@@ -38,6 +38,19 @@
   font-size: 15px!important;
   overflow: scroll;
   scroll-behavior: smooth;
+  overflow-x: hidden;
+}
+.box_messages::-webkit-scrollbar {
+  width: 5px;
+}
+ 
+.box_messages::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+}
+ 
+.box_messages::-webkit-scrollbar-thumb {
+  background-color: #6a688e;
+  outline: 1px solid slategrey;
 }
 .box_textarea{
   height: 57px;

@@ -83,6 +83,7 @@ export const setMessageStorageThunk = (message) => (dispath) => {
   dispath(actionCreatorAddmessage(message));
 }
 export const updateStatusMessageStorageThunk = (message) => (dispath) => {
+  //!if(localStorage.getItem('MESSAGES') === null)
   let messages = JSON.parse(localStorage.getItem('MESSAGES')).map(item => {
     if(item.id === message.id) {
       item.serverAccepted = message.serverAccepted; 
@@ -94,6 +95,7 @@ export const updateStatusMessageStorageThunk = (message) => (dispath) => {
   dispath(actionCreatorUpdateStatusMessage(message));
 }
 export const getMessagesStorageThunk = () => (dispath) => {
+  //!if(localStorage.getItem('MESSAGES') === null)
   const messages = JSON.parse(localStorage.getItem('MESSAGES'));
   if(messages !== null) {
     messages.forEach(element => {
