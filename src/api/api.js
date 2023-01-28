@@ -1,5 +1,5 @@
 import { Manager } from "socket.io-client";
-let manager = new Manager("212.193.48.242:4000", { transports: ['websocket', 'polling', 'flashsocket'] });//http://212.193.48.242
+let manager = new Manager("messenger.ddns.net", { transports: ['websocket', 'polling', 'flashsocket'] });//http://212.193.48.242
 let socket = manager.socket("/");
 // socket.on('news', (data) => {
 //   console.log(data);

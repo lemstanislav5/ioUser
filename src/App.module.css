@@ -89,55 +89,80 @@
   opacity: 1;
 }
 .from{
-  display: inline-block;
+  display: block;
   float: left;
   padding: 5px;
   background-color: #3143B9;
   margin: 0 0 5px 5px;
   color: #fff;
-  border-radius: 5px 5px 5px 0;
-  width: calc(100% - 100px);
+  border-radius: 0px 5px 5px 5px;
   text-align: left;
   font-size: 12px;
 }
 .to{
-  display: inline-block;
+  display: block;
   float: right;
   padding: 5px;
   background-color: #01ACF6;
   margin: 0px 5px 5px 0;
   color: #fff;
-  border-radius: 5px 5px 0 5px;
-  width: calc(100% - 100px);
+  border-radius: 0px 5px 5px 5px;
   text-align: left;
   font-size: 12px;
 }
 .serverAccepted{
-  width: 4px;
-  height: 4px;
   float: right;
-  display: inline-block;
-  margin-left: 2px;
-  background-color: #3333;
+  position: relative;
+  display: block;
+  top: -4px;
+  height: 0;
 }
 .botAccepted{
-  top: -22px;
+  float: right;
+  top: 0px;
   position: relative;
-}
-.trueServerAccepted{
-  left: 210px;
-  position: relative;
+  display: block;
+  margin-right: -1px;
+  margin-left: -3px;
   height: 0;
 }
-.trueBotAccepted{
-  left: 210px;
-  top: 5px;
-  position: relative;
-  height: 0;
-}
+
 .move{
   cursor: move;
   position: inherit;
   width: 88%;
   height: 100%;
+}
+.backСall{
+  position: absolute;
+  right: 44px;
+  top: 9px;
+  zoom: 1.5;
+  cursor: pointer;
+}
+.phoneBox{
+  position: absolute;
+  top: 50px;
+  display: block;
+  left: 50%;
+  margin-left: -80px;
+  font-size: 16px;
+  padding: 3px;
+  background: #f9b729;
+}
+.message{
+  max-width: 260px;
+  word-wrap: break-word;
+  display: inline-block;
+}
+.msgbox{
+  width: 100%;
+  display: inline-block;
+}
+.date{
+  width: 100%;
+  display: block;
+  font-size: 10px;
+  color: #fff;
+  text-align: right;
 }

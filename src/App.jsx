@@ -7,38 +7,39 @@ import { getConnectedSelector, getMessagesSelector } from './redux/selectrors';
 import style from './App.module.css'
 import { Manager } from "socket.io-client";
 import { nanoid } from 'nanoid';
-
-let manager = new Manager("212.193.48.242:4000", { transports: ['websocket', 'polling', 'flashsocket'] });
+import { PhoneForm } from './components/PhoneForm';
+import { SvgImages } from './components/images/SvgImages';
+const URL = 'messenger.ddns.net'
+let manager = new Manager("wss://" + URL + ":443", { transports: ['websocket', 'polling', 'flashsocket'] });
 let socket = manager.socket("/");
 
 
 export const Dialog = (props) => {
-  let { messages, connected, updateStatus, socket, nanoid, getMessages, setMessage, updateStatusMessage } = props; 
-  const conteiner = useRef(null);
+  let { messages, connected, updateStatus, socket, nanoid, getMessages, setMessage, updateStatusMessage } = props;
   const close = useRef(null);
   const lastMessage = useRef(null);
   const textarea = useRef(null);
   const messagesBox = useRef(null);
-  const [checkRegistedDomenName, setRegisted] = useState(false);
   const [message, setDataMessage] = useState('');
-  const [isMouseDown, setIsMouseDown] = useState(false);
   const [styleBox, setStyleBox] = useState({ 'bottom': -350, 'left': window.innerWidth - 175 , 'width': 170});
-  const [coords, setCoords] = useState({x: 0, y: 0});
-  const [left, setLeft] = useState(0);
+  const [styleСall, setStyleCall] = useState({ 'display': 'none'});
+  const [call, setCall] = useState(false);
+
 
   useEffect(() => {
     getMessages();
     socket.on('notification', (data) => {
-      if(data.code === 100) {
-        setRegisted(true);
-        console.warn(data.text);
-      } else if (data.code === 200) {
-        setRegisted(false);
-      }
+      // if(data.code === 100) {
+      //   setRegisted(true);
+      //   console.warn(data.text);
+      // } else if (data.code === 200) {
+      //   setRegisted(false);
+      // }
     });
-    socket.on('connect', () => { 
+    socket.on('connect', () => {
       console.log('connect');
-      updateStatus(true)
+      updateStatus(true);
+      setTimeout(() => messagesBox.current?.scrollTo(0, 999000), 300);
     });
     socket.on('disconnect', () => {
       console.log('disconnect');
@@ -47,28 +48,31 @@ export const Dialog = (props) => {
     socket.on('new message', function (data, fn) {
       //! fn(data.id);
       console.log(data)
-      setMessage(data);
-      setTimeout(() => messagesBox.current?.scrollTo(0, 999000), 300);//.scrollIntoView({ behavior: "smooth" }), 100)
-   });
+      const id = nanoid(10);
+      setMessage({ id, type: 'to', text: message, date: dateMessage(), serverAccepted: true, botAccepted: true });
+      setTimeout(() => messagesBox.current?.scrollTo(0, 999000), 300);
+    });
   }, []);
 
-
+  const dateMessage = () => {
+    let date = new Date();
+    return date.getDate() +'-'+ date.getMonth() +'-'+ date.getFullYear() +','+ date.getHours()+':'+date.getMinutes();
+  } 
   const closeChat = () => {
     setStyleBox({ 'bottom': -350, 'left': window.innerWidth - 175 , 'width': 170});
+    setStyleCall({ 'display': 'none'});
     close.current.classList.toggle(style.hideClose);
   }
   const openChat = () => {
     setStyleBox({ 'bottom': 0, 'left': window.innerWidth - 335 , 'width': 330});
+    setStyleCall({ 'display': 'block'});
     close.current.classList.toggle(style.hideClose);
-    setTimeout(() => messagesBox.current?.scrollTo(0, 999000), 300);//.scrollIntoView({ behavior: "smooth" }), 100)
+    setTimeout(() => messagesBox.current?.scrollTo(0, 999000), 300);
   }
-  const sendMessage = (e) => {
-    const message = textarea.current.value;
+  const sendMessage = (message) => {
     if (message === '') return null;
     const id = nanoid(10);
-    let date = new Date();
-    let dateMessage = date.getDate() +'-'+ date.getMonth() +'-'+ date.getFullYear();
-    setMessage({ id, type: 'to', text: message, date: dateMessage, serverAccepted: false, botAccepted: false });
+    setMessage({ id, type: 'to', text: message, date: dateMessage(), serverAccepted: false, botAccepted: false });
     socket.emit("new message", { id, message }, (response) => {
       if(response === 'sent to telegram') {
         updateStatusMessage({ id, type: 'to', text: message, date: dateMessage, serverAccepted: true, botAccepted: true});
@@ -81,90 +85,66 @@ export const Dialog = (props) => {
     });
     setTimeout(() => lastMessage.current?.scrollIntoView({ behavior: "smooth" }), 200);
   }
-  const changeMesssage = () => {
-    setDataMessage(textarea.current.value);
-  }
-  const mouseDown = (e) => {
-    console.log(e)
-    const x = e.pageX;
-    const y = e.pageY;
-    setIsMouseDown(true);
-    setCoords({x, y})
-    setLeft(styleBox.left)
-    console.log(conteiner.current.style.left);
-  } 
-  const mouseUp = (e) => setIsMouseDown(false);
-  const mouseMove = (e) => {
-    if(isMouseDown) {
-      const x = left + e.pageX - coords.x;
-      setStyleBox({ 'bottom': 0 , 'left': x , 'width': styleBox.width});
-    }
-  }
-  return (
-    checkRegistedDomenName === false 
-    ? 
-      "" 
-    : 
+  const changeMesssage = () => setDataMessage(textarea.current.value);
 
-      <>
-        <div className={style.conteiner} 
-             style={styleBox}
-             ref={conteiner}>
-          <div className={style.box_top}>
-            <span>Напишите ваше сообщение</span>
-            <div className={style.move} 
-                 onMouseDown={mouseDown} 
-                 onMouseUp={mouseUp} 
-                 onMouseMove={mouseMove} 
-                 onMouseLeave={mouseUp}>      
-            </div>
-            <div onClick={openChat} className={style.open}>
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                <path d="M0 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v2h2a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-2H2a2 2 0 0 1-2-2V2zm2-1a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H2z"/>
-              </svg>
-            </div>
-          </div>
-          <div className={style.box_messages} ref={messagesBox}>
-            {
-              (connected === false )
-              ? 
-                <p>Нет связи!</p>
-              :
-                messages.map((item, i, array) => {
-                  return <div ref={lastMessage} className={style[item.type] + (i === array.length - 1 ? ' LAST MESSAGE' : '')} key={i}> 
-                            {item.type === 'to' //#0cec0c    #e82554
-                              ?
-                                <>
-                                  <div className={style.trueServerAccepted}><svg xmlns="http://www.w3.org/2000/svg" fill={item.serverAccepted ? '#0cec0c' : ' #e82554'} x="0px" y="0px" width="14" height="24" viewBox="0 0 24 24"><path d="M 20.292969 5.2929688 L 9 16.585938 L 4.7070312 12.292969 L 3.2929688 13.707031 L 9 19.414062 L 21.707031 6.7070312 L 20.292969 5.2929688 z"></path></svg></div>
-                                  <div className={style.trueBotAccepted}><svg xmlns="http://www.w3.org/2000/svg" fill={item.trueBotAccepted ? '#0cec0c' : ' #e82554'} x="0px" y="0px" width="24" height="14" viewBox="0 0 24 24" ><path d="M 20.292969 5.2929688 L 9 16.585938 L 4.7070312 12.292969 L 3.2929688 13.707031 L 9 19.414062 L 21.707031 6.7070312 L 20.292969 5.2929688 z"></path></svg></div>
-                                </> 
-                              :
-                                ''}
-                            <div>{item.text}</div>
-                          </div>
-                })
-            }
-          </div>
-          <textarea 
-            ref={textarea}
-            className={style.box_textarea} 
-            placeholder="Введите сообщение"
-            onChange={changeMesssage}
-            value={message}
-          />
-          <div className={style.send} onClick={sendMessage}>
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="green" viewBox="0 0 16 16">
-              <path fillRule="evenodd" d="M15.964.686a.5.5 0 0 0-.65-.65L.767 5.855H.766l-.452.18a.5.5 0 0 0-.082.887l.41.26.001.002 4.995 3.178 3.178 4.995.002.002.26.41a.5.5 0 0 0 .886-.083l6-15Zm-1.833 1.89.471-1.178-1.178.471L5.93 9.363l.338.215a.5.5 0 0 1 .154.154l.215.338 7.494-7.494Z"/>
-            </svg>
-          </div>
-          <div ref={close} className={style.close} onClick={closeChat}>
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-              <path d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"/>
-              <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
-            </svg>
-          </div>
+  const openPhoneBox = () => {
+    call ? setCall(false) : setCall(true);
+    call ? setStyleCall({ 'color': '#FFB700'}) : setStyleCall({ 'color': '#333'});
+  }
+  if(connected === false ) {
+    console.log('no connection');
+    return <></>;
+  }
+
+  return (
+    <div className={style.conteiner} style={styleBox}>
+      <div className={style.box_top}>
+        <span>Напишите ваше сообщение</span>
+        <div className={style.move}>
         </div>
-      </>
+        <div style={styleСall} onClick={openPhoneBox} className={style.backСall}>
+          <svg width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+            <path fillRule="evenodd" d="M2.267.98a1.636 1.636 0 0 1 2.448.152l1.681 2.162c.309.396.418.913.296 1.4l-.513 2.053a.636.636 0 0 0 .167.604L8.65 9.654a.636.636 0 0 0 .604.167l2.052-.513a1.636 1.636 0 0 1 1.401.296l2.162 1.681c.777.604.849 1.753.153 2.448l-.97.97c-.693.693-1.73.998-2.697.658a17.471 17.471 0 0 1-6.571-4.144A17.47 17.47 0 0 1 .639 4.646c-.34-.967-.035-2.004.658-2.698l.97-.969zM15.854.146a.5.5 0 0 1 0 .708L11.707 5H14.5a.5.5 0 0 1 0 1h-4a.5.5 0 0 1-.5-.5v-4a.5.5 0 0 1 1 0v2.793L15.146.146a.5.5 0 0 1 .708 0z"/>
+          </svg>
+        </div>
+        <div onClick={openChat} className={style.open}>
+          <SvgImages svg={'open'}/>
+        </div>
+      </div>
+      <div className={style.box_messages} ref={messagesBox}>
+        {call === true && <PhoneForm openPhoneBox={openPhoneBox} sendMessage={sendMessage}/>}
+        {messages.map((item, i, array) => {
+          return <div className={style.msgbox} key={'msg' + i}>
+                    <div ref={lastMessage} className={style[item.type] + (i === array.length - 1 ? ' LAST MESSAGE' : '')} key={i}>
+                      <div className={style.message}>{item.text}</div>
+                      {item.type === 'to'
+                        ?
+                          <>
+                            <div className={style.serverAccepted}><svg xmlns="http://www.w3.org/2000/svg" fill={item.serverAccepted ? '#0cec0c' : ' #e82554'} x="0px" y="0px" width="14" height="24" viewBox="0 0 24 24"><path d="M 20.292969 5.2929688 L 9 16.585938 L 4.7070312 12.292969 L 3.2929688 13.707031 L 9 19.414062 L 21.707031 6.7070312 L 20.292969 5.2929688 z"></path></svg></div>
+                            <div className={style.botAccepted}><svg xmlns="http://www.w3.org/2000/svg" fill={item.botAccepted ? '#0cec0c' : ' #e82554'} x="0px" y="0px" width="24" height="14" viewBox="0 0 24 24" ><path d="M 20.292969 5.2929688 L 9 16.585938 L 4.7070312 12.292969 L 3.2929688 13.707031 L 9 19.414062 L 21.707031 6.7070312 L 20.292969 5.2929688 z"></path></svg></div>
+                          </>
+                        :
+                          ''}
+                      <div className={style.date}>{item.date.split(',')[1]}</div>
+                    </div>
+                  </div>
+          })
+        }
+      </div>
+      <textarea
+        ref={textarea}
+        className={style.box_textarea}
+        placeholder="Введите сообщение"
+        onChange={changeMesssage}
+        value={message}
+      />
+      <div className={style.send} onClick={() => sendMessage(textarea.current.value)}>
+        <SvgImages svg={'send'}/>
+      </div>
+      <div ref={close} className={style.close} onClick={closeChat}>
+        <SvgImages svg={'close'}/>
+      </div>
+    </div>
   );
 }
 

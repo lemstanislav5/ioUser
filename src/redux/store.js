@@ -8,5 +8,5 @@ const rootReducer = combineReducers({
 });
 
 export const store = createStore(rootReducer, applyMiddleware(thunk));
-window.store = store;
+window.store = store;//!DELETE
 export default store;
