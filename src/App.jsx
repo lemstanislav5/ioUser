@@ -45,7 +45,7 @@ export const Dialog = (props) => {
       console.log('disconnect');
       updateStatus(false)
     });
-    socket.on('new message', function (data, fn) {
+    socket.on('message', function (data, fn) {
       //! fn(data.id);
       console.log(data)
       const id = nanoid(10);
@@ -73,7 +73,7 @@ export const Dialog = (props) => {
     if (message === '') return null;
     const id = nanoid(10);
     setMessage({ id, type: 'to', text: message, date: dateMessage(), serverAccepted: false, botAccepted: false });
-    socket.emit("new message", { id, message }, (response) => {
+    socket.emit("message", { id, message }, (response) => {
       if(response === 'sent to telegram') {
         updateStatusMessage({ id, type: 'to', text: message, date: dateMessage, serverAccepted: true, botAccepted: true});
       } else if(response === 'telegram send error') {

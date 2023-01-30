@@ -7,6 +7,19 @@
   padding-bottom: 10px;
   z-index: 1;
 }
+.box::after {
+  content: ''; 
+  position: absolute; 
+  left: 244px;
+  top: -20px;
+  border: 10px solid transparent; 
+  border-top: 10px solid #ededed; 
+  -moz-transform: rotate(180deg); 
+  -ms-transform: rotate(180deg); 
+  -webkit-transform: rotate(180deg); 
+  -o-transform: rotate(180deg); 
+  transform: rotate(180deg);
+ }
 .text{
   font-size: 14px;
   padding: 10px;
