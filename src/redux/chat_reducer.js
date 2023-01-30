@@ -72,34 +72,8 @@ export const chat_reducer = (state = initialState, action) => {
 };
 
 export const setMessageStorageThunk = (message) => (dispath) => {
-  let messages = []
-  if(localStorage.getItem('MESSAGES') === null) {
-    messages = JSON.stringify([...messages, message]);
-  } else {
-    messages = JSON.stringify([...JSON.parse(localStorage.getItem('MESSAGES')), message]);
-  }
-  console.log(messages, typeof(messages))
-  localStorage.setItem('MESSAGES', messages)
   dispath(actionCreatorAddmessage(message));
 }
 export const updateStatusMessageStorageThunk = (message) => (dispath) => {
-  //!if(localStorage.getItem('MESSAGES') === null)
-  let messages = JSON.parse(localStorage.getItem('MESSAGES')).map(item => {
-    if(item.id === message.id) {
-      item.serverAccepted = message.serverAccepted; 
-      item.botAccepted = message.botAccepted;
-    }
-    return item;
-  });
-  localStorage.setItem('MESSAGES', JSON.stringify(messages));
   dispath(actionCreatorUpdateStatusMessage(message));
-}
-export const getMessagesStorageThunk = () => (dispath) => {
-  //!if(localStorage.getItem('MESSAGES') === null)
-  const messages = JSON.parse(localStorage.getItem('MESSAGES'));
-  if(messages !== null) {
-    messages.forEach(element => {
-      dispath(actionCreatorAddmessage(element));
-    });
-  }
 }
