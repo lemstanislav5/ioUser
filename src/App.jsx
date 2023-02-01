@@ -62,13 +62,14 @@ const App = (props) => {
       console.log('disconnect');
       setConnected(false)
     });
+  }, []);
+
+  useEffect(() => {
     socket.on('new message', (text) => {
-      console.log(text)
-      const id = nanoid(10);
-      setMessage([...messages, { id, chatId, type: 'to', text: text, date: dateMessage(), serverAccepted: true, botAccepted: true }]);
+      setMessage([...messages, { id: nanoid(10), chatId, type: 'from', text: text, date: dateMessage(), serverAccepted: true, botAccepted: true }]);
       setTimeout(() => messagesBox.current?.scrollTo(0, 999000), 300);
     });
-  }, []);
+  }, [messages]);
 
   const dateMessage = () => {
     let date = new Date();
@@ -87,8 +88,7 @@ const App = (props) => {
   }
 
   const send = (text) => {
-    const id = nanoid(10);
-    setMessage([...messages, { id, chatId, type: 'to', text: text, date: dateMessage(), serverAccepted: true, botAccepted: true }]);
+    setMessage([...messages, { id: nanoid(10), chatId, type: 'to', text: text, date: dateMessage(), serverAccepted: true, botAccepted: true }]);
     socket.emit("new message", { id, message: text }, (res) => {
       console.log(res);
     });
@@ -111,8 +111,7 @@ const App = (props) => {
     <div className={style.conteiner} style={styleBox}>
       <div className={style.box_top}>
         <span>Напишите ваше сообщение</span>
-        <div className={style.move}>
-        </div>
+        <div className={style.move}></div>
         <div style={styleСall} onClick={openPhoneBox} className={style.backСall}>
           <SvgImages svg={'backСall'}/>
         </div>
