@@ -2,7 +2,7 @@ import React, { useState }  from 'react'
 import style from './PhoneForm.module.css'
 
 export const PhoneForm = (props) => {
-  const { openPhoneBox, sendPhone } = props;
+  const { openPhoneBox, send } = props;
   const [phone, setPhone] = useState('');
   const phoneBoxKeyDown = (e) => {
     const numbers = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
@@ -24,7 +24,7 @@ export const PhoneForm = (props) => {
     } else if(e.keyCode === 13) {
       console.log(13)
       openPhoneBox();
-      sendPhone('Прошу мне перезвонить! \n' + phone);
+      send('Прошу мне перезвонить! \n' + phone);
       setPhone('');
     }
 
@@ -42,7 +42,7 @@ export const PhoneForm = (props) => {
           value={phone}
         />
         <div className={style.phoneSend} onClick={() => {
-          sendPhone('Прошу мне перезвонить! \n' + phone);
+          send('Прошу мне перезвонить! \n' + phone);
           openPhoneBox();
         }}>{'>'}</div>
       </div>
