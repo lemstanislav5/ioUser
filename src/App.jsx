@@ -1,13 +1,13 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useRef , useEffect, useState }  from 'react'
+import React, { useRef , useEffect, useState }  from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { actionCreatorСonnection, setMessageStorageThunk, updateStatusMessageStorageThunk} from './redux/chat_reducer';
-import { getConnectedSelector, getMessagesSelector } from './redux/selectrors';
-import style from './App.module.css'
+import { actionCreatorСonnection, setMessageThunk, updateStatusMessageThunk} from './redux/chat_reducer';
+import { getConnectedSelector, getMessagesSelector, getChatIdSelector } from './redux/selectrors';
+import style from './App.module.css';
 import { Manager } from "socket.io-client";
 import { nanoid } from 'nanoid';
-import { PhoneForm } from './components/PhoneForm';
+import { PhoneForm } from './components/forms/PhoneForm';
 import { SvgImages } from './components/images/SvgImages';
 const URL = 'messenger.ddns.net'
 let manager = new Manager("wss://" + URL + ":443", { transports: ['websocket', 'polling', 'flashsocket'] });
@@ -156,6 +156,7 @@ const mapStateToProps = (state) => {
   return {
     connected: getConnectedSelector(state),
     messages: getMessagesSelector(state),
+    chat_id: getChatIdSelector(state),
     socket,
     nanoid,
   };
@@ -164,8 +165,8 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     updateStatus: (result) => dispatch(actionCreatorСonnection(result)),
-    setMessage: (data) => dispatch(setMessageStorageThunk(data)),
-    updateStatusMessage: (data) => dispatch(updateStatusMessageStorageThunk(data)),
+    setMessage: (data) => dispatch(setMessageThunk(data)),
+    updateStatusMessage: (data) => dispatch(updateStatusMessageThunk(data)),
   };
 };
 
