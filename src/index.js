@@ -1,6 +1,5 @@
 import React, { useRef , useEffect, useState }  from 'react';
 import ReactDOM from 'react-dom';
-import reportWebVitals from './reportWebVitals';//!DELETE
 import style from './App.module.css';
 import { Manager } from "socket.io-client";
 import { nanoid } from 'nanoid';
@@ -168,7 +167,4 @@ ReactDOM.render(
   document.getElementById('chat_room')
 );
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();//!DELETE
+
