@@ -8,7 +8,16 @@ import { SvgImages } from './components/images/SvgImages';
 const URL = 'messenger.ddns.net'
 let manager = new Manager("wss://" + URL + ":443", { transports: ['websocket', 'polling', 'flashsocket'] });
 let socket = manager.socket("/");
-const ls = window.localStorage;
+const ls = {
+  set: (id, item) => {
+    if (window.localStorage.getItem(id) === null) {
+      window.localStorage.setItem(id, JSON.stringify(item));
+    } else {
+      window.localStorage.setItem(id, JSON.stringify([...window.localStorage.getItem(id), item]));
+    }
+  },
+  get: (id) => (window.localStorage.getItem(id))
+};
 
 const App = (props) => {
   const initialState = [
@@ -44,16 +53,21 @@ const App = (props) => {
   const [styleСall, setStyleCall] = useState({ 'display': 'none'});
   const [phoneFormOpen, setPhoneFormOpen] = useState(false);
 
+  /* 
+   * useEffect(function) запуск при каждом рендере
+   * useEffect(function, []) запуск при каждом рендере
+   * useEffect(function, [args]) запуск при обновлении args
+  */ 
   useEffect(() => {
     socket.on('connect', () => {
       console.log('connect');
       setConnected(true);
       setTimeout(() => messagesBox.current?.scrollTo(0, 999000), 300);
-      const id = ls.getItem('chatId');
-      if (id === undefined) {
+      const id = ls.get('chatId');
+      if (id === null) {
         const newId = nanoid(10);
         setChatId(newId);
-        ls.setItem(newId);
+        ls.get(newId);
       } else {
         setChatId(id);
       }
@@ -62,6 +76,8 @@ const App = (props) => {
       console.log('disconnect');
       setConnected(false)
     });
+    //! ОСТАНОВИЛСЯ ТУТ
+    console.log(ls.get('messages'));
   }, []);
 
   useEffect(() => {
