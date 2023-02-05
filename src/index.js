@@ -1,3 +1,10 @@
+/* З А Д А Ч И
+* 1. Предложить представиться
+* 2. Ссылки на wothsapp
+* 3. Отослать картинку
+* 4. Отослать аудио
+*/
+
 import React, { useRef , useEffect, useState }  from 'react';
 import ReactDOM from 'react-dom';
 import style from './App.module.css';
@@ -5,45 +12,47 @@ import { Manager } from "socket.io-client";
 import { nanoid } from 'nanoid';
 import { PhoneForm } from './components/forms/PhoneForm';
 import { SvgImages } from './components/images/SvgImages';
+import { storage } from './services/storage';
 const URL = 'messenger.ddns.net'
 let manager = new Manager("wss://" + URL + ":443", { transports: ['websocket', 'polling', 'flashsocket'] });
 let socket = manager.socket("/");
-const ls = {
-  set: (id, item) => {
-    if (window.localStorage.getItem(id) === null) {
-      window.localStorage.setItem(id, JSON.stringify(item));
-    } else {
-      window.localStorage.setItem(id, JSON.stringify([...window.localStorage.getItem(id), item]));
-    }
-  },
-  get: (id) => (window.localStorage.getItem(id))
-};
 
 const App = (props) => {
-  const initialState = [
-    { id: 'JHLJSHSLKJ', type: 'to', text: 'Hello!', date: '13-10-2021,9:19', serverAccepted: true, botAccepted: true},
-    { id: 'JHLJSHSLKJ', type: 'from', text: 'Hey! How can I help you?', date: '14-10-2021,9:19', serverAccepted: true, botAccepted: true},
-    { id: 'JHLJSHSLKJ', type: 'to', text: 'Hello!', date: '13-10-2021,9:19', serverAccepted: false, botAccepted: false},
-    { id: 'JHLJSHSLKJ', type: 'from', text: 'Hey! How can I help you?', date: '15-10-2021,9:19', serverAccepted: false, botAccepted: true},
-    { id: 'JHLJSHSLKJ', type: 'to', text: 'Hello!', date: '16-10-2021,9:19', serverAccepted: true, botAccepted: true},
-    { id: 'JHLJSHSLKJ', type: 'from', text: 'Hey! How can I help you?', date: '17-10-2021,9:19', serverAccepted: true, botAccepted: false},
-    { id: 'JHLJSHSLKJ', type: 'to', text: 'Hello!', date: '13-10-2021,9:19', serverAccepted: true, botAccepted: true},
-    { id: 'JHLJSHSLKJ', type: 'from', text: 'Hey! How can I help you?', date: '18-10-2021,9:19', serverAccepted: false, botAccepted: true},
-    { id: 'JHLJSHSLKJ', type: 'to', text: 'Hello!', date: '19-10-2021,9:19', serverAccepted: true, botAccepted: false},
-    { id: 'JHLJSHSLKJ', type: 'from', text: 'Hey! How can I help you?', date: '20-10-2021,9:19', serverAccepted: true, botAccepted: false},
-    { id: 'JHLJSHSLKJ', type: 'to', text: 'Hello!', date: '21-10-2021,9:19', serverAccepted: true, botAccepted: true},
-    { id: 'JHLJSHSLKJ', type: 'from', text: 'Hey! How can I help you?', date: '22-10-2021,9:19', serverAccepted: false, botAccepted: true},
-    { id: 'JHLJSHSLKJ', type: 'to', text: 'Hello!', date: '23-10-2021,9:19', serverAccepted: true, botAccepted: true},
-    { id: 'JHLJSHSLKJ', type: 'from', text: 'Hey! How can I help you?', date: '24-10-2021,9:19', serverAccepted: true, botAccepted: true},
-    { id: 'JHLJSHSLKJ', type: 'to', text: 'Hello!', date: '25-10-2021,9:19', serverAccepted: true, botAccepted: true},
-    { id: 'JHLJSHSLKJ', type: 'from', text: 'Hey! How can I help you?', date: '26-10-2021,9:19', serverAccepted: true, botAccepted: false},
-    { id: 'JHLJSHSLKJ', type: 'to', text: 'Hello!', date: '27-10-2021,9:19', serverAccepted: true, botAccepted: true},
-    { id: 'JHLJSHSLKJ', type: 'from', text: 'Hey! How can I help you?', date: '28-10-2021,9:19', serverAccepted: true, botAccepted: true},
-    { id: 'JHLJSHSLKJ', type: 'to', text: 'Hello!', date: '29-10-2021,9:19', serverAccepted: true, botAccepted: true},
-    { id: 'JHLJSHSLKJ', type: 'from', text: 'LAST MESSAGE', date: '30-10-2021,9:19', serverAccepted: true, botAccepted: false},
+  const testInitialState = [
+    { id: 'JHLJSHSLKJ', chatId: 'initialState', type: 'to', text: 'Hello!', date: '13-10-2021,9:19', serverAccepted: true, botAccepted: true},
+    { id: 'JHLJSHSLKJ', chatId: 'initialState',type: 'from', text: 'Hey! How can I help you?', date: '14-10-2021,9:19', serverAccepted: true, botAccepted: true},
+    { id: 'JHLJSHSLKJ', chatId: 'initialState',type: 'to', text: 'Hello!', date: '13-10-2021,9:19', serverAccepted: false, botAccepted: false},
+    { id: 'JHLJSHSLKJ', chatId: 'initialState',type: 'from', text: 'Hey! How can I help you?', date: '15-10-2021,9:19', serverAccepted: false, botAccepted: true},
+    { id: 'JHLJSHSLKJ', chatId: 'initialState',type: 'to', text: 'Hello!', date: '16-10-2021,9:19', serverAccepted: true, botAccepted: true},
+    { id: 'JHLJSHSLKJ', chatId: 'initialState',type: 'from', text: 'Hey! How can I help you?', date: '17-10-2021,9:19', serverAccepted: true, botAccepted: false},
+    { id: 'JHLJSHSLKJ', chatId: 'initialState',type: 'to', text: 'Hello!', date: '13-10-2021,9:19', serverAccepted: true, botAccepted: true},
+    { id: 'JHLJSHSLKJ', chatId: 'initialState',type: 'from', text: 'Hey! How can I help you?', date: '18-10-2021,9:19', serverAccepted: false, botAccepted: true},
+    { id: 'JHLJSHSLKJ', chatId: 'initialState',type: 'to', text: 'Hello!', date: '19-10-2021,9:19', serverAccepted: true, botAccepted: false},
+    { id: 'JHLJSHSLKJ', chatId: 'initialState',type: 'from', text: 'Hey! How can I help you?', date: '20-10-2021,9:19', serverAccepted: true, botAccepted: false},
+    { id: 'JHLJSHSLKJ', chatId: 'initialState',type: 'to', text: 'Hello!', date: '21-10-2021,9:19', serverAccepted: true, botAccepted: true},
+    { id: 'JHLJSHSLKJ', chatId: 'initialState',type: 'from', text: 'Hey! How can I help you?', date: '22-10-2021,9:19', serverAccepted: false, botAccepted: true},
+    { id: 'JHLJSHSLKJ', chatId: 'initialState',type: 'to', text: 'Hello!', date: '23-10-2021,9:19', serverAccepted: true, botAccepted: true},
+    { id: 'JHLJSHSLKJ', chatId: 'initialState',type: 'from', text: 'Hey! How can I help you?', date: '24-10-2021,9:19', serverAccepted: true, botAccepted: true},
+    { id: 'JHLJSHSLKJ', chatId: 'initialState',type: 'to', text: 'Hello!', date: '25-10-2021,9:19', serverAccepted: true, botAccepted: true},
+    { id: 'JHLJSHSLKJ', chatId: 'initialState',type: 'from', text: 'Hey! How can I help you?', date: '26-10-2021,9:19', serverAccepted: true, botAccepted: false},
+    { id: 'JHLJSHSLKJ', chatId: 'initialState',type: 'to', text: 'Hello!', date: '27-10-2021,9:19', serverAccepted: true, botAccepted: true},
+    { id: 'JHLJSHSLKJ', chatId: 'initialState',type: 'from', text: 'Hey! How can I help you?', date: '28-10-2021,9:19', serverAccepted: true, botAccepted: true},
+    { id: 'JHLJSHSLKJ', chatId: 'initialState',type: 'to', text: 'Hello!', date: '29-10-2021,9:19', serverAccepted: true, botAccepted: true},
+    { id: 'JHLJSHSLKJ', chatId: 'initialState',type: 'to', text: 'LAST MESSAGE', date: '30-10-2021,9:19', serverAccepted: true, botAccepted: false},
   ];
+  // В продакшен testInitialState удалить или заменить на testInitialState = []
+  let initialState = (storage.get('messages') === undefined) ? testInitialState : storage.get('messages');
+  const chatId = (() => {
+    if(storage.get('chatId') === null || storage.get('chatId') === undefined) {
+      let id = nanoid(10);
+      storage.set('chatId', id);
+      return id;
+    } else {
+      return storage.get('chatId')
+    }
+  })();
+
   const [connected, setConnected] = useState(false);
-  const [chatId, setChatId] = useState();
   const [messages, setMessage] = useState(initialState);
   const close = useRef(null);
   const lastMessage = useRef(null);
@@ -63,30 +72,25 @@ const App = (props) => {
       console.log('connect');
       setConnected(true);
       setTimeout(() => messagesBox.current?.scrollTo(0, 999000), 300);
-      const id = ls.get('chatId');
-      if (id === null) {
-        const newId = nanoid(10);
-        setChatId(newId);
-        ls.get(newId);
-      } else {
-        setChatId(id);
-      }
     });
     socket.on('disconnect', () => {
       console.log('disconnect');
-      setConnected(false)
+      setConnected(false);
     });
-    //! ОСТАНОВИЛСЯ ТУТ
-    console.log(ls.get('messages'));
   }, []);
 
   useEffect(() => {
-    socket.on('new message', (text) => {
+    //! Установление слушателя дважды
+    socket.once('new message', (text) => {
       const id = nanoid(10);
-      setMessage([...messages, { id, chatId, type: 'from', text: text, date: dateMessage(), serverAccepted: true, botAccepted: true }]);
+      const incomingMessage = { id, chatId, type: 'from', text, date: dateMessage(), serverAccepted: true, botAccepted: true }
+      setMessage([...messages, incomingMessage]);
       setTimeout(() => messagesBox.current?.scrollTo(0, 999000), 300);
+      console.log(messages.length)
+      socket.off('new message');
     });
-  }, [messages]);
+    storage.set('messages', messages);
+  }, [messages, chatId]);
 
   const dateMessage = () => {
     let date = new Date();
@@ -108,13 +112,11 @@ const App = (props) => {
     const id = nanoid(10);
     setMessage([...messages, { id, chatId, type: 'to', text: text, date: dateMessage(), serverAccepted: true, botAccepted: true }]);
     socket.emit("new message", { id, message: text }, (res) => {
-      console.log(res);
+      console.log(res);//! UPDATE
     });
     setDataMessage('');
     setTimeout(() => lastMessage.current?.scrollIntoView({ behavior: "smooth" }), 200);
   }
-
-  const changeMesssage = (event) => setDataMessage(event.target.value);
 
   const openPhoneBox = () => {
     phoneFormOpen ? setPhoneFormOpen(false) : setPhoneFormOpen(true);
@@ -163,7 +165,7 @@ const App = (props) => {
       <textarea
         className={style.box_textarea}
         placeholder="Введите сообщение"
-        onChange={changeMesssage}
+        onChange={(event) => setDataMessage(event.target.value)}
         value={message}
       />
       <div className={style.send} onClick={() => {send(message)}}>
