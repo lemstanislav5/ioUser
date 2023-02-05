@@ -120,7 +120,7 @@ const App = (props) => {
   const send = (text) => {
     const id = nanoid(10);
     setMessage([...messages, { id, chatId, type: 'to', text: text, date: dateMessage(), serverAccepted: true, botAccepted: true }]);
-    socket.emit("new message", { id, message: text }, (res) => {
+    socket.emit("new message", { id, text, chatId }, (res) => {
       console.log(res);//! UPDATE
     });
     setDataMessage('');
