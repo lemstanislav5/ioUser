@@ -71,11 +71,11 @@ const App = (props) => {
   const [styleСall, setStyleCall] = useState({ 'display': 'none'});
   const [phoneFormOpen, setPhoneFormOpen] = useState(false);
 
-  /* 
+  /*
    * useEffect(function) запуск при каждом рендере
    * useEffect(function, []) запуск при каждом рендере
    * useEffect(function, [args]) запуск при обновлении args
-  */ 
+  */
   useEffect(() => {
     socket.on('connect', () => {
       console.log('connect');
@@ -135,6 +135,9 @@ const App = (props) => {
     console.log('no connection');
     return <></>;
   }
+  const keyboardEvents = (e) => {
+    if (e.key === "Enter") send(message);
+  }
 
   return (
     <div className={style.conteiner} style={styleBox}>
@@ -172,6 +175,7 @@ const App = (props) => {
         }
       </div>
       <textarea
+        onKeyPress={keyboardEvents}
         className={style.box_textarea}
         placeholder="Введите сообщение"
         onChange={(event) => setDataMessage(event.target.value)}
@@ -193,5 +197,3 @@ ReactDOM.render(
   </React.StrictMode>,
   document.getElementById('chat_room')
 );
-
-
