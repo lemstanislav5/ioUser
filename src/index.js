@@ -13,7 +13,6 @@
 * 12. Скрипт для вставки в сайт готовый
 * 13. Видеоинструкция и статья с 0
 */
-
 import React, { useRef , useEffect, useState }  from 'react';
 import ReactDOM from 'react-dom';
 import style from './App.module.css';
@@ -25,7 +24,17 @@ import { storage } from './services/storage';
 const URL = 'messenger.ddns.net'
 let manager = new Manager("wss://" + URL + ":443", { transports: ['websocket', 'polling', 'flashsocket'] });
 let socket = manager.socket("/");
-
+const colors = {
+  conteiner: '#fff',
+  top: '#2c2e33',
+  messages: '#000',
+  textarea: '#fff',
+  close: '#FFB700',
+  from: '#303245',
+  to: '#888887',
+  text: '#FFB700',
+  send: '#4caf50'
+}
 const App = (props) => {
   const testInitialState = [
     { id: 'JHLJSHSLKJ', chatId: 'initialState', type: 'to', text: 'Hello!', date: '13-10-2021,9:19', serverAccepted: true, botAccepted: true},
@@ -61,19 +70,22 @@ const App = (props) => {
     }
   })();
 
-  const [connected, setConnected] = useState(false);
-  const [messages, setMessage] = useState(initialState);
   const close = useRef(null);
   const lastMessage = useRef(null);
   const messagesBox = useRef(null);
+  const [open, setOpen] = useState(false);
+
+
+  const [connected, setConnected] = useState(false);
+  const [messages, setMessage] = useState(initialState);
   const [message, setDataMessage] = useState('');
-  const [styleBox, setStyleBox] = useState({ 'bottom': -350, 'left': window.innerWidth - 175 , 'width': 170});
-  const [styleСall, setStyleCall] = useState({ 'display': 'none'});
+  const [styleBox, setStyleBox] = useState({ 'bottom': -400, 'left': window.innerWidth - 175 , 'width': 170, 'backgroundColor': colors.conteiner});
+  const [styleСall, setStyleCall] = useState({ 'display': 'none', 'color': colors.text});
   const [phoneFormOpen, setPhoneFormOpen] = useState(false);
 
   /*
    * useEffect(function) запуск при каждом рендере
-   * useEffect(function, []) запуск при каждом рендере
+   * useEffect(function, []) один раз
    * useEffect(function, [args]) запуск при обновлении args
   */
   useEffect(() => {
@@ -87,6 +99,17 @@ const App = (props) => {
       setConnected(false);
     });
   }, []);
+
+  useEffect(() => {
+    if (open) {
+      setStyleBox({ 'bottom': 0, 'left': window.innerWidth - 335 , 'width': 330, 'backgroundColor': colors.conteiner});
+      setStyleCall({ 'display': 'block', 'color': colors.text});
+      setTimeout(() => messagesBox.current?.scrollTo(0, 999000), 300);
+    } else {
+      setStyleBox({ 'bottom': -400, 'left': window.innerWidth - 175 , 'width': 170, 'backgroundColor': colors.conteiner});
+      setStyleCall({ 'display': 'none', 'color': colors.text});
+    }
+  }, [open]);
 
   useEffect(() => {
     //! Установление слушателя дважды
@@ -104,17 +127,6 @@ const App = (props) => {
   const dateMessage = () => {
     let date = new Date();
     return date.getDate() +'-'+ date.getMonth() +'-'+ date.getFullYear() +','+ date.getHours()+':'+date.getMinutes();
-  }
-  const closeChat = () => {
-    setStyleBox({ 'bottom': -350, 'left': window.innerWidth - 175 , 'width': 170});
-    setStyleCall({ 'display': 'none'});
-    close.current.classList.toggle(style.hideClose);
-  }
-  const openChat = () => {
-    setStyleBox({ 'bottom': 0, 'left': window.innerWidth - 335 , 'width': 330});
-    setStyleCall({ 'display': 'block'});
-    close.current.classList.toggle(style.hideClose);
-    setTimeout(() => messagesBox.current?.scrollTo(0, 999000), 300);
   }
 
   const send = (text) => {
@@ -141,23 +153,25 @@ const App = (props) => {
 
   return (
     <div className={style.conteiner} style={styleBox}>
-      <div className={style.box_top}>
-        <span>Напишите ваше сообщение</span>
+      <div className={style.box_top} style={{'backgroundColor': colors.top}}>
+        <span style={{'color': colors.text}}>
+          { open ? 'Напишите ваше сообщение' : 'Поддержка' }
+        </span>
         <div className={style.move}></div>
         <div style={styleСall} onClick={openPhoneBox} className={style.backСall}>
           <SvgImages svg={'backСall'}/>
         </div>
-        <div onClick={openChat} className={style.open}>
+        <div onClick={() => setOpen(true)} className={style.open} style={{'color': colors.text}}>
           <SvgImages svg={'open'}/>
         </div>
       </div>
-      <div className={style.box_messages} ref={messagesBox}>
+      <div className={style.box_messages} ref={messagesBox} style={{'backgroundColor': colors.messages}}>
         {phoneFormOpen === true && <PhoneForm openPhoneBox={openPhoneBox} send={send}/>}
         {
           messages.map((item, i, array) => {
             return (
               <div className={style.msgbox} key={'msg' + i}>
-                <div ref={lastMessage} className={style[item.type] + (i === array.length - 1 ? ' LAST MESSAGE' : '')} key={i}>
+                <div ref={lastMessage} className={style[item.type] + (i === array.length - 1 ? ' LAST MESSAGE' : '')} key={i}  style={{'backgroundColor': colors[item.type]}}>
                   <div className={style.message}>{item.text}</div>
                     {
                       item.type === 'to' ?
@@ -180,13 +194,17 @@ const App = (props) => {
         placeholder="Введите сообщение"
         onChange={(event) => setDataMessage(event.target.value)}
         value={message}
+        style={{'backgroundColor': colors.textarea}}
       />
-      <div className={style.send} onClick={() => {send(message)}}>
+      <div className={style.send} onClick={() => {send(message)}}  style={{'color': colors.send, 'borderColor': colors.send}}>
         <SvgImages svg={'send'}/>
       </div>
-      <div ref={close} className={style.close} onClick={closeChat}>
-        <SvgImages svg={'close'}/>
-      </div>
+      {
+        open &&
+        <div ref={close} className={style.close} onClick={() => setOpen(false)} style={{'color': colors.text}}>
+          <SvgImages svg={'close'}/>
+        </div>
+      }
     </div>
   );
 }
