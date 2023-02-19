@@ -7,5 +7,6 @@ export const storage = {
     } else {
       return JSON.parse(window.localStorage.getItem(id));
     }
-  }
+  },
+  clear: () => window.localStorage.clear(),
 };

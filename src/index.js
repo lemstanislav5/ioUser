@@ -21,47 +21,35 @@ import { nanoid } from 'nanoid';
 import { PhoneForm } from './components/forms/PhoneForm';
 import { SvgImages } from './components/images/SvgImages';
 import { storage } from './services/storage';
+import { testInitialState } from './components/testInitialState';
 const URL = 'messenger.ddns.net'
 let manager = new Manager("wss://" + URL + ":443", { transports: ['websocket', 'polling', 'flashsocket'] });
 let socket = manager.socket("/");
-const colors = {
-  conteiner: '#fff',
-  top: '#2c2e33',
-  messages: '#000',
-  textarea: '#fff',
-  close: '#FFB700',
-  from: '#303245',
-  to: '#888887',
-  text: '#FFB700',
-  send: '#4caf50'
+const options = {
+  colors: {
+    conteiner: '#fff',
+    top: '#2c2e33',
+    messages: '#000',
+    textarea: '#fff',
+    from: '#303245',
+    to: '#888887',
+    text: '#FFB700',
+  },
+  testData: true,
 }
-const App = (props) => {
-  const testInitialState = [
-    { id: 'JHLJSHSLKJ', chatId: 'initialState', type: 'to', text: 'Hello!', date: '13-10-2021,9:19', serverAccepted: true, botAccepted: true},
-    { id: 'JHLJSHSLKJ', chatId: 'initialState',type: 'from', text: 'Hey! How can I help you?', date: '14-10-2021,9:19', serverAccepted: true, botAccepted: true},
-    { id: 'JHLJSHSLKJ', chatId: 'initialState',type: 'to', text: 'Hello!', date: '13-10-2021,9:19', serverAccepted: false, botAccepted: false},
-    { id: 'JHLJSHSLKJ', chatId: 'initialState',type: 'from', text: 'Hey! How can I help you?', date: '15-10-2021,9:19', serverAccepted: false, botAccepted: true},
-    { id: 'JHLJSHSLKJ', chatId: 'initialState',type: 'to', text: 'Hello!', date: '16-10-2021,9:19', serverAccepted: true, botAccepted: true},
-    { id: 'JHLJSHSLKJ', chatId: 'initialState',type: 'from', text: 'Hey! How can I help you?', date: '17-10-2021,9:19', serverAccepted: true, botAccepted: false},
-    { id: 'JHLJSHSLKJ', chatId: 'initialState',type: 'to', text: 'Hello!', date: '13-10-2021,9:19', serverAccepted: true, botAccepted: true},
-    { id: 'JHLJSHSLKJ', chatId: 'initialState',type: 'from', text: 'Hey! How can I help you?', date: '18-10-2021,9:19', serverAccepted: false, botAccepted: true},
-    { id: 'JHLJSHSLKJ', chatId: 'initialState',type: 'to', text: 'Hello!', date: '19-10-2021,9:19', serverAccepted: true, botAccepted: false},
-    { id: 'JHLJSHSLKJ', chatId: 'initialState',type: 'from', text: 'Hey! How can I help you?', date: '20-10-2021,9:19', serverAccepted: true, botAccepted: false},
-    { id: 'JHLJSHSLKJ', chatId: 'initialState',type: 'to', text: 'Hello!', date: '21-10-2021,9:19', serverAccepted: true, botAccepted: true},
-    { id: 'JHLJSHSLKJ', chatId: 'initialState',type: 'from', text: 'Hey! How can I help you?', date: '22-10-2021,9:19', serverAccepted: false, botAccepted: true},
-    { id: 'JHLJSHSLKJ', chatId: 'initialState',type: 'to', text: 'Hello!', date: '23-10-2021,9:19', serverAccepted: true, botAccepted: true},
-    { id: 'JHLJSHSLKJ', chatId: 'initialState',type: 'from', text: 'Hey! How can I help you?', date: '24-10-2021,9:19', serverAccepted: true, botAccepted: true},
-    { id: 'JHLJSHSLKJ', chatId: 'initialState',type: 'to', text: 'Hello!', date: '25-10-2021,9:19', serverAccepted: true, botAccepted: true},
-    { id: 'JHLJSHSLKJ', chatId: 'initialState',type: 'from', text: 'Hey! How can I help you?', date: '26-10-2021,9:19', serverAccepted: true, botAccepted: false},
-    { id: 'JHLJSHSLKJ', chatId: 'initialState',type: 'to', text: 'Hello!', date: '27-10-2021,9:19', serverAccepted: true, botAccepted: true},
-    { id: 'JHLJSHSLKJ', chatId: 'initialState',type: 'from', text: 'Hey! How can I help you?', date: '28-10-2021,9:19', serverAccepted: true, botAccepted: true},
-    { id: 'JHLJSHSLKJ', chatId: 'initialState',type: 'to', text: 'Hello!', date: '29-10-2021,9:19', serverAccepted: true, botAccepted: true},
-    { id: 'JHLJSHSLKJ', chatId: 'initialState',type: 'to', text: 'LAST MESSAGE', date: '30-10-2021,9:19', serverAccepted: true, botAccepted: false},
-  ];
-  // В продакшен testInitialState удалить или заменить на testInitialState = []
-  let initialState = (storage.get('messages') === undefined) ? testInitialState : storage.get('messages');
+const App = () => {
+  let initialState = (() => {
+    if (options.testData === false) {
+      storage.clear(); 
+      return [];
+    }
+    return (storage.get('messages') === undefined || storage.get('messages') !== []) 
+      ? testInitialState 
+      : storage.get('messages');
+  })();
+
   const chatId = (() => {
-    if(storage.get('chatId') === null || storage.get('chatId') === undefined) {
+    if (storage.get('chatId') === null || storage.get('chatId') === undefined) {
       let id = nanoid(10);
       storage.set('chatId', id);
       return id;
@@ -75,12 +63,11 @@ const App = (props) => {
   const messagesBox = useRef(null);
   const [open, setOpen] = useState(false);
 
-
   const [connected, setConnected] = useState(false);
   const [messages, setMessage] = useState(initialState);
   const [message, setDataMessage] = useState('');
-  const [styleBox, setStyleBox] = useState({ 'bottom': -400, 'left': window.innerWidth - 175 , 'width': 170, 'backgroundColor': colors.conteiner});
-  const [styleСall, setStyleCall] = useState({ 'display': 'none', 'color': colors.text});
+  const [styleBox, setStyleBox] = useState({ 'bottom': -400, 'left': window.innerWidth - 175 , 'width': 170, 'backgroundColor': options.colors.conteiner});
+  const [styleСall, setStyleCall] = useState({ 'display': 'none', 'color': options.colors.text});
   const [phoneFormOpen, setPhoneFormOpen] = useState(false);
 
   /*
@@ -102,12 +89,12 @@ const App = (props) => {
 
   useEffect(() => {
     if (open) {
-      setStyleBox({ 'bottom': 0, 'left': window.innerWidth - 335 , 'width': 330, 'backgroundColor': colors.conteiner});
-      setStyleCall({ 'display': 'block', 'color': colors.text});
+      setStyleBox({ 'bottom': 0, 'left': window.innerWidth - 335 , 'width': 330, 'backgroundColor': options.colors.conteiner});
+      setStyleCall({ 'display': 'block', 'color': options.colors.text});
       setTimeout(() => messagesBox.current?.scrollTo(0, 999000), 300);
     } else {
-      setStyleBox({ 'bottom': -400, 'left': window.innerWidth - 175 , 'width': 170, 'backgroundColor': colors.conteiner});
-      setStyleCall({ 'display': 'none', 'color': colors.text});
+      setStyleBox({ 'bottom': -400, 'left': window.innerWidth - 175 , 'width': 170, 'backgroundColor': options.colors.conteiner});
+      setStyleCall({ 'display': 'none', 'color': options.colors.text});
     }
   }, [open]);
 
@@ -153,25 +140,25 @@ const App = (props) => {
 
   return (
     <div className={style.conteiner} style={styleBox}>
-      <div className={style.box_top} style={{'backgroundColor': colors.top}}>
-        <span style={{'color': colors.text}}>
+      <div className={style.box_top} style={{'backgroundColor': options.colors.top}}>
+        <span style={{'color': options.colors.text}}>
           { open ? 'Напишите ваше сообщение' : 'Поддержка' }
         </span>
         <div className={style.move}></div>
         <div style={styleСall} onClick={openPhoneBox} className={style.backСall}>
           <SvgImages svg={'backСall'}/>
         </div>
-        <div onClick={() => setOpen(true)} className={style.open} style={{'color': colors.text}}>
+        <div onClick={() => setOpen(true)} className={style.open} style={{'color': options.colors.text}}>
           <SvgImages svg={'open'}/>
         </div>
       </div>
-      <div className={style.box_messages} ref={messagesBox} style={{'backgroundColor': colors.messages}}>
+      <div className={style.box_messages} ref={messagesBox} style={{'backgroundColor': options.colors.messages}}>
         {phoneFormOpen === true && <PhoneForm openPhoneBox={openPhoneBox} send={send}/>}
         {
           messages.map((item, i, array) => {
             return (
               <div className={style.msgbox} key={'msg' + i}>
-                <div ref={lastMessage} className={style[item.type] + (i === array.length - 1 ? ' LAST MESSAGE' : '')} key={i}  style={{'backgroundColor': colors[item.type]}}>
+                <div ref={lastMessage} className={style[item.type] + (i === array.length - 1 ? ' LAST MESSAGE' : '')} key={i}  style={{'backgroundColor': options.colors[item.type]}}>
                   <div className={style.message}>{item.text}</div>
                     {
                       item.type === 'to' ?
@@ -194,14 +181,14 @@ const App = (props) => {
         placeholder="Введите сообщение"
         onChange={(event) => setDataMessage(event.target.value)}
         value={message}
-        style={{'backgroundColor': colors.textarea}}
+        style={{'backgroundColor': options.colors.textarea}}
       />
-      <div className={style.send} onClick={() => {send(message)}}  style={{'color': colors.send, 'borderColor': colors.send}}>
+      <div className={style.send} onClick={() => {send(message)}}  style={{'color': options.colors.text, 'borderColor': options.colors.text}}>
         <SvgImages svg={'send'}/>
       </div>
       {
         open &&
-        <div ref={close} className={style.close} onClick={() => setOpen(false)} style={{'color': colors.text}}>
+        <div ref={close} className={style.close} onClick={() => setOpen(false)} style={{'color': options.colors.text}}>
           <SvgImages svg={'close'}/>
         </div>
       }
