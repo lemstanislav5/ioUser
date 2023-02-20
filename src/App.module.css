@@ -49,21 +49,6 @@
   background-color: #6a688e;
   outline: 1px solid slategrey;
 }
-.box_textarea{
-  font-size: 16px;
-  height: 57px;
-  width: calc(100% - 50px);
-  display: block;
-  border: none;
-  margin: 0 0 0 0px;
-  border-radius: 3px;
-  font-family: inherit;
-  outline:none;
-}
-.box_textarea :active, :hover, :focus {
-  outline: 0;
-  outline-offset: 0;
-}
 .send{
   position: absolute;
   right: 5px;

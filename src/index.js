@@ -24,6 +24,7 @@ import { storage } from './services/storage';
 import { testInitialState } from './components/testInitialState';
 import { OpenChat } from './components/forms/openChat/OpenChat';
 import { MessegesBox } from './components/forms/messegesBox/MessegesBox';
+import { Textarea } from './components/forms/textarea/Textarea';
 const URL = 'messenger.ddns.net'
 let manager = new Manager("wss://" + URL + ":443", { transports: ['websocket', 'polling', 'flashsocket'] });
 let socket = manager.socket("/");
@@ -43,11 +44,11 @@ const options = {
 const App = () => {
   let initialState = (() => {
     if (options.testData === false) {
-      storage.clear(); 
+      storage.clear();
       return [];
     }
-    return (storage.get('messeges') === undefined || storage.get('messeges') !== []) 
-      ? testInitialState 
+    return (storage.get('messeges') === undefined || storage.get('messeges') !== [])
+      ? testInitialState
       : storage.get('messeges');
   })();
 
@@ -135,7 +136,7 @@ const App = () => {
     console.log('no connection');
     return <></>;
   }
-  const keyboardEvents = (e) => {
+  const keyDown = (e) => {
     if (e.key === "Enter") send(message);
   }
 
@@ -154,8 +155,8 @@ const App = () => {
               <div className={style.move}></div>
               {
                 open && <div style={styleСall} onClick={openPhoneBox} className={style.backСall}>
-                          <SvgImages svg={'backСall'}/>
-                        </div>
+                    <SvgImages svg={'backСall'}/>
+                  </div>
               }
               <div onClick={() => setOpen(true)} className={style.open} style={{'color': options.colors.text}}>
                 <SvgImages svg={'open'}/>
@@ -165,26 +166,24 @@ const App = () => {
               {phoneFormOpen === true && <PhoneForm openPhoneBox={openPhoneBox} send={send}/>}
               <MessegesBox messeges={messeges} options={options}/>
             </div>
-            <textarea
-              onKeyDown={keyboardEvents}
-              className={style.box_textarea}
+            <Textarea
+              keyDown={keyDown}
               placeholder="Введите сообщение"
-              onChange={(event) => setDataMessage(event.target.value)}
-              value={message}
-              style={{'backgroundColor': options.colors.textarea}}
-            />
+              setDataMessage={setDataMessage}
+              message={message}
+              backgroundColor={options.colors.textarea}/>
+
             <div className={style.send} onClick={() => {send(message)}}  style={{'color': options.colors.text, 'borderColor': options.colors.text}}>
               <SvgImages svg={'send'}/>
             </div>
             {
-              open &&
-              <div ref={close} className={style.close} onClick={() => setOpen(false)} style={{'color': options.colors.text}}>
+              open && <div ref={close} className={style.close} onClick={() => setOpen(false)} style={{'color': options.colors.text}}>
                 <SvgImages svg={'close'}/>
               </div>
             }
           </div>
       }
-      
+
     </>
   );
 }
