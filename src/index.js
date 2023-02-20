@@ -62,15 +62,14 @@ const App = () => {
     }
   })();
 
-  const styleStart = {'bottom': -400, 'left': window.innerWidth - 175 , 'width': 170, 'backgroundColor': options.colors.conteiner};
-  const styleEnd = { 'bottom': 0, 'left': window.innerWidth - 335 , 'width': 330, 'backgroundColor': options.colors.conteiner};
+  
   const close = useRef(null);
   const messegesBox = useRef(null);
   const [open, setOpen] = useState(false);
   const [connected, setConnected] = useState(false);
   const [messeges, setMessage] = useState(initialState);
   const [message, setDataMessage] = useState('');
-  const [styleBox, setStyleBox] = useState(styleStart);
+  const [styleBox, setStyleBox] = useState({});
   const [styleСall, setStyleCall] = useState({'display': 'block', 'color': options.colors.text});
   const [phoneFormOpen, setPhoneFormOpen] = useState(false);
 
@@ -93,10 +92,10 @@ const App = () => {
 
   useEffect(() => {
     if (open) {
-      setStyleBox(styleEnd);
+      setStyleBox({ 'bottom': 0, 'left': window.innerWidth - 335 , 'width': 330, 'backgroundColor': options.colors.conteiner});
       setTimeout(() => messegesBox.current?.scrollTo(0, 999000), 300);
     } else {
-      setStyleBox(styleStart);
+      setStyleBox({'bottom': -400, 'left': window.innerWidth - 175 , 'width': 170, 'backgroundColor': options.colors.conteiner});
     }
   }, [open]);
 
