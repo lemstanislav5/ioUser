@@ -1,4 +1,5 @@
 /* З А Д А Ч И
+* 0. Сохранение сообщений по схеме: хранилище - стейт - хранилище 
 * 1. Предложить представиться
 * 2. Ссылки на wothsapp
 * 3. Отослать картинку
@@ -13,6 +14,7 @@
 * 12. Скрипт для вставки в сайт готовый
 * 13. Видеоинструкция и статья с 0
 */
+// Поменяйте опции на свое усмотрение преред deploy
 import React, { useRef , useEffect, useState }  from 'react';
 import ReactDOM from 'react-dom';
 import style from './App.module.css';
@@ -25,22 +27,11 @@ import { testInitialState } from './components/testInitialState';
 import { OpenChat } from './components/forms/openChat/OpenChat';
 import { MessegesBox } from './components/forms/messegesBox/MessegesBox';
 import { Textarea } from './components/forms/textarea/Textarea';
-const URL = 'messenger.ddns.net'
-let manager = new Manager("wss://" + URL + ":443", { transports: ['websocket', 'polling', 'flashsocket'] });
+import { options } from './options';
+
+let manager = new Manager("wss://" + options.url + ":443", { transports: ['websocket', 'polling', 'flashsocket'] });
 let socket = manager.socket("/");
-const options = {
-  colors: {
-    conteiner: '#fff',
-    top: '#2c2e33',
-    messeges: '#000',
-    textarea: '#fff',
-    from: '#303245',
-    to: '#888887',
-    text: '#FFB700',
-  },
-  testData: true,
-  iconChat: true,
-}
+
 const App = () => {
   let initialState = (() => {
     if (options.testData === false) {
@@ -78,25 +69,15 @@ const App = () => {
    * useEffect(function, []) один раз
    * useEffect(function, [args]) запуск при обновлении args
   */
+  useEffect(() => setTimeout(() => messegesBox.current?.scrollTo(0, 999000), 300));
   useEffect(() => {
-    socket.on('connect', () => {
-      console.log('connect');
-      setConnected(true);
-      setTimeout(() => messegesBox.current?.scrollTo(0, 999000), 300);
-    });
-    socket.on('disconnect', () => {
-      console.log('disconnect');
-      setConnected(false);
-    });
+    socket.on('connect', () => setConnected(true));
+    socket.on('disconnect', () => setConnected(false));
   }, []);
 
   useEffect(() => {
-    if (open) {
-      setStyleBox({ 'bottom': 0, 'left': window.innerWidth - 335 , 'width': 330, 'backgroundColor': options.colors.conteiner});
-      setTimeout(() => messegesBox.current?.scrollTo(0, 999000), 300);
-    } else {
-      setStyleBox({'bottom': -400, 'left': window.innerWidth - 175 , 'width': 170, 'backgroundColor': options.colors.conteiner});
-    }
+    if (open) return setStyleBox({ 'bottom': 0, 'left': window.innerWidth - 335 , 'width': 330});
+    setStyleBox({'bottom': -400, 'left': window.innerWidth - 175 , 'width': 170});
   }, [open]);
 
   useEffect(() => {
@@ -105,8 +86,6 @@ const App = () => {
       const id = nanoid(10);
       const incomingMessage = { id, chatId, type: 'from', text, date: dateMessage(), serverAccepted: true, botAccepted: true }
       setMessage([...messeges, incomingMessage]);
-      setTimeout(() => messegesBox.current?.scrollTo(0, 999000), 300);
-      console.log(messeges.length)
       socket.off('new message');
     });
     storage.set('messeges', messeges);
@@ -124,7 +103,6 @@ const App = () => {
       console.log(res);//! UPDATE
     });
     setDataMessage('');
-    // setTimeout(() => lastMessage.current?.scrollIntoView({ behavior: "smooth" }), 200);
   }
 
   const openPhoneBox = () => {
@@ -170,7 +148,7 @@ const App = () => {
               placeholder="Введите сообщение"
               setDataMessage={setDataMessage}
               message={message}
-              backgroundColor={options.colors.textarea}/>
+              backgroundColor={options.colors.conteiner}/>
 
             <div className={style.send} onClick={() => {send(message)}}  style={{'color': options.colors.text, 'borderColor': options.colors.text}}>
               <SvgImages svg={'send'}/>
