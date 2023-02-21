@@ -71,6 +71,7 @@ const App = () => {
   */
   useEffect(() => setTimeout(() => messegesBox.current?.scrollTo(0, 999000), 300));
   useEffect(() => {
+    //prevCountRef.current
     socket.on('connect', () => setConnected(true));
     socket.on('disconnect', () => setConnected(false));
   }, []);
