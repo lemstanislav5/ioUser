@@ -1,5 +1,5 @@
 /* З А Д А Ч И
-* 0. Сохранение сообщений по схеме: хранилище - стейт - хранилище 
+* 0. Сохранение сообщений по схеме: хранилище - стейт - хранилище
 * 1. Предложить представиться
 * 2. Ссылки на wothsapp
 * 3. Отослать картинку
@@ -31,6 +31,7 @@ import { options } from './options';
 
 let manager = new Manager("wss://" + options.url + ":443", { transports: ['websocket', 'polling', 'flashsocket'] });
 let socket = manager.socket("/");
+window._socket_ = socket;
 
 const App = () => {
   let initialState = (() => {
@@ -53,7 +54,8 @@ const App = () => {
     }
   })();
 
-  
+
+
   const close = useRef(null);
   const messegesBox = useRef(null);
   const [open, setOpen] = useState(false);
@@ -71,18 +73,18 @@ const App = () => {
   */
   useEffect(() => setTimeout(() => messegesBox.current?.scrollTo(0, 999000), 300));
   useEffect(() => {
-    //prevCountRef.current
     socket.on('connect', () => setConnected(true));
     socket.on('disconnect', () => setConnected(false));
   }, []);
 
   useEffect(() => {
-    if (open) return setStyleBox({ 'bottom': 0, 'left': window.innerWidth - 335 , 'width': 330});
-    setStyleBox({'bottom': -400, 'left': window.innerWidth - 175 , 'width': 170});
+    if (open) return setStyleBox({ 'bottom': 0, 'left': window.innerWidth - 335 , 'width': 330, 'backgroundColor': options.colors.conteiner});
+    setStyleBox({'bottom': -400, 'left': window.innerWidth - 175 , 'width': 170, 'backgroundColor': options.colors.conteiner});
   }, [open]);
 
   useEffect(() => {
     //! Установление слушателя дважды
+    //prevCountRef.current
     socket.once('new message', (text) => {
       const id = nanoid(10);
       const incomingMessage = { id, chatId, type: 'from', text, date: dateMessage(), serverAccepted: true, botAccepted: true }
