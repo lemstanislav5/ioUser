@@ -32,10 +32,9 @@ import { chatId } from './services/chatId';
 
 let manager = new Manager("wss://" + options.url + ":443", { transports: ['websocket', 'polling', 'flashsocket'] });
 let socket = manager.socket("/");
+//socket.connected: true, disconnected: false
 
 const App = () => {
-  
-
   const close = useRef(null);
   const messegesBox = useRef(null);
   const [open, setOpen] = useState(false);
@@ -46,14 +45,9 @@ const App = () => {
   const [styleСall, setStyleCall] = useState({'display': 'block', 'color': options.colors.text});
   const [phoneFormOpen, setPhoneFormOpen] = useState(false);
 
-  /*
-   * useEffect(function) запуск при каждом рендере
-   * useEffect(function, []) один раз
-   * useEffect(function, [args]) запуск при обновлении args
-  */
+  // useEffect(fn) при каждом рендере; (fn, []) один раз; (fn, [args]) при обновлении args
   useEffect(() => setTimeout(() => messegesBox.current?.scrollTo(0, 999000), 300));
   useEffect(() => {
-    console.log(this)
     socket.on('connect', () => setConnected(true));
     socket.on('disconnect', () => setConnected(false));
   }, []);
