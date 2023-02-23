@@ -31,9 +31,9 @@ import { options } from './options';
 
 let manager = new Manager("wss://" + options.url + ":443", { transports: ['websocket', 'polling', 'flashsocket'] });
 let socket = manager.socket("/");
-window._socket_ = socket;
 
 const App = () => {
+  
   let initialState = (() => {
     if (options.testData === false) {
       storage.clear();
@@ -54,8 +54,6 @@ const App = () => {
     }
   })();
 
-
-
   const close = useRef(null);
   const messegesBox = useRef(null);
   const [open, setOpen] = useState(false);
@@ -73,6 +71,7 @@ const App = () => {
   */
   useEffect(() => setTimeout(() => messegesBox.current?.scrollTo(0, 999000), 300));
   useEffect(() => {
+    console.log(this)
     socket.on('connect', () => setConnected(true));
     socket.on('disconnect', () => setConnected(false));
   }, []);
@@ -83,15 +82,15 @@ const App = () => {
   }, [open]);
 
   useEffect(() => {
-    //! Установление слушателя дважды
-    //prevCountRef.current
-    socket.once('new message', (text) => {
-      const id = nanoid(10);
-      const incomingMessage = { id, chatId, type: 'from', text, date: dateMessage(), serverAccepted: true, botAccepted: true }
-      setMessage([...messeges, incomingMessage]);
-      socket.off('new message');
-    });
-    storage.set('messeges', messeges);
+    //! prevCountRef.current
+    // Проверяем наличие слушателя, в случае отсутствия устанавливаем 
+    if (socket._callbacks['$new message'] !== undefined)return false;
+      socket.on('new message', (text) => {
+        const id = nanoid(10);
+        const incomingMessage = { id, chatId, type: 'from', text, date: dateMessage(), serverAccepted: true, botAccepted: true }
+        setMessage([...messeges, incomingMessage]);
+      });
+      storage.set('messeges', messeges);
   }, [messeges, chatId]);
 
   const dateMessage = () => {
