@@ -1,4 +1,6 @@
-export const testInitialState = [
+import { options } from '../options';
+import { storage } from './storage';
+const testInitialState = [
   { id: 'JHLJSHSLKJ', chatId: 'initialState', type: 'to', text: 'Hello!', date: '13-10-2021,9:19', serverAccepted: true, botAccepted: true},
   { id: 'JHLJSHSLKJ', chatId: 'initialState',type: 'from', text: 'Hey! How can I help you?', date: '14-10-2021,9:19', serverAccepted: true, botAccepted: true},
   { id: 'JHLJSHSLKJ', chatId: 'initialState',type: 'to', text: 'Hello!', date: '13-10-2021,9:19', serverAccepted: false, botAccepted: false},
@@ -19,4 +21,14 @@ export const testInitialState = [
   { id: 'JHLJSHSLKJ', chatId: 'initialState',type: 'from', text: 'Hey! How can I help you?', date: '28-10-2021,9:19', serverAccepted: true, botAccepted: true},
   { id: 'JHLJSHSLKJ', chatId: 'initialState',type: 'to', text: 'Hello!', date: '29-10-2021,9:19', serverAccepted: true, botAccepted: true},
   { id: 'JHLJSHSLKJ', chatId: 'initialState',type: 'to', text: 'LAST MESSAGE', date: '30-10-2021,9:19', serverAccepted: true, botAccepted: false},
-]
+];
+
+export const initialState = (() => {
+  if (options.testData === false) {
+    storage.clear();
+    return [];
+  }
+  return (storage.get('messeges') === undefined || storage.get('messeges') !== [])
+    ? testInitialState
+    : storage.get('messeges');
+})();

@@ -23,36 +23,18 @@ import { nanoid } from 'nanoid';
 import { PhoneForm } from './components/forms/phoneForm/PhoneForm';
 import { SvgImages } from './components/images/SvgImages';
 import { storage } from './services/storage';
-import { testInitialState } from './components/testInitialState';
+import { initialState } from './services/initialState';
 import { OpenChat } from './components/forms/openChat/OpenChat';
 import { MessegesBox } from './components/forms/messegesBox/MessegesBox';
 import { Textarea } from './components/forms/textarea/Textarea';
 import { options } from './options';
+import { chatId } from './services/chatId';
 
 let manager = new Manager("wss://" + options.url + ":443", { transports: ['websocket', 'polling', 'flashsocket'] });
 let socket = manager.socket("/");
 
 const App = () => {
   
-  let initialState = (() => {
-    if (options.testData === false) {
-      storage.clear();
-      return [];
-    }
-    return (storage.get('messeges') === undefined || storage.get('messeges') !== [])
-      ? testInitialState
-      : storage.get('messeges');
-  })();
-
-  const chatId = (() => {
-    if (storage.get('chatId') === null || storage.get('chatId') === undefined) {
-      let id = nanoid(10);
-      storage.set('chatId', id);
-      return id;
-    } else {
-      return storage.get('chatId')
-    }
-  })();
 
   const close = useRef(null);
   const messegesBox = useRef(null);
@@ -84,14 +66,14 @@ const App = () => {
   useEffect(() => {
     //! prevCountRef.current
     // Проверяем наличие слушателя, в случае отсутствия устанавливаем 
-    if (socket._callbacks['$new message'] !== undefined)return false;
+    if (socket._callbacks['$new message'] !== undefined) return false;
       socket.on('new message', (text) => {
         const id = nanoid(10);
         const incomingMessage = { id, chatId, type: 'from', text, date: dateMessage(), serverAccepted: true, botAccepted: true }
         setMessage([...messeges, incomingMessage]);
       });
       storage.set('messeges', messeges);
-  }, [messeges, chatId]);
+  }, [messeges]);
 
   const dateMessage = () => {
     let date = new Date();
@@ -115,28 +97,20 @@ const App = () => {
     console.log('no connection');
     return <></>;
   }
-  const keyDown = (e) => {
-    if (e.key === "Enter") send(message);
-  }
+  const keyDown = (e) => (e.key === "Enter") && send(message);
 
   return (
     <>
       {
         (options.iconChat === true && open === false)
-        ?
-          <OpenChat colorStart={options.colors.text} colorEnd={options.colors.top} setOpen={setOpen}/>
-        :
-          <div className={style.conteiner} style={styleBox}>
+        ? <OpenChat colorStart={options.colors.text} colorEnd={options.colors.top} setOpen={setOpen}/>
+        : <div className={style.conteiner} style={styleBox}>
             <div className={style.box_top} style={{'backgroundColor': options.colors.top}}>
               <span style={{'color': options.colors.text}}>
-                { open ? 'Напишите ваше сообщение' : 'Поддержка' }
+                {open ? 'Напишите ваше сообщение' : 'Поддержка'}
               </span>
               <div className={style.move}></div>
-              {
-                open && <div style={styleСall} onClick={openPhoneBox} className={style.backСall}>
-                    <SvgImages svg={'backСall'}/>
-                  </div>
-              }
+              {open && <div style={styleСall} onClick={openPhoneBox} className={style.backСall}><SvgImages svg={'backСall'}/></div>}
               <div onClick={() => setOpen(true)} className={style.open} style={{'color': options.colors.text}}>
                 <SvgImages svg={'open'}/>
               </div>
@@ -155,11 +129,9 @@ const App = () => {
             <div className={style.send} onClick={() => {send(message)}}  style={{'color': options.colors.text, 'borderColor': options.colors.text}}>
               <SvgImages svg={'send'}/>
             </div>
-            {
-              open && <div ref={close} className={style.close} onClick={() => setOpen(false)} style={{'color': options.colors.text}}>
+            { open && <div ref={close} className={style.close} onClick={() => setOpen(false)} style={{'color': options.colors.text}}>
                 <SvgImages svg={'close'}/>
-              </div>
-            }
+              </div> }
           </div>
       }
 
@@ -167,9 +139,4 @@ const App = () => {
   );
 }
 
-ReactDOM.render(
-  <React.StrictMode>
-    <App/>
-  </React.StrictMode>,
-  document.getElementById('chat_room')
-);
+ReactDOM.render(<React.StrictMode> <App/> </React.StrictMode>, document.getElementById('online-consultant-client'));
