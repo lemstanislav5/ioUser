@@ -16,10 +16,10 @@ export const MessegesBox = (props) => {
                 item.type === 'to' ?
                   <>
                     <div className={style.serverAccepted}>
-                      <SvgImages fill={item.serverAccepted ? '#0cec0c' : ' #e82554'}/>
+                      <SvgImages svg='daw' fill={item.serverAccepted ? '#0cec0c' : ' #e82554'}/>
                     </div>
                     <div className={style.botAccepted}>
-                      <SvgImages fill={item.botAccepted ? '#0cec0c' : ' #e82554'}/>
+                      <SvgImages svg='line' fill={item.botAccepted ? '#0cec0c' : ' #e82554'}/>
                     </div>
                   </>
                 : ''
