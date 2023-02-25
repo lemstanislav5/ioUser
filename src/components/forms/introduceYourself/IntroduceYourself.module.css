@@ -1,20 +1,41 @@
 .headForm{
   color: #fff;
+  margin: 10px 0px 0 0;
 }
 .containerForm{
-  width: 250px;
+  width: 85%;
   border: 1px #fff solid;
   text-align: center;
+  display: revert;
+  margin: 0 8%;
+  border-radius: 8px;
+}
+.labelForm{
+  width: calc(100% - 64px);
   display: inline-block;
-  margin: 0 40px;
+  text-align: left;
+  margin: 2px 0px;
+  padding: 0;
+  font-size: 13px;
+  color: #fff;
 }
 .inputForm{
-  width: 160px;
-  height: 30px;
+  height: 22px;
   font-size: 16px;
+  width: calc(100% - 70px);
+  display: inline-block;
   text-align: center;
-  border: none;
+  margin: 0px 0px 0px 0
 }
 .submitForm{
-  display: block;
+  display: inline-block;
+  height: 25px;
+  font-size: 16px;
+  width: calc(100% - 82px);
+  background-color: #000;
+  border: 1px #fff solid;
+  border-radius: 5px;
+  color: #fff;
+  margin: 10px 0 10px 0px;
+  cursor: pointer;
 }

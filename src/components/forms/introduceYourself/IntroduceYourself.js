@@ -5,16 +5,12 @@ export const IntroduceYourself = (props) => {
 
   return(
     <div className={style.containerForm}>
-    <h3 className={style.headForm}>Представьтесь в чате</h3>
+    <div className={style.headForm}>Представьтесь в чате</div>
       <form>
-        <label>
-          Ваше имя:
-          <input className={style.inputForm} type="text" name="name" />
-        </label>
-        <label>
-          Ваш e-mail:
-          <input className={style.inputForm} type="text" name="Email" />
-        </label>
+        <label className={style.labelForm}> Ваше имя: </label>
+        <input className={style.inputForm} type="text" name="name" />
+        <label className={style.labelForm}> Ваш e-mail: </label>
+        <input className={style.inputForm} type="text" name="Email" />
         <input className={style.submitForm} type="submit" value="Submit" />
       </form>
     </div> 
