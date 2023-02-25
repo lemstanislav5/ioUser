@@ -22,14 +22,16 @@ import { Manager } from "socket.io-client";
 import { PhoneForm } from './components/forms/phoneForm/PhoneForm';
 import { SvgImages } from './components/images/SvgImages';
 import { storage } from './services/storage';
-import { initialState } from './services/initialState';
+import { initialTestMesseges } from './services/initialTestMesseges';
 import { OpenChat } from './components/forms/openChat/OpenChat';
 import { MessegesBox } from './components/forms/messegesBox/MessegesBox';
 import { Textarea } from './components/forms/textarea/Textarea';
 import { options } from './options';
 import { chatId, newId } from './services/chatId';
 import { FirstQuestions } from './components/forms/firstQuestions/FirstQuestions';
-                          //"wss://" + options.url + ":433"
+import { IntroduceYourself } from './components/forms/introduceYourself/IntroduceYourself';
+
+                        //"wss://" + options.url + ":433"
 let manager = new Manager("ws://" + options.url + ":80", { transports: ['websocket', 'polling', 'flashsocket'] });
 let socket = manager.socket("/");
 //socket.connected: true, disconnected: false
@@ -39,13 +41,13 @@ const App = () => {
   const messegesBox = useRef(null);
   const [open, setOpen] = useState(false);
   const [connected, setConnected] = useState(false);
-  const [messeges, setMessage] = useState(initialState);
+  const [messeges, setMessage] = useState(initialTestMesseges);
   const [message, setDataMessage] = useState('');
   const [styleBox, setStyleBox] = useState({});
   const [styleСall, setStyleCall] = useState({'display': 'block', 'color': options.colors.text});
   const [phoneFormOpen, setPhoneFormOpen] = useState(false);
 
-  // useEffect(fn) при каждом рендере; (fn, []) один раз; (fn, [args]) при обновлении args
+  // (fn) каждый рендер; (fn, []) один раз; (fn, [args]) при обновлении args
   useEffect(() => setTimeout(() => messegesBox.current?.scrollTo(0, 999000), 300));
   useEffect(() => {
     socket.on('connect', () => setConnected(true));
@@ -117,6 +119,7 @@ const App = () => {
               {phoneFormOpen === true && <PhoneForm openPhoneBox={openPhoneBox} send={send}/>}
               <FirstQuestions send={send} initialFirstQuestions={options.initialFirstQuestions}/>
               <MessegesBox messeges={messeges} options={options}/>
+              <IntroduceYourself/>
             </div>
             <Textarea
               keyDown={keyDown}

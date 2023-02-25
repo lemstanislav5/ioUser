@@ -1,16 +1,20 @@
-.greetings {
-  margin-bottom: 10px;
-  display: inline-block;
-  width: 100%;
-}
-.greetings div{
+.headForm{
   color: #fff;
+}
+.containerForm{
+  width: 250px;
   border: 1px #fff solid;
-  padding: 5px 10px;
-  margin: 11px 0 0 51%;
-  border-radius: 30px;
-  float: right;
+  text-align: center;
   display: inline-block;
-  font-size: 15px;
-  cursor: pointer;
+  margin: 0 40px;
+}
+.inputForm{
+  width: 160px;
+  height: 30px;
+  font-size: 16px;
+  text-align: center;
+  border: none;
+}
+.submitForm{
+  display: block;
 }

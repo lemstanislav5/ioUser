@@ -1,6 +1,6 @@
 import { options } from '../options';
 import { storage } from './storage';
-const initialTestMesseges = [
+const testMesseges = [
   { id: 'JHLJSHS121', chatId: 'initialState', type: 'to', text: 'Hello!', date: '13-10-2021,9:19', serverAccepted: true, botAccepted: true},
   { id: 'JHLJSHS111', chatId: 'initialState',type: 'from', text: 'Hey! How can I help you?', date: '14-10-2021,9:19', serverAccepted: true, botAccepted: true},
   { id: 'JHLJSHS222', chatId: 'initialState',type: 'to', text: 'Hello!', date: '13-10-2021,9:19', serverAccepted: false, botAccepted: false},
@@ -23,21 +23,22 @@ const initialTestMesseges = [
   { id: 'JHLJSHS725', chatId: 'initialState',type: 'to', text: 'LAST MESSAGE', date: '30-10-2021,9:19', serverAccepted: true, botAccepted: false},
 ];
 
-export const initialState = (() => {
+export const initialTestMesseges = (() => {
   let ms = storage.get('messeges');
   let testMode = () => {
     if (ms !== undefined && ms[0] !== undefined && ms[0].id === 'JHLJSHS121') return true;
     return false
   }
+  console.log(options.testData, testMode())
   if (options.testData && testMode()) {
     return ms;
   } else if(options.testData && !testMode()) {
     storage.clear()
-    return initialTestMesseges;
+    return testMesseges;
   } else if(!options.testData && testMode()) {
     storage.clear();
     return [];
   } else if(!options.testData && !testMode()) {
-    return ms;
+    return ms === undefined? [] : ms;
   }
 })();

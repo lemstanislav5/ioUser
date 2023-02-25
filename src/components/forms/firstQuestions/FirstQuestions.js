@@ -16,11 +16,7 @@ export const FirstQuestions = (props) => {
 
   return(
     <div className={style.greetings}>
-      {
-        initialFirstQuestions.map( item => {
-          return <div onClick={greetings}>{item}</div>
-        })
-      }
+      { initialFirstQuestions.map((item, i) => ( <div key={'q' + i} onClick={greetings}>{item}</div>)) }
     </div>
   )
 }

@@ -1,23 +1,22 @@
 import React, { useState, useEffect }  from 'react'
 import style from './IntroduceYourself.module.css'
-import { userController } from '../../../controllers/userController';
 
 export const IntroduceYourself = (props) => {
-  const { send } = props;
-  const [user, setUser] = useState(false);
-  useEffect(() => {
-    setUser(userController.get());
-  },[user]);
-  const greetings = (e) => {
-    send(e.target.innerText);
-  }
-
-  if(user !== false) return false;
 
   return(
-    <div className={style.greetings}>
-      <div onClick={greetings}>Здравствуйте!</div>
-      <div onClick={greetings}>Mне нужна помощь!</div>
-    </div>
+    <div className={style.containerForm}>
+    <h3 className={style.headForm}>Представьтесь в чате</h3>
+      <form>
+        <label>
+          Ваше имя:
+          <input className={style.inputForm} type="text" name="name" />
+        </label>
+        <label>
+          Ваш e-mail:
+          <input className={style.inputForm} type="text" name="Email" />
+        </label>
+        <input className={style.submitForm} type="submit" value="Submit" />
+      </form>
+    </div> 
   )
 }
