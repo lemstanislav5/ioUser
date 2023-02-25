@@ -19,7 +19,6 @@ import React, { useRef , useEffect, useState }  from 'react';
 import ReactDOM from 'react-dom';
 import style from './App.module.css';
 import { Manager } from "socket.io-client";
-import { nanoid } from 'nanoid';
 import { PhoneForm } from './components/forms/phoneForm/PhoneForm';
 import { SvgImages } from './components/images/SvgImages';
 import { storage } from './services/storage';
@@ -28,9 +27,10 @@ import { OpenChat } from './components/forms/openChat/OpenChat';
 import { MessegesBox } from './components/forms/messegesBox/MessegesBox';
 import { Textarea } from './components/forms/textarea/Textarea';
 import { options } from './options';
-import { chatId } from './services/chatId';
-
-let manager = new Manager("wss://" + options.url + ":443", { transports: ['websocket', 'polling', 'flashsocket'] });
+import { chatId, newId } from './services/chatId';
+import { IntroduceYourself } from './components/forms/introduceYourself/IntroduceYourself';
+                          //"wss://" + options.url + ":433"
+let manager = new Manager("ws://" + options.url + ":80", { transports: ['websocket', 'polling', 'flashsocket'] });
 let socket = manager.socket("/");
 //socket.connected: true, disconnected: false
 
@@ -59,14 +59,15 @@ const App = () => {
 
   useEffect(() => {
     //! prevCountRef.current
-    // Проверяем наличие слушателя, в случае отсутствия устанавливаем 
-    if (socket._callbacks['$new message'] !== undefined) return false;
+    // Проверяем наличие слушателя, в случае отсутствия устанавливаем
+    if (socket._callbacks['$new message'] === undefined) {
       socket.on('new message', (text) => {
-        const id = nanoid(10);
+        const id = newId(10);
         const incomingMessage = { id, chatId, type: 'from', text, date: dateMessage(), serverAccepted: true, botAccepted: true }
         setMessage([...messeges, incomingMessage]);
       });
-      storage.set('messeges', messeges);
+    }
+    storage.set('messeges', messeges);
   }, [messeges]);
 
   const dateMessage = () => {
@@ -75,11 +76,13 @@ const App = () => {
   }
 
   const send = (text) => {
-    const id = nanoid(10);
-    setMessage([...messeges, { id, chatId, type: 'to', text: text, date: dateMessage(), serverAccepted: true, botAccepted: true }]);
-    socket.emit("new message", { id, text, chatId }, (error, message) => {
-      console.log(error);
-      console.log(message);
+    const id = newId(10);
+    socket.emit("new message", { id, text, chatId }, (error, notification) => {
+      if(error) {
+        console.log(error, notification);
+        setMessage([...messeges, { id, chatId, type: 'from', 'Извините сервис временно недоступен!': text, date: dateMessage()}]);
+      }
+      setMessage([...messeges, { id, chatId, type: 'to', text: text, date: dateMessage(), serverAccepted: notification.add, botAccepted: notification.send }]);
   });
     setDataMessage('');
   }
@@ -112,6 +115,7 @@ const App = () => {
             </div>
             <div className={style.box_messeges} ref={messegesBox} style={{'backgroundColor': options.colors.messeges}}>
               {phoneFormOpen === true && <PhoneForm openPhoneBox={openPhoneBox} send={send}/>}
+              <IntroduceYourself send={send}/>
               <MessegesBox messeges={messeges} options={options}/>
             </div>
             <Textarea

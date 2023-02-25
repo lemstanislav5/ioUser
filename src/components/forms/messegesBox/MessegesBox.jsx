@@ -5,7 +5,7 @@ import { SvgImages } from '../../images/SvgImages';
 export const MessegesBox = (props) => {
   const lastMessage = useRef(null);
   const { messeges, options } = props;
-  
+
   return(
     messeges.map((item, i, array) => {
       return (

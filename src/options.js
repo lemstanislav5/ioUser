@@ -1,5 +1,5 @@
 export const options = {
-  url: 'messenger.ddns.net',
+  url: '212.193.48.171',
   colors: {
     conteiner: '#fff',
     top: '#2c2e33',

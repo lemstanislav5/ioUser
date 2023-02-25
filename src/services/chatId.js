@@ -9,3 +9,4 @@ export const chatId = (() => {
     return storage.get('chatId')
   }
 })();
+export const newId = num => (nanoid(num));
