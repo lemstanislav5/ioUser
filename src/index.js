@@ -28,7 +28,7 @@ import { MessegesBox } from './components/forms/messegesBox/MessegesBox';
 import { Textarea } from './components/forms/textarea/Textarea';
 import { options } from './options';
 import { chatId, newId } from './services/chatId';
-import { IntroduceYourself } from './components/forms/introduceYourself/IntroduceYourself';
+import { FirstQuestions } from './components/forms/firstQuestions/FirstQuestions';
                           //"wss://" + options.url + ":433"
 let manager = new Manager("ws://" + options.url + ":80", { transports: ['websocket', 'polling', 'flashsocket'] });
 let socket = manager.socket("/");
@@ -115,7 +115,7 @@ const App = () => {
             </div>
             <div className={style.box_messeges} ref={messegesBox} style={{'backgroundColor': options.colors.messeges}}>
               {phoneFormOpen === true && <PhoneForm openPhoneBox={openPhoneBox} send={send}/>}
-              <IntroduceYourself send={send}/>
+              <FirstQuestions send={send} initialFirstQuestions={options.initialFirstQuestions}/>
               <MessegesBox messeges={messeges} options={options}/>
             </div>
             <Textarea

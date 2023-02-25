@@ -1,0 +1,16 @@
+.greetings {
+  margin-bottom: 10px;
+  display: inline-block;
+  width: 100%;
+}
+.greetings div{
+  color: #fff;
+  border: 1px #fff solid;
+  padding: 4px 5px;
+  margin: 6px 0 0 33%;
+  border-radius: 8px;
+  display: inline-block;
+  font-size: 15px;
+  cursor: pointer;
+  float: right;
+}
