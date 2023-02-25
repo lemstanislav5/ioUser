@@ -29,7 +29,6 @@ import { Textarea } from './components/forms/textarea/Textarea';
 import { options } from './options';
 import { chatId, newId } from './services/chatId';
 import { FirstQuestions } from './components/forms/firstQuestions/FirstQuestions';
-import { IntroduceYourself } from './components/forms/introduceYourself/IntroduceYourself';
 
                         //"wss://" + options.url + ":433"
 let manager = new Manager("ws://" + options.url + ":80", { transports: ['websocket', 'polling', 'flashsocket'] });
@@ -119,7 +118,6 @@ const App = () => {
               {phoneFormOpen === true && <PhoneForm openPhoneBox={openPhoneBox} send={send}/>}
               <FirstQuestions send={send} initialFirstQuestions={options.initialFirstQuestions}/>
               <MessegesBox messeges={messeges} options={options}/>
-              <IntroduceYourself/>
             </div>
             <Textarea
               keyDown={keyDown}
