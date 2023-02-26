@@ -31,6 +31,7 @@ import { chatId, newId } from './services/chatId';
 import { FirstQuestions } from './components/forms/firstQuestions/FirstQuestions';
 import { IntroduceYourself } from './components/forms/introduceYourself/IntroduceYourself';
 import { initialIntroduce } from './services/initialIntroduce';
+import { Attachment } from './components/forms/tools/attachment/Attachment';
 
                         //"wss://" + options.url + ":433"
 let manager = new Manager("ws://" + options.url + ":80", { transports: ['websocket', 'polling', 'flashsocket'] });
@@ -143,7 +144,7 @@ const App = () => {
               setDataMessage={setDataMessage}
               message={message}
               backgroundColor={options.colors.conteiner}/>
-
+            <div className={style.tools}><Attachment color={options.colors.messeges}/></div>
             <div className={style.send} onClick={() => {send(message)}}  style={{'color': options.colors.text, 'borderColor': options.colors.text}}>
               <SvgImages svg={'send'}/>
             </div>
