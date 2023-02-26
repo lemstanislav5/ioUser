@@ -23,7 +23,7 @@ const testMesseges = [
   { id: 'JHLJSHS725', chatId: 'initialState',type: 'to', text: 'LAST MESSAGE', date: '30-10-2021,9:19', serverAccepted: true, botAccepted: false},
 ];
 
-export const initialTestMesseges = (() => {
+export const initialMesseges = (() => {
   let ms = storage.get('messeges');
   let testMode = () => {
     if (ms !== undefined && ms[0] !== undefined && ms[0].id === 'JHLJSHS121') return true;

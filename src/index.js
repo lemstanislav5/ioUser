@@ -22,13 +22,14 @@ import { Manager } from "socket.io-client";
 import { PhoneForm } from './components/forms/phoneForm/PhoneForm';
 import { SvgImages } from './components/images/SvgImages';
 import { storage } from './services/storage';
-import { initialTestMesseges } from './services/initialTestMesseges';
+import { initialMesseges } from './services/initialMesseges';
 import { OpenChat } from './components/forms/openChat/OpenChat';
 import { MessegesBox } from './components/forms/messegesBox/MessegesBox';
 import { Textarea } from './components/forms/textarea/Textarea';
 import { options } from './options';
 import { chatId, newId } from './services/chatId';
 import { FirstQuestions } from './components/forms/firstQuestions/FirstQuestions';
+import { IntroduceYourself } from './components/forms/introduceYourself/IntroduceYourself';
 
                         //"wss://" + options.url + ":433"
 let manager = new Manager("ws://" + options.url + ":80", { transports: ['websocket', 'polling', 'flashsocket'] });
@@ -40,13 +41,13 @@ const App = () => {
   const messegesBox = useRef(null);
   const [open, setOpen] = useState(false);
   const [connected, setConnected] = useState(false);
-  const [messeges, setMessage] = useState(initialTestMesseges);
+  const [messeges, setMessage] = useState(initialMesseges);
   const [message, setDataMessage] = useState('');
   const [styleBox, setStyleBox] = useState({});
   const [styleСall, setStyleCall] = useState({'display': 'block', 'color': options.colors.text});
   const [phoneFormOpen, setPhoneFormOpen] = useState(false);
 
-  // (fn) каждый рендер; (fn, []) один раз; (fn, [args]) при обновлении args
+  // (fn) каждый рендер; (fn, []) один раз; (fn, [args]) при обновлении args; prevCountRef.current - предидущий стейт
   useEffect(() => setTimeout(() => messegesBox.current?.scrollTo(0, 999000), 300));
   useEffect(() => {
     socket.on('connect', () => setConnected(true));
@@ -59,10 +60,9 @@ const App = () => {
   }, [open]);
 
   useEffect(() => {
-    //! prevCountRef.current
     // Проверяем наличие слушателя, в случае отсутствия устанавливаем
     if (socket._callbacks['$new message'] === undefined) {
-      socket.on('new message', (text) => {
+      socket.on('newMessage', (text) => {
         const id = newId(10);
         const incomingMessage = { id, chatId, type: 'from', text, date: dateMessage(), serverAccepted: true, botAccepted: true }
         setMessage([...messeges, incomingMessage]);
@@ -78,7 +78,7 @@ const App = () => {
 
   const send = (text) => {
     const id = newId(10);
-    socket.emit("new message", { id, text, chatId }, (error, notification) => {
+    socket.emit("newMessage", { id, text, chatId }, (error, notification) => {
       if(error) {
         console.log(error, notification);
         setMessage([...messeges, { id, chatId, type: 'from', 'Извините сервис временно недоступен!': text, date: dateMessage()}]);
@@ -87,6 +87,19 @@ const App = () => {
   });
     setDataMessage('');
   }
+
+  const sendNameAndEmail = (name, email) => {
+    const id = newId(10);
+    socket.emit("newNameAndEmail", { id, chatId, name, email}, (error, notification) => {
+      if(error) {
+        console.log(error, notification);
+        // setMessage([...messeges, { id, chatId, type: 'from', 'Извините сервис временно недоступен!': text, date: dateMessage()}]);
+      }
+      // setMessage([...messeges, { id, chatId, type: 'to', text: text, date: dateMessage(), serverAccepted: notification.add, botAccepted: notification.send }]);
+  });
+    setDataMessage('');
+  }
+
 
   const openPhoneBox = () => {
     phoneFormOpen ? setPhoneFormOpen(false) : setPhoneFormOpen(true);
@@ -115,9 +128,10 @@ const App = () => {
               </div>
             </div>
             <div className={style.box_messeges} ref={messegesBox} style={{'backgroundColor': options.colors.messeges}}>
+              {messeges.length === 1 && <IntroduceYourself SvgImages={SvgImages}/>}
               {phoneFormOpen === true && <PhoneForm openPhoneBox={openPhoneBox} send={send}/>}
               <FirstQuestions send={send} initialFirstQuestions={options.initialFirstQuestions}/>
-              <MessegesBox messeges={messeges} options={options}/>
+              <MessegesBox messeges={messeges} options={options} SvgImages={SvgImages} />
             </div>
             <Textarea
               keyDown={keyDown}
