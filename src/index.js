@@ -30,6 +30,7 @@ import { options } from './options';
 import { chatId, newId } from './services/chatId';
 import { FirstQuestions } from './components/forms/firstQuestions/FirstQuestions';
 import { IntroduceYourself } from './components/forms/introduceYourself/IntroduceYourself';
+import { initialIntroduce } from './services/initialIntroduce';
 
                         //"wss://" + options.url + ":433"
 let manager = new Manager("ws://" + options.url + ":80", { transports: ['websocket', 'polling', 'flashsocket'] });
@@ -46,6 +47,7 @@ const App = () => {
   const [styleBox, setStyleBox] = useState({});
   const [styleСall, setStyleCall] = useState({'display': 'block', 'color': options.colors.text});
   const [phoneFormOpen, setPhoneFormOpen] = useState(false);
+  const [introduce, setIntroduce] = useState(initialIntroduce);
 
   // (fn) каждый рендер; (fn, []) один раз; (fn, [args]) при обновлении args; prevCountRef.current - предидущий стейт
   useEffect(() => setTimeout(() => messegesBox.current?.scrollTo(0, 999000), 300));
@@ -81,7 +83,7 @@ const App = () => {
     socket.emit("newMessage", { id, text, chatId }, (error, notification) => {
       if(error) {
         console.log(error, notification);
-        setMessage([...messeges, { id, chatId, type: 'from', 'Извините сервис временно недоступен!': text, date: dateMessage()}]);
+        setMessage([...messeges, { id, chatId, type: 'from', text: 'Извините сервис временно недоступен!', date: dateMessage()}]);
       }
       setMessage([...messeges, { id, chatId, type: 'to', text: text, date: dateMessage(), serverAccepted: notification.add, botAccepted: notification.send }]);
   });
@@ -89,15 +91,17 @@ const App = () => {
   }
 
   const sendNameAndEmail = (name, email) => {
+    console.log(name, email);
     const id = newId(10);
     socket.emit("newNameAndEmail", { id, chatId, name, email}, (error, notification) => {
       if(error) {
         console.log(error, notification);
-        // setMessage([...messeges, { id, chatId, type: 'from', 'Извините сервис временно недоступен!': text, date: dateMessage()}]);
+        setMessage([...messeges, { id, chatId, type: 'from', text: 'Извините сервис временно недоступен!', date: dateMessage()}]);
       }
-      // setMessage([...messeges, { id, chatId, type: 'to', text: text, date: dateMessage(), serverAccepted: notification.add, botAccepted: notification.send }]);
-  });
-    setDataMessage('');
+      setMessage([...messeges, { id, chatId, type: 'from', text: 'Ваши данные приняты (' +name +' , '+ email+')', date: dateMessage(), serverAccepted: notification.add, botAccepted: notification.send }]);
+      storage.set('introduce', {name, email});
+      setIntroduce({name, email});
+    });
   }
 
 
@@ -128,7 +132,7 @@ const App = () => {
               </div>
             </div>
             <div className={style.box_messeges} ref={messegesBox} style={{'backgroundColor': options.colors.messeges}}>
-              {messeges.length === 1 && <IntroduceYourself SvgImages={SvgImages}/>}
+              {(messeges.length === 2 && introduce === false) && <IntroduceYourself SvgImages={SvgImages} sendNameAndEmail={sendNameAndEmail}/>}
               {phoneFormOpen === true && <PhoneForm openPhoneBox={openPhoneBox} send={send}/>}
               <FirstQuestions send={send} initialFirstQuestions={options.initialFirstQuestions}/>
               <MessegesBox messeges={messeges} options={options} SvgImages={SvgImages} />
