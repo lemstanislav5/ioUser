@@ -1,5 +1,5 @@
 /* З А Д А Ч И
-* 0. Сохранение сообщений по схеме: хранилище - стейт - хранилище
+* 0. Единый STATE AND initialState Сохранение сообщений по схеме: хранилище - стейт - хранилище
 * 1. Предложить представиться
 * 2. Ссылки на wothsapp
 * 3. Отослать картинку
@@ -149,7 +149,9 @@ const App = () => {
               setDataMessage={setDataMessage}
               message={message}
               backgroundColor={options.colors.conteiner}/>
-            <div className={style.tools}><Attachment color={options.colors.messeges} upload={upload}/></div>
+            <div className={style.tools}>
+              <Attachment color={options.colors.messeges} upload={upload} limitSizeFile={options.limitSizeFile}/>
+            </div>
             <div className={style.send} onClick={() => {send(message)}}  style={{'color': options.colors.text, 'borderColor': options.colors.text}}>
               <SvgImages svg={'send'}/>
             </div>
