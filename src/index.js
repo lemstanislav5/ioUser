@@ -105,6 +105,11 @@ const App = () => {
     });
   }
 
+  const upload = (files) => {
+    socket.emit("upload", files[0], (status) => {
+      console.log(status);
+    });
+  }
 
   const openPhoneBox = () => {
     phoneFormOpen ? setPhoneFormOpen(false) : setPhoneFormOpen(true);
@@ -144,7 +149,7 @@ const App = () => {
               setDataMessage={setDataMessage}
               message={message}
               backgroundColor={options.colors.conteiner}/>
-            <div className={style.tools}><Attachment color={options.colors.messeges}/></div>
+            <div className={style.tools}><Attachment color={options.colors.messeges} upload={upload}/></div>
             <div className={style.send} onClick={() => {send(message)}}  style={{'color': options.colors.text, 'borderColor': options.colors.text}}>
               <SvgImages svg={'send'}/>
             </div>
