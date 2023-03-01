@@ -6,6 +6,7 @@ export const MessegesBox = (props) => {
 //notification
   return(
     messeges.map((item, i) => {
+      console.log(item.type);
       return (
         <div className={style.msgbox} key={'msg' + i}>
           <div className={style[item.type]} key={i}  style={{'backgroundColor': options.colors[item.type]}}>

@@ -108,30 +108,25 @@ const App = () => {
     socket.emit("upload", file, type, data => {
       const id = newId(10);
       console.log(data);
-      if (data.url) {
-        setMessage([...messeges, { id, chatId, type: 'toImage', text: data.url, date: dateMessage()}]);
-      } else {
+      if (data.url === false) {
         setMessage([...messeges, { id, chatId, type: 'notification', text: 'Ошибка отправки!', date: dateMessage()}]);
+      } else {
+        setMessage([...messeges, { id, chatId, type: 'toImage', text: data.url, date: dateMessage()}]);
       }
     });
   }
 
   const fileСheck = (file) => {
-    let mb = 1048576, text = '', id = newId(10);
+    let mb = 1048576, id = newId(10);
     const type = file.type.replace('image/', '');
     const filesExt = ['jpeg', 'jpg','png'];
     if (file.size > mb * options.limitSizeFile) {
-      text = '!: Лимит файла в 5 МБ превышен';
+      setMessage([...messeges, { id, chatId, type: 'notification', text: 'Лимит файла в 5 МБ превышен', date: dateMessage()}]);
     } else if (filesExt.indexOf(type) === -1) {
-      text = "!: Допустимы орматы: 'jpeg', 'jpg','png'";
+      setMessage([...messeges, { id, chatId, type: 'notification', text: 'Допустимы орматы: jpeg, jpg, png', date: dateMessage()}]);
     } else {
-      text = '!: Файл передан на отправку';
       upload(file, type);
     }
-    setTimeout(() => {
-      setMessage([...messeges, { id, chatId, type: 'from', text, date: dateMessage()}]);
-    }, 1000);
-
   }
 
 
