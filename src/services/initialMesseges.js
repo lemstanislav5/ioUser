@@ -29,7 +29,7 @@ export const initialMesseges = (() => {
     if (ms !== undefined && ms[0] !== undefined && ms[0].id === 'JHLJSHS121') return true;
     return false
   }
-  console.log(options.testData, testMode())
+
   if (options.testData && testMode()) {
     return ms;
   } else if(options.testData && !testMode()) {

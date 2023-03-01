@@ -92,7 +92,6 @@ const App = () => {
   }
 
   const sendNameAndEmail = (name, email) => {
-    console.log(name, email);
     const id = newId(10);
     socket.emit("newNameAndEmail", { id, chatId, name, email}, (error, notification) => {
       if(error) {
@@ -105,11 +104,36 @@ const App = () => {
     });
   }
 
-  const upload = (files) => {
-    socket.emit("upload", files[0], (status) => {
-      console.log(status);
+  const upload = (file, type) => {
+    socket.emit("upload", file, type, data => {
+      const id = newId(10);
+      console.log(data);
+      if (data.url) {
+        setMessage([...messeges, { id, chatId, type: 'toImage', text: data.url, date: dateMessage()}]);
+      } else {
+        setMessage([...messeges, { id, chatId, type: 'notification', text: 'Ошибка отправки!', date: dateMessage()}]);
+      }
     });
   }
+
+  const fileСheck = (file) => {
+    let mb = 1048576, text = '', id = newId(10);
+    const type = file.type.replace('image/', '');
+    const filesExt = ['jpeg', 'jpg','png'];
+    if (file.size > mb * options.limitSizeFile) {
+      text = '!: Лимит файла в 5 МБ превышен';
+    } else if (filesExt.indexOf(type) === -1) {
+      text = "!: Допустимы орматы: 'jpeg', 'jpg','png'";
+    } else {
+      text = '!: Файл передан на отправку';
+      upload(file, type);
+    }
+    setTimeout(() => {
+      setMessage([...messeges, { id, chatId, type: 'from', text, date: dateMessage()}]);
+    }, 1000);
+
+  }
+
 
   const openPhoneBox = () => {
     phoneFormOpen ? setPhoneFormOpen(false) : setPhoneFormOpen(true);
@@ -150,7 +174,7 @@ const App = () => {
               message={message}
               backgroundColor={options.colors.conteiner}/>
             <div className={style.tools}>
-              <Attachment color={options.colors.messeges} upload={upload} limitSizeFile={options.limitSizeFile}/>
+              <Attachment color={options.colors.messeges} upload={upload} fileСheck={fileСheck}/>
             </div>
             <div className={style.send} onClick={() => {send(message)}}  style={{'color': options.colors.text, 'borderColor': options.colors.text}}>
               <SvgImages svg={'send'}/>
