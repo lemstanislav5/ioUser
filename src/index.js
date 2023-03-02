@@ -2,7 +2,7 @@
 * 0. Единый STATE AND initialState Сохранение сообщений по схеме: хранилище - стейт - хранилище
 * 1. Предложить представиться
 * 2. Ссылки на wothsapp
-* 3. Отослать картинку
+* 3.
 * 4. Отослать аудио
 * 5. При клики на значок "окна" в открытом месенжере просто убирается значок закрыть
 * 6. Перетаскивать окно чата
@@ -19,19 +19,20 @@ import React, { useRef , useEffect, useState }  from 'react';
 import ReactDOM from 'react-dom';
 import style from './App.module.css';
 import { Manager } from "socket.io-client";
-import { PhoneForm } from './components/forms/phoneForm/PhoneForm';
+// import { PhoneForm } from './components/forms/phoneForm/PhoneForm';
 import { SvgImages } from './components/images/SvgImages';
 import { storage } from './services/storage';
 import { initialMesseges } from './services/initialMesseges';
-import { OpenChat } from './components/forms/openChat/OpenChat';
-import { MessegesBox } from './components/forms/messegesBox/MessegesBox';
-import { Textarea } from './components/forms/textarea/Textarea';
+// import { OpenChat } from './components/forms/openChat/OpenChat';
+// import { MessegesBox } from './components/forms/messegesBox/MessegesBox';
+// import { Textarea } from './components/forms/textarea/Textarea';
 import { options } from './options';
 import { chatId, newId } from './services/chatId';
-import { FirstQuestions } from './components/forms/firstQuestions/FirstQuestions';
-import { IntroduceYourself } from './components/forms/introduceYourself/IntroduceYourself';
+// import { FirstQuestions } from './components/forms/firstQuestions/FirstQuestions';
+// import { IntroduceYourself } from './components/forms/introduceYourself/IntroduceYourself';
 import { initialIntroduce } from './services/initialIntroduce';
-import { Attachment } from './components/forms/tools/attachment/Attachment';
+import { FirstQuestions, IntroduceYourself, MessegesBox, OpenChat, PhoneForm, Textarea, Attachment } from '../components/forms/Forms';
+// import { Attachment } from './components/forms/tools/attachment/Attachment';
 
                         //"wss://" + options.url + ":433"
 let manager = new Manager("ws://" + options.url + ":80", { transports: ['websocket', 'polling', 'flashsocket'] });
@@ -97,7 +98,7 @@ const App = () => {
     socket.emit("newNameAndEmail", { id, chatId, name, email}, (error, notification) => {
       if(error) {
         console.log(error, notification);
-        setMessage([...messeges, { id, chatId, type: 'from', text: 'Извините сервис временно недоступен!', date: dateMessage()}]);
+        return setMessage([...messeges, { id, chatId, type: 'from', text: 'Извините сервис временно недоступен!', date: dateMessage()}]);
       }
       setMessage([...messeges, { id, chatId, type: 'from', text: 'Ваши данные приняты (' +name +' , '+ email+')', date: dateMessage(), serverAccepted: notification.add, botAccepted: notification.send }]);
       storage.set('introduce', {name, email});
@@ -120,16 +121,15 @@ const App = () => {
   const fileСheck = (file) => {
     let mb = 1048576, id = newId(10);
     const type = file.type.replace('image/', '');
-    const filesExt = ['jpeg', 'jpg','png'];
+    const filesExt = ['jpeg', 'jpg','png', 'pdf', 'doc', 'docx', 'mp3', 'mp4', 'wav'];
     if (file.size > mb * options.limitSizeFile) {
       setMessage([...messeges, { id, chatId, type: 'notification', text: 'Лимит файла в 5 МБ превышен', date: dateMessage()}]);
     } else if (filesExt.indexOf(type) === -1) {
-      setMessage([...messeges, { id, chatId, type: 'notification', text: 'Допустимы орматы: jpeg, jpg, png', date: dateMessage()}]);
+      setMessage([...messeges, { id, chatId, type: 'notification', text: 'Допустимы орматы: jpeg, jpg, png, pdf, doc, docx, mp3, mp4, wav', date: dateMessage()}]);
     } else {
       upload(file, type);
     }
   }
-
 
   const openPhoneBox = () => {
     phoneFormOpen ? setPhoneFormOpen(false) : setPhoneFormOpen(true);
