@@ -4,18 +4,16 @@
   display: inline-block;
 }
 .msgbox{
+  display: grid;
   width: 100%;
-  display: inline-block;
 }
 .date{
-  width: 100%;
-  display: block;
   font-size: 10px;
   color: #fff;
-  text-align: right;
+  padding-top: 5px;
 }
 .from{
-  display: block;
+  width: 89%;
   float: left;
   padding: 5px;
   margin: 0 0 5px 5px;
@@ -23,33 +21,27 @@
   border-radius: 0px 8px 8px 8px;
   text-align: left;
   font-size: 15px;
+  display: grid;
 }
 .to{
-  display: block;
+  width: 89%;
   float: right;
   padding: 5px;
-  margin: 0px 5px 5px 0;
+  margin: 0px 0px 5px 22px;
   color: #fff;
   border-radius: 8px 8px 0px 8px;
   text-align: left;
   font-size: 15px;
+  display: grid;
 }
 .serverAccepted{
-  float: right;
-  position: relative;
-  display: block;
-  top: -1px;
-  height: 0px;
-  right: 2px;
+  height: 20px;
+  text-align: right;
+  margin-right: -10px;
 }
 .botAccepted{
-  float: right;
-  top: 0px;
-  position: relative;
-  display: block;
-  margin-right: -1px;
-  margin-left: -3px;
-  height: 0;
+  height: 20px;
+  text-align: right;
 }
 .false{
   color: red;
@@ -58,19 +50,36 @@
   color: green;
 }
 .notification{
-  display: inline-block;
   text-align: center;
-  font-size: 12 !important;
-  color: red;
+  font-size: 12px;
+  padding: 4px;
+  border-radius: 9px;
+  border: 1px #706d6d solid;
+  max-width: 250px;
+  margin: 2px auto;
 }
 .toImage{
-  word-wrap: break-word;
-  max-width: 260px;
-  display: block;
+  width: 89%;
   float: right;
-  margin: 0px 5px 5px 0;
+  padding: 5px;
+  margin: 0px 0px 5px 22px;
   color: #fff;
   border-radius: 8px 8px 0px 8px;
   text-align: left;
   font-size: 15px;
+  display: grid;
+}
+.bottomMessage{
+  display: grid;
+  grid-template-columns: 251px 15px 26px;
+}
+.image{
+  width: 99%;
+  border-radius: 5px;
+}
+.bottomNotification{
+
+}
+.notificationText{
+  color: #ca7e7e;
 }

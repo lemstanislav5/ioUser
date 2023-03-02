@@ -16,24 +16,26 @@ export const MessegesBox = (props) => {
             }
             {
               item.type === 'notification' &&
-              <div className={style.notification}>{item.text}</div>
+              <div className={style.notificationText}>{item.text}</div>
             }
             {
               item.type === 'toImage' &&
-              <img className={style.toImage} src={item.text} alt="#" />
+              <img className={style.image} src={item.text} alt="#" />
             }
-            {
-              (item.type === 'to' || item.type === 'toImage') &&
-                <>
-                  <div className={style.serverAccepted}>
-                    <SvgImages svg='daw' fill={item.serverAccepted ? '#0cec0c' : ' #e82554'}/>
-                  </div>
-                  <div className={style.botAccepted}>
-                    <SvgImages svg='line' fill={item.botAccepted ? '#0cec0c' : ' #e82554'}/>
-                  </div>
-                </>
-            }
-            <div className={style.date}>{item.date.split(',')[1]}</div>
+            <div className={item.type === 'notification'? style.bottomNotification : style.bottomMessage}>
+              {
+                (item.type === 'to' || item.type === 'toImage') &&
+                  <>
+                    <div className={style.serverAccepted}>
+                      <SvgImages svg='daw' fill={item.serverAccepted ? '#0cec0c' : ' #e82554'}/>
+                    </div>
+                    <div className={style.botAccepted}>
+                      <SvgImages svg='line' fill={item.botAccepted ? '#0cec0c' : ' #e82554'}/>
+                    </div>
+                  </>
+              }
+              <div className={style.date}>{item.date.split(',')[1]}</div>
+            </div>
           </div>
         </div>
       )

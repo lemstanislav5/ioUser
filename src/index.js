@@ -81,10 +81,11 @@ const App = () => {
 
   const send = (text) => {
     const id = newId(10);
+    if (text === '') return setMessage([...messeges, { id, chatId, type: 'notification', text: 'Сообщение не может быть пустым!', date: dateMessage()}]);
     socket.emit("newMessage", { id, text, chatId }, (error, notification) => {
       if(error) {
         console.log(error, notification);
-        setMessage([...messeges, { id, chatId, type: 'from', text: 'Извините сервис временно недоступен!', date: dateMessage()}]);
+        return setMessage([...messeges, { id, chatId, type: 'from', text: 'Извините сервис временно недоступен!', date: dateMessage()}]);
       }
       setMessage([...messeges, { id, chatId, type: 'to', text: text, date: dateMessage(), serverAccepted: notification.add, botAccepted: notification.send }]);
   });
