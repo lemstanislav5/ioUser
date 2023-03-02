@@ -1,4 +1,4 @@
-import { options } from '../options';
+import { testData } from '../options';
 import { storage } from './storage';
 const testMesseges = [
   { id: 'JHLJSHS121', chatId: 'initialState', type: 'to', text: 'Hello!', date: '13-10-2021,9:19', serverAccepted: true, botAccepted: true},
@@ -30,15 +30,15 @@ export const initialMesseges = (() => {
     return false
   }
 
-  if (options.testData && testMode()) {
+  if (testData && testMode()) {
     return ms;
-  } else if(options.testData && !testMode()) {
+  } else if(testData && !testMode()) {
     storage.clear()
     return testMesseges;
-  } else if(!options.testData && testMode()) {
+  } else if(!testData && testMode()) {
     storage.clear();
     return [];
-  } else if(!options.testData && !testMode()) {
+  } else if(!testData && !testMode()) {
     return ms === undefined? [] : ms;
   }
 })();

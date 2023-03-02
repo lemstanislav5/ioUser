@@ -1,4 +1,5 @@
 import { storage } from '../services/storage';
+
 export const userController = {
   get: () => {
     if (storage.get('user') === null || storage.get('user') === undefined) {

@@ -1,5 +1,5 @@
 .message{
-  max-width: 260px;
+  width: 98%;
   word-wrap: break-word;
   display: inline-block;
 }
@@ -20,7 +20,7 @@
   color: #fff;
   border-radius: 0px 8px 8px 8px;
   text-align: left;
-  font-size: 15px;
+  font-size: 14px;
   display: grid;
 }
 .to{
@@ -31,7 +31,7 @@
   color: #fff;
   border-radius: 8px 8px 0px 8px;
   text-align: left;
-  font-size: 15px;
+  font-size: 14px;
   display: grid;
 }
 .serverAccepted{
@@ -63,6 +63,17 @@
   float: right;
   padding: 5px;
   margin: 0px 0px 5px 22px;
+  color: #fff;
+  border-radius: 8px 8px 0px 8px;
+  text-align: left;
+  font-size: 15px;
+  display: grid;
+}
+.documents{
+  width: 50px;
+  float: right;
+  padding: 5px;
+  margin: 0px 0px 5px 261px;
   color: #fff;
   border-radius: 8px 8px 0px 8px;
   text-align: left;

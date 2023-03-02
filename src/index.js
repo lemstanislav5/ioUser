@@ -1,42 +1,32 @@
 /* З А Д А Ч И
-* 0. Единый STATE AND initialState Сохранение сообщений по схеме: хранилище - стейт - хранилище
+* 0. КОНТРОЛЛЕРЫ МЕСЕНДЖЫ
 * 1. Предложить представиться
 * 2. Ссылки на wothsapp
-* 3.
+* 3. Выверить цвета
 * 4. Отослать аудио
-* 5. При клики на значок "окна" в открытом месенжере просто убирается значок закрыть
-* 6. Перетаскивать окно чата
-* 7. Изменять размеры окна чата
-* 8. Адаптация с мобильным устройством
-* 9. Конфиг с указанием расположения и стиля чата
-* 10. Убрать testInitialState
-* 11. Обновление статуса отосланного письма
-* 12. Скрипт для вставки в сайт готовый
-* 13. Видеоинструкция и статья с 0
+* 5. Перетаскивать окно чат
+* 6. Изменять размеры окна чата
+* 7. Адаптация с мобильным устройством
+* 8. Скрипт для вставки в сайт готовый
+* 9. Видеоинструкция и статья с 0
+* 10. consent to the processing of personal data
+* 11. Продолжая пользоваться сайтом, я даю согласие на использование файлов cookie.
 */
-// Поменяйте опции на свое усмотрение преред deploy
 import React, { useRef , useEffect, useState }  from 'react';
 import ReactDOM from 'react-dom';
-import style from './App.module.css';
+import { FirstQuestions, IntroduceYourself, MessegesBox, OpenChat, PhoneForm, Textarea, Attachment } from './components/forms/Forms';
 import { Manager } from "socket.io-client";
-// import { PhoneForm } from './components/forms/phoneForm/PhoneForm';
 import { SvgImages } from './components/images/SvgImages';
+import { idController } from './controllers/idController';
+import style from './App.module.css';
 import { storage } from './services/storage';
+import { url, colors, iconChat, initialFirstQuestions,limitSizeFile, ws, port } from './options';
 import { initialMesseges } from './services/initialMesseges';
-// import { OpenChat } from './components/forms/openChat/OpenChat';
-// import { MessegesBox } from './components/forms/messegesBox/MessegesBox';
-// import { Textarea } from './components/forms/textarea/Textarea';
-import { options } from './options';
-import { chatId, newId } from './services/chatId';
-// import { FirstQuestions } from './components/forms/firstQuestions/FirstQuestions';
-// import { IntroduceYourself } from './components/forms/introduceYourself/IntroduceYourself';
 import { initialIntroduce } from './services/initialIntroduce';
-import { FirstQuestions, IntroduceYourself, MessegesBox, OpenChat, PhoneForm, Textarea, Attachment } from '../components/forms/Forms';
-// import { Attachment } from './components/forms/tools/attachment/Attachment';
-
-                        //"wss://" + options.url + ":433"
-let manager = new Manager("ws://" + options.url + ":80", { transports: ['websocket', 'polling', 'flashsocket'] });
+import { nanoid } from 'nanoid';
+let manager = new Manager(ws + "://" + url + ":" + port, { transports: ['websocket', 'polling', 'flashsocket'] });
 let socket = manager.socket("/");
+const chatId = (idController.get() === null || idController.get() === undefined) ? idController.set(nanoid(10)) : idController.get();
 //socket.connected: true, disconnected: false
 
 const App = () => {
@@ -47,7 +37,7 @@ const App = () => {
   const [messeges, setMessage] = useState(initialMesseges);
   const [message, setDataMessage] = useState('');
   const [styleBox, setStyleBox] = useState({});
-  const [styleСall, setStyleCall] = useState({'display': 'block', 'color': options.colors.text});
+  const [styleСall, setStyleCall] = useState({'display': 'block', 'color': colors.text});
   const [phoneFormOpen, setPhoneFormOpen] = useState(false);
   const [introduce, setIntroduce] = useState(initialIntroduce);
 
@@ -59,15 +49,15 @@ const App = () => {
   }, []);
 
   useEffect(() => {
-    if (open) return setStyleBox({ 'bottom': 0, 'left': window.innerWidth - 335 , 'width': 330, 'backgroundColor': options.colors.conteiner});
-    setStyleBox({'bottom': -400, 'left': window.innerWidth - 175 , 'width': 170, 'backgroundColor': options.colors.conteiner});
+    if (open) return setStyleBox({ 'bottom': 0, 'left': window.innerWidth - 335 , 'width': 330, 'backgroundColor': colors.conteiner});
+    setStyleBox({'bottom': -400, 'left': window.innerWidth - 175 , 'width': 170, 'backgroundColor': colors.conteiner});
   }, [open]);
 
   useEffect(() => {
     // Проверяем наличие слушателя, в случае отсутствия устанавливаем
     if (socket._callbacks['$new message'] === undefined) {
       socket.on('newMessage', (text) => {
-        const id = newId(10);
+        const id = nanoid(10);
         const incomingMessage = { id, chatId, type: 'from', text, date: dateMessage(), serverAccepted: true, botAccepted: true }
         setMessage([...messeges, incomingMessage]);
       });
@@ -81,7 +71,7 @@ const App = () => {
   }
 
   const send = (text) => {
-    const id = newId(10);
+    const id = nanoid(10);
     if (text === '') return setMessage([...messeges, { id, chatId, type: 'notification', text: 'Сообщение не может быть пустым!', date: dateMessage()}]);
     socket.emit("newMessage", { id, text, chatId }, (error, notification) => {
       if(error) {
@@ -94,7 +84,7 @@ const App = () => {
   }
 
   const sendNameAndEmail = (name, email) => {
-    const id = newId(10);
+    const id = nanoid(10);
     socket.emit("newNameAndEmail", { id, chatId, name, email}, (error, notification) => {
       if(error) {
         console.log(error, notification);
@@ -107,25 +97,38 @@ const App = () => {
   }
 
   const upload = (file, type) => {
+    console.log('data', type);
     socket.emit("upload", file, type, data => {
-      const id = newId(10);
+      const id = nanoid(10);
       console.log(data);
       if (data.url === false) {
         setMessage([...messeges, { id, chatId, type: 'notification', text: 'Ошибка отправки!', date: dateMessage()}]);
       } else {
-        setMessage([...messeges, { id, chatId, type: 'toImage', text: data.url, date: dateMessage()}]);
+        let section;
+        if (type === 'jpeg' || type === 'jpg' || type === 'png') {
+          section = 'toImage';
+        } else if (type === 'pdf' || type === 'doc' || type === 'docx' || type === 'txt') {
+          section = 'documents';
+        } else if (type === 'mp3' || 'mpeg') {
+          section = 'audio';
+        } else if (type === 'mp4' || type ===  'wav') {
+          section = 'video';
+        }
+        setMessage([...messeges, { id, chatId, type: section, text: data.url, date: dateMessage()}]);
       }
     });
   }
 
   const fileСheck = (file) => {
-    let mb = 1048576, id = newId(10);
-    const type = file.type.replace('image/', '');
-    const filesExt = ['jpeg', 'jpg','png', 'pdf', 'doc', 'docx', 'mp3', 'mp4', 'wav'];
-    if (file.size > mb * options.limitSizeFile) {
+    let mb = 1048576, id = nanoid(10);
+    console.log(file.type)
+    const type = file.type.replace('image/', '').replace('application/', '').replace('audio/', '');
+    console.log(type)
+    const filesExt = ['jpeg', 'jpg','png', 'pdf', 'doc', 'docx', 'txt', 'mp3', 'mpeg', 'mp4', 'wav'];
+    if (file.size > mb * limitSizeFile) {
       setMessage([...messeges, { id, chatId, type: 'notification', text: 'Лимит файла в 5 МБ превышен', date: dateMessage()}]);
     } else if (filesExt.indexOf(type) === -1) {
-      setMessage([...messeges, { id, chatId, type: 'notification', text: 'Допустимы орматы: jpeg, jpg, png, pdf, doc, docx, mp3, mp4, wav', date: dateMessage()}]);
+      setMessage([...messeges, { id, chatId, type: 'notification', text: 'Допустимы орматы: jpeg, jpg, png, pdf, doc, docx, txt, mp3, mpeg, mp4, wav', date: dateMessage()}]);
     } else {
       upload(file, type);
     }
@@ -133,49 +136,47 @@ const App = () => {
 
   const openPhoneBox = () => {
     phoneFormOpen ? setPhoneFormOpen(false) : setPhoneFormOpen(true);
-    phoneFormOpen ? setStyleCall({ 'color': options.colors.text}) : setStyleCall({ 'color': options.colors.messeges});
+    phoneFormOpen ? setStyleCall({ 'color': colors.text}) : setStyleCall({ 'color': colors.messeges});
   }
-  if(connected === false ) {
-    console.log('no connection');
-    return <></>;
-  }
+  if(connected === false ) return <></>;
+
   const keyDown = (e) => (e.key === "Enter") && send(message);
 
   return (
     <>
       {
-        (options.iconChat === true && open === false)
-        ? <OpenChat colorStart={options.colors.text} colorEnd={options.colors.top} setOpen={setOpen}/>
+        (iconChat === true && open === false)
+        ? <OpenChat colorStart={colors.text} colorEnd={colors.top} setOpen={setOpen}/>
         : <div className={style.conteiner} style={styleBox}>
-            <div className={style.box_top} style={{'backgroundColor': options.colors.top}}>
-              <span style={{'color': options.colors.text}}>
+            <div className={style.box_top} style={{'backgroundColor': colors.top}}>
+              <span style={{'color': colors.text}}>
                 {open ? 'Напишите ваше сообщение' : 'Поддержка'}
               </span>
               <div className={style.move}></div>
               {open && <div style={styleСall} onClick={openPhoneBox} className={style.backСall}><SvgImages svg={'backСall'}/></div>}
-              <div onClick={() => setOpen(true)} className={style.open} style={{'color': options.colors.text}}>
+              <div onClick={() => setOpen(true)} className={style.open} style={{'color': colors.text}}>
                 <SvgImages svg={'open'}/>
               </div>
             </div>
-            <div className={style.box_messeges} ref={messegesBox} style={{'backgroundColor': options.colors.messeges}}>
+            <div className={style.box_messeges} ref={messegesBox} style={{'backgroundColor': colors.messeges}}>
               {(messeges.length === 2 && introduce === false) && <IntroduceYourself SvgImages={SvgImages} sendNameAndEmail={sendNameAndEmail}/>}
               {phoneFormOpen === true && <PhoneForm openPhoneBox={openPhoneBox} send={send}/>}
-              <FirstQuestions send={send} initialFirstQuestions={options.initialFirstQuestions}/>
-              <MessegesBox messeges={messeges} options={options} SvgImages={SvgImages} />
+              <FirstQuestions send={send} initialFirstQuestions={initialFirstQuestions}/>
+              <MessegesBox messeges={messeges} colors={colors} SvgImages={SvgImages} />
             </div>
             <Textarea
               keyDown={keyDown}
               placeholder="Введите сообщение"
               setDataMessage={setDataMessage}
               message={message}
-              backgroundColor={options.colors.conteiner}/>
+              backgroundColor={colors.conteiner}/>
             <div className={style.tools}>
-              <Attachment color={options.colors.messeges} upload={upload} fileСheck={fileСheck}/>
+              <Attachment color={colors.messeges} upload={upload} fileСheck={fileСheck}/>
             </div>
-            <div className={style.send} onClick={() => {send(message)}}  style={{'color': options.colors.text, 'borderColor': options.colors.text}}>
+            <div className={style.send} onClick={() => {send(message)}}  style={{'color': colors.text, 'borderColor': colors.text}}>
               <SvgImages svg={'send'}/>
             </div>
-            { open && <div ref={close} className={style.close} onClick={() => setOpen(false)} style={{'color': options.colors.text}}>
+            { open && <div ref={close} className={style.close} onClick={() => setOpen(false)} style={{'color': colors.text}}>
                 <SvgImages svg={'close'}/>
               </div> }
           </div>

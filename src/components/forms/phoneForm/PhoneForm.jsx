@@ -27,8 +27,8 @@ export const PhoneForm = (props) => {
       send('Прошу мне перезвонить! \n' + phone);
       setPhone('');
     }
-
   }
+
   return(
     <div className={style.box}>
       <div className={style.text}>Введите номер телефона, и мы перезвоним вам в ближайшее время!</div>
