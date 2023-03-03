@@ -24,4 +24,4 @@ let url = 'messenger.ddns.net',
     ],
     filesType = ['jpeg', 'jpg','png', 'pdf', 'doc', 'docx', 'txt', 'mp3', 'mpeg', 'mp4', 'wav'],
     limitSizeFile = 10; // в мегабайтах
-export { url, ws, port, colors, testData, iconChat, initialFirstQuestions,limitSizeFile }
+export { url, ws, port, colors, testData, iconChat, initialFirstQuestions, filesType, limitSizeFile }

@@ -12,9 +12,10 @@
   display: inline-block;
   padding-top: 10px;
   z-index: 100;
-  0% {opacity: 0;}
-  100% {opacity: 1;}
+  -webkit-animation: mymove 15s infinite; /* Chrome, Safari, Opera */
+  animation: mymove 15s infinite;
 }
+
 .myForm{
   width: 85%;
   border-top: 1px #fff solid;
