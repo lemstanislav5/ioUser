@@ -22,5 +22,6 @@ let url = 'messenger.ddns.net',
       'Как пройти в библиотеку?',
       'Вы не скажете, сколько сейчас градусов ниже нуля?',
     ],
+    filesExt = ['jpeg', 'jpg','png', 'pdf', 'doc', 'docx', 'txt', 'mp3', 'mpeg', 'mp4', 'wav'],
     limitSizeFile = 10; // в мегабайтах
 export { url, ws, port, colors, testData, iconChat, initialFirstQuestions,limitSizeFile }
