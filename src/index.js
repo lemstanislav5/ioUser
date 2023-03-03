@@ -21,7 +21,7 @@ import { Preloader } from './components/preloader/Preloader';
 import { idController } from './controllers/idController';
 import style from './App.module.css';
 import { storage } from './services/storage';
-import { url, colors, iconChat, initialFirstQuestions,limitSizeFile, ws, port } from './options';
+import { url, colors, iconChat, initialFirstQuestions,limitSizeFile, ws, port, filesType } from './options';
 import { initialMesseges } from './services/initialMesseges';
 import { initialIntroduce } from './services/initialIntroduce';
 import { nanoid } from 'nanoid';
@@ -132,11 +132,10 @@ const App = () => {
   const fileСheck = (file) => {
     let mb = 1048576, id = nanoid(10);
     const type = file.type.replace('image/', '').replace('application/', '').replace('audio/', '').replace('video/', '');
-    const filesExt = ['jpeg', 'jpg','png', 'pdf', 'doc', 'docx', 'txt', 'mp3', 'mpeg', 'mp4', 'wav'];
     if (file.size > mb * limitSizeFile) {
       setMessage([...messeges, { id, chatId, type: 'notification', text: 'Лимит файла в 5 МБ превышен', date: dateMessage()}]);
-    } else if (filesExt.indexOf(type) === -1) {
-      setMessage([...messeges, { id, chatId, type: 'notification', text: 'Допустимы орматы: jpeg, jpg, png, pdf, doc, docx, txt, mp3, mpeg, mp4, wav', date: dateMessage()}]);
+    } else if (filesType.indexOf(type) === -1) {
+      setMessage([...messeges, { id, chatId, type: 'notification', text: 'Допустимы орматы: ' + filesType.toString(), date: dateMessage()}]);
     } else {
       upload(file, type);
     }
