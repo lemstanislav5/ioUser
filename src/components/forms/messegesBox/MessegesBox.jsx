@@ -5,6 +5,7 @@ import style from './MessegesBox.module.css';
 export const MessegesBox = (props) => {
   const { messeges, colors, SvgImages } = props;
 
+
   return(
     messeges.map((item, i) => {
       return (
@@ -31,11 +32,13 @@ export const MessegesBox = (props) => {
               <a href={item.text}><SvgImages svg={'documents'} fill={'#fff'}/>< /a>
             }
             {
-              item.type === 'audio' && <Player url={item.text}/>
+              item.type === 'audio' && <Player SvgImages={SvgImages} url={item.text}/>
             }
             {
               item.type === 'video' &&
-              < a href="http://www.blablablaaaa.com/products.pdf#page=835">Our Products - Page 835< /a>
+              <video width="100%" height="100%" controls>
+                    <source src={item.text} type="video/mp4"/>
+              </video>
             }
             <div className={item.type === 'notification'? style.bottomNotification : style.bottomMessage}>
               {

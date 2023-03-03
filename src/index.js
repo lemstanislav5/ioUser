@@ -17,6 +17,7 @@ import ReactDOM from 'react-dom';
 import { FirstQuestions, IntroduceYourself, MessegesBox, OpenChat, PhoneForm, Textarea, Attachment } from './components/forms/Forms';
 import { Manager } from "socket.io-client";
 import { SvgImages } from './components/images/SvgImages';
+import { Preloader } from './components/preloader/Preloader';
 import { idController } from './controllers/idController';
 import style from './App.module.css';
 import { storage } from './services/storage';
@@ -27,7 +28,6 @@ import { nanoid } from 'nanoid';
 let manager = new Manager(ws + "://" + url + ":" + port, { transports: ['websocket', 'polling', 'flashsocket'] });
 let socket = manager.socket("/");
 const chatId = (idController.get() === null || idController.get() === undefined) ? idController.set(nanoid(10)) : idController.get();
-//socket.connected: true, disconnected: false
 
 const App = () => {
   const close = useRef(null);
@@ -40,6 +40,7 @@ const App = () => {
   const [styleСall, setStyleCall] = useState({'display': 'block', 'color': colors.text});
   const [phoneFormOpen, setPhoneFormOpen] = useState(false);
   const [introduce, setIntroduce] = useState(initialIntroduce);
+  const [loading, setLoading] = useState(false);
 
   // (fn) каждый рендер; (fn, []) один раз; (fn, [args]) при обновлении args; prevCountRef.current - предидущий стейт
   useEffect(() => setTimeout(() => messegesBox.current?.scrollTo(0, 999000), 300));
@@ -59,6 +60,15 @@ const App = () => {
       socket.on('newMessage', (text) => {
         const id = nanoid(10);
         const incomingMessage = { id, chatId, type: 'from', text, date: dateMessage(), serverAccepted: true, botAccepted: true }
+        setMessage([...messeges, incomingMessage]);
+      });
+    }
+    storage.set('messeges', messeges);
+
+    if (socket._callbacks['$notification'] === undefined) {
+      socket.on('notification', (text) => {
+        const id = nanoid(10);
+        const incomingMessage = { id, chatId, type: 'notification', text, date: dateMessage(), serverAccepted: true, botAccepted: true }
         setMessage([...messeges, incomingMessage]);
       });
     }
@@ -97,10 +107,10 @@ const App = () => {
   }
 
   const upload = (file, type) => {
-    console.log('data', type);
+    setLoading(true);
     socket.emit("upload", file, type, data => {
+      setLoading(false);
       const id = nanoid(10);
-      console.log(data);
       if (data.url === false) {
         setMessage([...messeges, { id, chatId, type: 'notification', text: 'Ошибка отправки!', date: dateMessage()}]);
       } else {
@@ -109,7 +119,7 @@ const App = () => {
           section = 'toImage';
         } else if (type === 'pdf' || type === 'doc' || type === 'docx' || type === 'txt') {
           section = 'documents';
-        } else if (type === 'mp3' || 'mpeg') {
+        } else if (type === 'mp3' || type ===  'mpeg') {
           section = 'audio';
         } else if (type === 'mp4' || type ===  'wav') {
           section = 'video';
@@ -121,9 +131,7 @@ const App = () => {
 
   const fileСheck = (file) => {
     let mb = 1048576, id = nanoid(10);
-    console.log(file.type)
-    const type = file.type.replace('image/', '').replace('application/', '').replace('audio/', '');
-    console.log(type)
+    const type = file.type.replace('image/', '').replace('application/', '').replace('audio/', '').replace('video/', '');
     const filesExt = ['jpeg', 'jpg','png', 'pdf', 'doc', 'docx', 'txt', 'mp3', 'mpeg', 'mp4', 'wav'];
     if (file.size > mb * limitSizeFile) {
       setMessage([...messeges, { id, chatId, type: 'notification', text: 'Лимит файла в 5 МБ превышен', date: dateMessage()}]);
@@ -163,6 +171,7 @@ const App = () => {
               {phoneFormOpen === true && <PhoneForm openPhoneBox={openPhoneBox} send={send}/>}
               <FirstQuestions send={send} initialFirstQuestions={initialFirstQuestions}/>
               <MessegesBox messeges={messeges} colors={colors} SvgImages={SvgImages} />
+              {loading && <Preloader className="39012739017239"/>}
             </div>
             <Textarea
               keyDown={keyDown}

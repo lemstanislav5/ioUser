@@ -1,4 +1,4 @@
-let url = '212.193.48.171',
+let url = 'messenger.ddns.net',
     ws = 'ws', // wss
     port = '80', // 433
     colors = {
@@ -11,6 +11,8 @@ let url = '212.193.48.171',
       notification: '#333',
       toImage: '#888887',
       documents: '#888887',
+      audio: '#888887',
+      video: '#888887',
     },
     testData = false, // "false" уберет тестовые сообщения
     iconChat = true, // "false" поменяет иконку чата на шапку окна, высплывающую снизу

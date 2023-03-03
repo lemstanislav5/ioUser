@@ -12,6 +12,8 @@
   display: inline-block;
   padding-top: 10px;
   z-index: 100;
+  0% {opacity: 0;}
+  100% {opacity: 1;}
 }
 .myForm{
   width: 85%;

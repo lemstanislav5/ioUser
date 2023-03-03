@@ -58,6 +58,19 @@ export const SvgImages = (props) => {
           <circle cx="194" cy="382.3" r="60"/>
         </svg>
       }
+      {svg === 'play' &&
+        <svg width="40px" height="40px" viewBox="0 0 24 24" fill={fill} xmlns="http://www.w3.org/2000/svg">
+        <path d="M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="#fff" strokeWidth="2"/>
+        <path d="M10.9 8.8L10.6577 8.66152C10.1418 8.36676 9.5 8.73922 9.5 9.33333L9.5 14.6667C9.5 15.2608 10.1418 15.6332 10.6577 15.3385L10.9 15.2L15.1 12.8C15.719 12.4463 15.719 11.5537 15.1 11.2L10.9 8.8Z" stroke="#323232" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+        </svg>
+      }
+      {svg === 'pause' &&
+        <svg width="40px" height="40px" viewBox="0 0 24 24" fill={fill} xmlns="http://www.w3.org/2000/svg">
+        <path d="M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="#fff" strokeWidth="2"/>
+        <path d="M14 9L14 15" stroke="#323232" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+        <path d="M10 9L10 15" stroke="#323232" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+        </svg>
+      }
     </>
   );
 }

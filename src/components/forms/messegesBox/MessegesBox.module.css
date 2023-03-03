@@ -80,6 +80,31 @@
   font-size: 15px;
   display: grid;
 }
+.audio{
+  width: 50px;
+  float: right;
+  padding: 5px;
+  margin: 0px 0px 5px 261px;
+  color: #fff;
+  border-radius: 8px 8px 0px 8px;
+  text-align: left;
+  font-size: 15px;
+  display: grid;
+}
+.video{
+  width: 89%;
+  float: right;
+  padding: 5px;
+  margin: 0px 0px 5px 22px;
+  color: #fff;
+  border-radius: 8px 8px 0px 8px;
+  text-align: left;
+  font-size: 15px;
+  display: grid;
+}
+.video video{
+  border-radius: 5px;
+}
 .bottomMessage{
   display: grid;
   grid-template-columns: 251px 15px 26px;
