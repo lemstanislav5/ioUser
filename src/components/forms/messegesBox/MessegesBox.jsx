@@ -29,7 +29,7 @@ export const MessegesBox = (props) => {
             }
             {
               item.type === 'documents' &&
-              <a href={item.text}><SvgImages svg={'documents'} fill={'#fff'}/>< /a>
+              <a href={item.text}><SvgImages svg={'documents'} fill={'#fff'}/></a>
             }
             {
               item.type === 'audio' && <Player SvgImages={SvgImages} url={item.text}/>

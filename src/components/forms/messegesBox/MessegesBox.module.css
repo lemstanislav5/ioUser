@@ -22,6 +22,7 @@
   text-align: left;
   font-size: 14px;
   display: grid;
+  word-wrap: break-word;
 }
 .to{
   width: 89%;
@@ -33,6 +34,7 @@
   text-align: left;
   font-size: 14px;
   display: grid;
+  word-wrap: break-word;
 }
 .serverAccepted{
   height: 20px;
@@ -57,6 +59,7 @@
   border: 1px #706d6d solid;
   max-width: 250px;
   margin: 2px auto;
+  word-wrap: break-word;
 }
 .toImage{
   width: 89%;
