@@ -1,6 +1,4 @@
 /* З А Д А Ч И
-* 0. КОНТРОЛЛЕРЫ МЕСЕНДЖЫ
-* 1. Предложить представиться
 * 2. Ссылки на wothsapp
 * 3. Выверить цвета
 * 4. Отослать аудио
@@ -15,19 +13,14 @@
 import React, { useRef , useEffect, useState }  from 'react';
 import ReactDOM from 'react-dom';
 import { FirstQuestions, IntroduceYourself, MessegesBox, OpenChat, PhoneForm, Textarea, Attachment } from './components/forms/Forms';
-import { Manager } from "socket.io-client";
 import { SvgImages } from './components/images/SvgImages';
 import { Preloader } from './components/preloader/Preloader';
-import { idController } from './controllers/idController';
 import style from './App.module.css';
 import { storage } from './services/storage';
-import { url, colors, iconChat, initialFirstQuestions,limitSizeFile, ws, port, filesType } from './options';
+import { colors, iconChat, initialFirstQuestions, filesType } from './options';
 import { initialMesseges } from './services/initialMesseges';
 import { initialIntroduce } from './services/initialIntroduce';
-import { nanoid } from 'nanoid';
-let manager = new Manager(ws + "://" + url + ":" + port, { transports: ['websocket', 'polling', 'flashsocket'] });
-let socket = manager.socket("/");
-const chatId = (idController.get() === null || idController.get() === undefined) ? idController.set(nanoid(10)) : idController.get();
+import { messengesController } from './controllers/messengesController';
 
 const App = () => {
   const close = useRef(null);
@@ -45,8 +38,7 @@ const App = () => {
   // (fn) каждый рендер; (fn, []) один раз; (fn, [args]) при обновлении args; prevCountRef.current - предидущий стейт
   useEffect(() => setTimeout(() => messegesBox.current?.scrollTo(0, 999000), 300));
   useEffect(() => {
-    socket.on('connect', () => setConnected(true));
-    socket.on('disconnect', () => setConnected(false));
+    messengesController.connect(setConnected);
   }, []);
 
   useEffect(() => {
@@ -55,92 +47,15 @@ const App = () => {
   }, [open]);
 
   useEffect(() => {
-    // Проверяем наличие слушателя, в случае отсутствия устанавливаем
-    if (socket._callbacks['$new message'] === undefined) {
-      socket.on('newMessage', (text) => {
-        const id = nanoid(10);
-        const incomingMessage = { id, chatId, type: 'from', text, date: dateMessage(), serverAccepted: true, botAccepted: true }
-        setMessage([...messeges, incomingMessage]);
-      });
-    }
-    storage.set('messeges', messeges);
-
-    if (socket._callbacks['$notification'] === undefined) {
-      socket.on('notification', (text) => {
-        const id = nanoid(10);
-        const incomingMessage = { id, chatId, type: 'notification', text, date: dateMessage(), serverAccepted: true, botAccepted: true }
-        setMessage([...messeges, incomingMessage]);
-      });
-    }
+    messengesController.newMessage(messeges, setMessage);
+    messengesController.notification(messeges, setMessage);
     storage.set('messeges', messeges);
   }, [messeges]);
 
-  const dateMessage = () => {
-    let date = new Date();
-    return date.getDate() +'-'+ date.getMonth() +'-'+ date.getFullYear() +','+ date.getHours()+':'+date.getMinutes();
-  }
-
-  const send = (text) => {
-    const id = nanoid(10);
-    if (text === '') return setMessage([...messeges, { id, chatId, type: 'notification', text: 'Сообщение не может быть пустым!', date: dateMessage()}]);
-    socket.emit("newMessage", { id, text, chatId }, (error, notification) => {
-      if(error) {
-        console.log(error, notification);
-        return setMessage([...messeges, { id, chatId, type: 'from', text: 'Извините сервис временно недоступен!', date: dateMessage()}]);
-      }
-      setMessage([...messeges, { id, chatId, type: 'to', text: text, date: dateMessage(), serverAccepted: notification.add, botAccepted: notification.send }]);
-  });
-    setDataMessage('');
-  }
-
-  const sendNameAndEmail = (name, email) => {
-    const id = nanoid(10);
-    socket.emit("newNameAndEmail", { id, chatId, name, email}, (error, notification) => {
-      if(error) {
-        console.log(error, notification);
-        return setMessage([...messeges, { id, chatId, type: 'from', text: 'Извините сервис временно недоступен!', date: dateMessage()}]);
-      }
-      setMessage([...messeges, { id, chatId, type: 'from', text: 'Ваши данные приняты (' +name +' , '+ email+')', date: dateMessage(), serverAccepted: notification.add, botAccepted: notification.send }]);
-      storage.set('introduce', {name, email});
-      setIntroduce({name, email});
-    });
-  }
-
-  const upload = (file, type) => {
-    setLoading(true);
-    socket.emit("upload", file, type, data => {
-      setLoading(false);
-      const id = nanoid(10);
-      if (data.url === false) {
-        setMessage([...messeges, { id, chatId, type: 'notification', text: 'Ошибка отправки!', date: dateMessage()}]);
-      } else {
-        let section;
-        if (type === 'jpeg' || type === 'jpg' || type === 'png') {
-          section = 'toImage';
-        } else if (type === 'pdf' || type === 'doc' || type === 'docx' || type === 'txt') {
-          section = 'documents';
-        } else if (type === 'mp3' || type ===  'mpeg') {
-          section = 'audio';
-        } else if (type === 'mp4' || type ===  'wav') {
-          section = 'video';
-        }
-        setMessage([...messeges, { id, chatId, type: section, text: data.url, date: dateMessage()}]);
-      }
-    });
-  }
-
-  const fileСheck = (file) => {
-    let mb = 1048576, id = nanoid(10);
-    const type = file.type.replace('image/', '').replace('application/', '').replace('audio/', '').replace('video/', '');
-    if (file.size > mb * limitSizeFile) {
-      setMessage([...messeges, { id, chatId, type: 'notification', text: 'Лимит файла в 5 МБ превышен', date: dateMessage()}]);
-    } else if (filesType.indexOf(type) === -1) {
-      setMessage([...messeges, { id, chatId, type: 'notification', text: 'Допустимы орматы: ' + filesType.toString(), date: dateMessage()}]);
-    } else {
-      upload(file, type);
-    }
-  }
-
+  const send = (text) => messengesController.send(text, setMessage, messeges, setDataMessage);
+  const sendNameAndEmail = (name, email) => messengesController.sendNameAndEmail(name, email, setMessage, messeges, setIntroduce);
+  const upload = (file, type) => messengesController.upload(file, type, setLoading, setMessage, messeges);
+  const fileСheck = (file) => messengesController.fileСheck(file, setMessage, messeges, filesType, upload) 
   const openPhoneBox = () => {
     phoneFormOpen ? setPhoneFormOpen(false) : setPhoneFormOpen(true);
     phoneFormOpen ? setStyleCall({ 'color': colors.text}) : setStyleCall({ 'color': colors.messeges});
