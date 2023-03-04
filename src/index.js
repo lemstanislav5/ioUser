@@ -12,7 +12,7 @@
 */
 import React, { useRef , useEffect, useState }  from 'react';
 import ReactDOM from 'react-dom';
-import { FirstQuestions, IntroduceYourself, MessegesBox, OpenChat, PhoneForm, Textarea, Attachment } from './components/forms/Forms';
+import { FirstQuestions, IntroduceYourself, MessegesBox, OpenChat, PhoneForm, Textarea, Attachment, Record } from './components/forms/Forms';
 import { SvgImages } from './components/images/SvgImages';
 import { Preloader } from './components/preloader/Preloader';
 import style from './App.module.css';
@@ -95,6 +95,7 @@ const App = () => {
               backgroundColor={colors.conteiner}/>
             <div className={style.tools}>
               <Attachment color={colors.messeges} upload={upload} fileСheck={fileСheck}/>
+              <Record/>
             </div>
             <div className={style.send} onClick={() => {send(message)}}  style={{'color': colors.text, 'borderColor': colors.text}}>
               <SvgImages svg={'send'}/>

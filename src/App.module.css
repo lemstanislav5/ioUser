@@ -107,4 +107,5 @@
 }
 .tools{
   display: inline-block;
+  display: flex;
 }

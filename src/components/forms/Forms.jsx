@@ -5,5 +5,6 @@ import { OpenChat } from './openChat/OpenChat';
 import { PhoneForm } from './phoneForm/PhoneForm';
 import { Textarea } from './textarea/Textarea';
 import { Attachment } from './tools/attachment/Attachment';
+import { Record } from './tools/record/Record';
 
-export { FirstQuestions, IntroduceYourself, MessegesBox, OpenChat, PhoneForm, Textarea, Attachment };
+export { FirstQuestions, IntroduceYourself, MessegesBox, OpenChat, PhoneForm, Textarea, Attachment, Record };
