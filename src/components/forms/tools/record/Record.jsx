@@ -26,8 +26,12 @@ export const Record = (props) => {
       console.log(event)
       // setVoice([...voice, event.data]);
     });
+    mediaRecorder.addEventListener("stop", function() {
+      const voiceBlob = new Blob(voice, {
+          type: 'audio/wav'
+      });
+    });
   }
-
   const stopRecording = () => {
     if (mediaRecorder === null) return false; 
     console.log('stopRecording', voice)
