@@ -13,7 +13,6 @@ export const Record = (props) => {
   
   
   useEffect(async ()=> {
-    
     mediaRecorder.addEventListener("dataavailable",function(event) {
       setVoice([...voice, event.data]);
     });
