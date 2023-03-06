@@ -55,7 +55,7 @@ const App = () => {
   const send = (text) => messengesController.send(text, setMessage, messeges, setDataMessage);
   const sendNameAndEmail = (name, email) => messengesController.sendNameAndEmail(name, email, setMessage, messeges, setIntroduce);
   const upload = (file, type) => messengesController.upload(file, type, setLoading, setMessage, messeges);
-  const fileСheck = (file) => messengesController.fileСheck(file, setMessage, messeges, filesType, upload) 
+  const fileСheck = (file) => messengesController.fileСheck(file, setMessage, messeges, filesType, upload);
   const openPhoneBox = () => {
     phoneFormOpen ? setPhoneFormOpen(false) : setPhoneFormOpen(true);
     phoneFormOpen ? setStyleCall({ 'color': colors.text}) : setStyleCall({ 'color': colors.messeges});
@@ -95,7 +95,7 @@ const App = () => {
               backgroundColor={colors.conteiner}/>
             <div className={style.tools}>
               <Attachment color={colors.messeges} upload={upload} fileСheck={fileСheck}/>
-              <Record/>
+              <Record fileСheck={fileСheck}/>
             </div>
             <div className={style.send} onClick={() => {send(message)}}  style={{'color': colors.text, 'borderColor': colors.text}}>
               <SvgImages svg={'send'}/>
