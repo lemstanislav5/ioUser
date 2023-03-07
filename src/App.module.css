@@ -31,7 +31,6 @@
 .box_messeges{
   height: calc(450px - 125px);
   width: 100%;
-  display: block;
   border-bottom: 1px #00000096 solid;
   font-family: inherit;
   font-size: 15px!important;

@@ -4,19 +4,20 @@
   display: inline-block;
 }
 .msgbox{
-  display: grid;
+  display: inline-block;
   width: 100%;
 }
 .date{
   font-size: 10px;
   color: #fff;
   padding-top: 5px;
+  text-align: right;
 }
 .from{
   width: 89%;
   float: left;
   padding: 5px;
-  margin: 0 0 5px 5px;
+  margin: 0 2px 2px 5px;
   color: #fff;
   border-radius: 0px 8px 8px 8px;
   text-align: left;
@@ -28,7 +29,7 @@
   width: 89%;
   float: right;
   padding: 5px;
-  margin: 0px 0px 5px 22px;
+  margin: 0px 2px 2px 22px;
   color: #fff;
   border-radius: 8px 8px 0px 8px;
   text-align: left;
@@ -37,13 +38,15 @@
   word-wrap: break-word;
 }
 .serverAccepted{
-  height: 20px;
+  height: 1px;
   text-align: right;
   margin-right: -10px;
+  margin-top: -1px;
 }
 .botAccepted{
-  height: 20px;
+  height: 1px;
   text-align: right;
+  margin-top: -1px;
 }
 .false{
   color: red;
@@ -58,61 +61,64 @@
   border-radius: 9px;
   border: 1px #706d6d solid;
   max-width: 250px;
-  margin: 2px auto;
+  margin: 0px auto;
   word-wrap: break-word;
+  margin-bottom: 5px;
 }
 .toImage{
   width: 89%;
   float: right;
-  padding: 5px;
-  margin: 0px 0px 5px 22px;
+  padding: 2px;
+  margin: 0px 2px 5px 22px;
   color: #fff;
   border-radius: 8px 8px 0px 8px;
   text-align: left;
   font-size: 15px;
   display: grid;
 }
-.documents{
+.toDocuments{
   width: 50px;
   float: right;
   padding: 5px;
-  margin: 0px 0px 5px 261px;
+  margin: 0px 2px 5px 261px;
   color: #fff;
   border-radius: 8px 8px 0px 8px;
   text-align: left;
   font-size: 15px;
   display: grid;
 }
-.audio{
+.toAudio{
   width: 50px;
   float: right;
   padding: 5px;
-  margin: 0px 0px 5px 261px;
   color: #fff;
-  border-radius: 8px 8px 0px 8px;
+  margin: 0px 2px 2px 22px;
   text-align: left;
   font-size: 15px;
   display: grid;
+  margin-bottom: 2px;
+  border-radius: 8px 8px 0px 8px;
 }
-.video{
+.toVideo{
   width: 89%;
   float: right;
   padding: 5px;
-  margin: 0px 0px 5px 22px;
+  margin: 0px 2px 2px 22px;
   color: #fff;
   border-radius: 8px 8px 0px 8px;
   text-align: left;
   font-size: 15px;
   display: grid;
 }
-.video video{
+.toVideo video{
   border-radius: 5px;
 }
 .bottomMessage{
-  display: grid;
-  grid-template-columns: 251px 15px 26px;
+  display: flex;
+  justify-content: right;
+  align-items: flex-start;
 }
-.image{
+.toImage{
   width: 99%;
   border-radius: 5px;
 }

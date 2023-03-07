@@ -66,11 +66,11 @@ export const messengesController = {
         if (type === 'jpeg' || type === 'jpg' || type === 'png') {
           section = 'toImage';
         } else if (type === 'pdf' || type === 'doc' || type === 'docx' || type === 'txt') {
-          section = 'documents';
-        } else if (type === 'mp3' || type ===  'mpeg') {
-          section = 'audio';
-        } else if (type === 'mp4' || type ===  'wav') {
-          section = 'video';
+          section = 'toDocuments';
+        } else if (type === 'mp3') {
+          section = 'toAudio';
+        } else if (type === 'mp4') {
+          section = 'toVideo';
         }
         setMessage([...messeges, { id, chatId, type: section, text: data.url, date: dateMessage()}]);
       }
@@ -78,11 +78,12 @@ export const messengesController = {
   },
   fileСheck: (file, setMessage, messeges, filesType, upload) => {
     let mb = 1048576, id = nanoid(10);
-    const type = file.type.replace('image/', '').replace('application/', '').replace('audio/', '').replace('video/', '');
+    let type = file.type.replace('image/', '').replace('application/', '').replace('audio/', '').replace('video/', '');
+    type = (type === 'mpeg') ? 'mp3' : type;
     if (file.size > mb * limitSizeFile) {
       setMessage([...messeges, { id, chatId, type: 'notification', text: 'Лимит файла ' + limitSizeFile + ' МБ превышен', date: dateMessage()}]);
     } else if (filesType.indexOf(type) === -1) {
-      setMessage([...messeges, { id, chatId, type: 'notification', text: 'Допустимы орматы: ' + filesType.toString(), date: dateMessage()}]);
+      setMessage([...messeges, { id, chatId, type: 'notification', text: 'Допустимы орматы: ' + filesType.join(', '), date: dateMessage()}]);
     } else {
       upload(file, type);
     }

@@ -39,9 +39,7 @@ export const Record = (props) => {
 
   const startRecording = async () => {
     const media = new MediaRecorder(stream, { type: mimeType });
-    //set the MediaRecorder instance to the mediaRecorder ref
     mediaRecorder.current = media;
-    //invokes the start method to start the recording process
     mediaRecorder.current.start();
     let localAudioChunks = [];
     mediaRecorder.current.ondataavailable = (event) => {

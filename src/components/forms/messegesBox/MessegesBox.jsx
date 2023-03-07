@@ -28,14 +28,14 @@ export const MessegesBox = (props) => {
               <img className={style.image} src={item.text} alt="#" />
             }
             {
-              item.type === 'documents' &&
+              item.type === 'toDocuments' &&
               <a href={item.text}><SvgImages svg={'documents'} fill={'#fff'}/></a>
             }
             {
-              item.type === 'audio' && <Player SvgImages={SvgImages} url={item.text}/>
+              item.type === 'toAudio' && <Player SvgImages={SvgImages} url={item.text}/>
             }
             {
-              item.type === 'video' &&
+              item.type === 'toVideo' &&
               <video width="100%" height="100%" controls>
                     <source src={item.text} type="video/mp4"/>
               </video>
