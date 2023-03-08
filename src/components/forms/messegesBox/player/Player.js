@@ -33,12 +33,12 @@ const useAudio = url => {
 const Player = ({ url, SvgImages }) => {
   const [playing, toggle, duration, err] = useAudio(url);
   console.log(playing)
-  if (err) return <>файла нет</>
+  if (err) return <SvgImages svg='playError'/>
   return (
     <div onClick={toggle}>
       { duration && <div className={style.duration}> { duration } </div> }
       {
-        playing ? <SvgImages svg="pause" fill={'#fff'}/> : <SvgImages svg="play" fill={'#fff'}/>
+        playing ? <SvgImages svg='pause' fill={'#fff'}/> : <SvgImages svg='play' fill={'#fff'}/>
       }
     </div>
   );

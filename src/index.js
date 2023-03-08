@@ -35,7 +35,7 @@ const App = () => {
   const [loading, setLoading] = useState(false);
 
   // (fn) каждый рендер; (fn, []) один раз; (fn, [args]) при обновлении args; prevCountRef.current - предидущий стейт
-  useEffect(() => setTimeout(() => messegesBox.current?.scrollTo(0, 999000), 300));
+  useEffect(() => setTimeout(() => messegesBox.current?.scrollTo(0, messegesBox.current.scrollHeight), 0));
   useEffect(() => {
     messengesController.connect(setConnected);
   }, []);
