@@ -2,20 +2,13 @@ import React, { useState, useEffect } from "react";
 
 const FileAvailabilityCheck = ({ url, SvgImages, Component }) => {
   const [fileAvailability, setFileAvailability] = useState(null);
-  useEffect(async() => {
-    try {
-      const response = await fetch(url);
-      if (!response.ok) {
-        setFileAvailability(false);
-        throw Error(`is not ok: ` + response.status);
-      } else {
+  useEffect(() => {
+    fetch(url)
+      .then(res => {
+        if (res.status === 202) return setFileAvailability(false);
         setFileAvailability(true);
-      }
-    } catch (error) {
-      setFileAvailability(false);
-      console.log('There was an error', error);
-    }
-
+      })
+      .catch(err => console.log(err));
   }, [url])
 
   if (fileAvailability === null){
