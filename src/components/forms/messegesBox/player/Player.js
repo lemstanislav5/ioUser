@@ -5,7 +5,6 @@ const useAudio = url => {
   const [audio] = useState(new Audio(url));
   const [playing, setPlaying] = useState(false);
   const [duration, setDuration] = useState('00:00');
-  const [err, setErr] = useState(false);
 
   const toggle = () => setPlaying(!playing);
 
@@ -14,9 +13,6 @@ const useAudio = url => {
   },[playing, audio]);
 
   useEffect(() => {
-    audio.addEventListener('error', () => {
-      return setErr(true);
-    });
     audio.addEventListener('timeupdate', () => {
       setDuration(new Date(audio.currentTime * 1000).toISOString().substring(14, 19));
     });
@@ -26,12 +22,12 @@ const useAudio = url => {
     };
   }, [audio]);
 
-  return [playing, toggle, duration, err];
+  return [playing, toggle, duration];
 };
 
 const Player = ({ url, SvgImages }) => {
-  const [playing, toggle, duration, err] = useAudio(url);
-  if (err) return <SvgImages svg='playError'/>
+  const [playing, toggle, duration] = useAudio(url);
+
   return (
     <div onClick={toggle}>
       { duration && <div className={style.duration}> { duration } </div> }

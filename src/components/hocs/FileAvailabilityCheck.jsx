@@ -1,27 +1,30 @@
 import React, { useState, useEffect } from "react";
 
-const FileAvailabilityCheck = ({ url, SvgImages, WrappedComponent}) => {
-  const [err, setErr] = useState(null);
-  useEffect(() => {
-    console.log(url)
-    fetch(url)
-      .then((response) => {
-        console.log('response', response.status === 404);
-        if (response.status === 404) return setErr(false);
-        setErr(true);
-      })
-      .catch((err) => {
-        setErr(false);
-        console.log(err);
-      });
+const FileAvailabilityCheck = ({ url, SvgImages, Component }) => {
+  const [fileAvailability, setFileAvailability] = useState(null);
+  useEffect(async() => {
+    try {
+      const response = await fetch(url);
+      if (!response.ok) {
+        setFileAvailability(false);
+        throw Error(`is not ok: ` + response.status);
+      } else {
+        setFileAvailability(true);
+      }
+    } catch (error) {
+      setFileAvailability(false);
+      console.log('There was an error', error);
+    }
+
   }, [url])
 
-  if (err === null) return <></>;
-  if (err === false) {
-    return <SvgImages/>
-  } else {
-    return <WrappedComponent/>;
-  }  
+  if (fileAvailability === null){
+    return <></>
+  } else if (fileAvailability === false) {
+    return <SvgImages svg='playError'/>
+  } else if (fileAvailability === true) {
+    return <Component url={url} SvgImages={SvgImages}/>
+  }
 };
 
 export default FileAvailabilityCheck;

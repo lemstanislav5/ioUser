@@ -3,6 +3,7 @@ import Player from './player/Player';
 import style from './MessegesBox.module.css';
 import MyImage from './image/MyImage';
 import FileAvailabilityCheck from '../../hocs/FileAvailabilityCheck';
+import Document from './document/Document';
 export const MessegesBox = (props) => {
   const { messeges, colors, SvgImages } = props;
 
@@ -25,14 +26,16 @@ export const MessegesBox = (props) => {
               <div className={style.notificationText}>{item.text}</div>
             }
             {
-              item.type === 'toImage' && <MyImage className={style.image} url={item.text} SvgImages={SvgImages}/>
+              item.type === 'toImage' && 
+              <FileAvailabilityCheck className={style.image} url={item.text} SvgImages={SvgImages} Component={MyImage}/>
             }
             {
               item.type === 'toDocuments' &&
-              <FileAvailabilityCheck url={item.text} SvgImages={<SvgImages svg='playError'/>} WrappedComponent={<SvgImages svg={'documents'} fill={'#fff'}/>}/>
+              <FileAvailabilityCheck url={item.text} SvgImages={SvgImages} Component={Document}/>
             }
             {
-              item.type === 'toAudio' && <Player SvgImages={SvgImages} url={item.text}/>
+              item.type === 'toAudio' && 
+              <FileAvailabilityCheck url={item.text} SvgImages={SvgImages} Component={Player}/>
             }
             {
               item.type === 'toVideo' &&
