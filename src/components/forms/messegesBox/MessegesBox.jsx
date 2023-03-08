@@ -1,6 +1,7 @@
 import React from 'react';
 import Player from './player/Player';
 import style from './MessegesBox.module.css';
+import MyImage from './image/MyImage';
 
 export const MessegesBox = (props) => {
   const { messeges, colors, SvgImages } = props;
@@ -24,8 +25,7 @@ export const MessegesBox = (props) => {
               <div className={style.notificationText}>{item.text}</div>
             }
             {
-              item.type === 'toImage' &&
-              <img className={style.image} src={item.text} alt="#" />
+              item.type === 'toImage' && <MyImage className={style.image} url={item.text} SvgImages={SvgImages}/>
             }
             {
               item.type === 'toDocuments' &&

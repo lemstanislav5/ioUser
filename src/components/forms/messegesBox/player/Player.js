@@ -14,12 +14,11 @@ const useAudio = url => {
   },[playing, audio]);
 
   useEffect(() => {
-    console.log(audio.duration)
+    audio.addEventListener('error', () => {
+      return setErr(true);
+    });
     audio.addEventListener('timeupdate', () => {
       setDuration(new Date(audio.currentTime * 1000).toISOString().substring(14, 19));
-    });
-    audio.addEventListener('error', () => {
-      setErr(true);
     });
     audio.addEventListener('ended', () => setPlaying(false));
     return () => {
@@ -32,7 +31,6 @@ const useAudio = url => {
 
 const Player = ({ url, SvgImages }) => {
   const [playing, toggle, duration, err] = useAudio(url);
-  console.log(playing)
   if (err) return <SvgImages svg='playError'/>
   return (
     <div onClick={toggle}>

@@ -1,8 +1,8 @@
 .conteiner{
-  width: 170px;
+  width: 330px;
   height: 450px;
   display: block;
-  position: fixed;
+  position: absolute;
   font-size: 14px!important;
   border-radius: 10px 30px 0 0;
   box-shadow: -3px 4px 20px #333;

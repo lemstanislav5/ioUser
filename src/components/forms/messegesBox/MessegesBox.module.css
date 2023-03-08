@@ -66,7 +66,7 @@
   margin-bottom: 5px;
 }
 .toImage{
-  width: 89%;
+  max-width: 89%;
   float: right;
   padding: 2px;
   margin: 0px 2px 5px 22px;
@@ -88,7 +88,7 @@
   display: grid;
 }
 .toAudio{
-  width: 50px;
+  max-width: 89%;
   float: right;
   padding: 5px;
   color: #fff;

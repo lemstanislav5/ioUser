@@ -29,10 +29,12 @@ export const Record = (props) => {
         const streamData = await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
         setStream(streamData);
       } catch (err) {
-        alert(err.message);
+        console.log(err.message);
+        setColor('#9e9e9e')
       }
     } else {
-      alert("The MediaRecorder API is not supported in your browser.");
+      console.log("The MediaRecorder API is not supported in your browser.");
+      setColor('#9e9e9e')
     }
   };
 

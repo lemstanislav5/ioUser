@@ -21,6 +21,8 @@ import { initialMesseges } from './services/initialMesseges';
 import { initialIntroduce } from './services/initialIntroduce';
 import { messengesController } from './controllers/messengesController';
 
+
+
 const App = () => {
   const close = useRef(null);
   const messegesBox = useRef(null);
@@ -33,23 +35,37 @@ const App = () => {
   const [phoneFormOpen, setPhoneFormOpen] = useState(false);
   const [introduce, setIntroduce] = useState(initialIntroduce);
   const [loading, setLoading] = useState(false);
-
+  const [styleMessegesBox, setStyleMessegesBox] = useState({'opacity': 0});
+  const [x, setX] = useState(0);
+  const [y, setY] = useState(0);
   // (fn) каждый рендер; (fn, []) один раз; (fn, [args]) при обновлении args; prevCountRef.current - предидущий стейт
-  useEffect(() => setTimeout(() => messegesBox.current?.scrollTo(0, messegesBox.current.scrollHeight), 0));
+  useEffect(() => setTimeout(() => messegesBox.current?.scrollTo(0, 999000), 100));
   useEffect(() => {
     messengesController.connect(setConnected);
   }, []);
 
+  //! УСТАНОВИТЬ НАЧЕНИЕ LEFT TOP ПО УМОЛЧАНИЮ
   useEffect(() => {
-    if (open) return setStyleBox({ 'bottom': 0, 'left': window.innerWidth - 335 , 'width': 330, 'backgroundColor': colors.conteiner});
-    setStyleBox({'bottom': -400, 'left': window.innerWidth - 175 , 'width': 170, 'backgroundColor': colors.conteiner});
-  }, [open]);
+    if (open) {
+      setStyleBox({'backgroundColor': colors.conteiner, left: x, top: y});
+      setTimeout(() => setStyleMessegesBox({'opacity': 1}), 500);
+    } else {
+      setStyleMessegesBox({'opacity': 0})
+    }
+  }, [open, x, y]);
 
   useEffect(() => {
     messengesController.newMessage(messeges, setMessage);
     messengesController.notification(messeges, setMessage);
     storage.set('messeges', messeges);
   }, [messeges]);
+
+  const handleDragEnd = (event) => {
+    // position: 'absolute', left: x, top: y
+    setX(event.clientX);
+    setY(event.clientY);
+    setStyleBox({ 'bottom': 0, 'left': window.innerWidth - 335 , 'width': 330, 'backgroundColor': colors.conteiner, position: 'absolute', left: x, top: y});
+  };
 
   const send = (text) => messengesController.send(text, setMessage, messeges, setDataMessage);
   const sendNameAndEmail = (name, email) => messengesController.sendNameAndEmail(name, email, setMessage, messeges, setIntroduce);
@@ -68,7 +84,7 @@ const App = () => {
       {
         (iconChat === true && open === false)
         ? <OpenChat colorStart={colors.text} colorEnd={colors.top} setOpen={setOpen}/>
-        : <div className={style.conteiner} style={styleBox}>
+        : <div className={style.conteiner} draggable  onDragEnd={handleDragEnd} style={styleBox}>
             <div className={style.box_top} style={{'backgroundColor': colors.top}}>
               <span style={{'color': colors.text}}>
                 {open ? 'Напишите ваше сообщение' : 'Поддержка'}
@@ -79,12 +95,14 @@ const App = () => {
                 <SvgImages svg={'open'}/>
               </div>
             </div>
-            <div className={style.box_messeges} ref={messegesBox} style={{'backgroundColor': colors.messeges}}>
-              {(messeges.length === 2 && introduce === false) && <IntroduceYourself SvgImages={SvgImages} sendNameAndEmail={sendNameAndEmail}/>}
-              {phoneFormOpen === true && <PhoneForm openPhoneBox={openPhoneBox} send={send}/>}
-              <FirstQuestions send={send} initialFirstQuestions={initialFirstQuestions}/>
-              <MessegesBox messeges={messeges} colors={colors} SvgImages={SvgImages} />
-              {loading && <Preloader className="39012739017239"/>}
+            <div style={{'backgroundColor': colors.messeges}}>
+              <div className={style.box_messeges} ref={messegesBox} style={styleMessegesBox}>
+                {(messeges.length === 2 && introduce === false) && <IntroduceYourself SvgImages={SvgImages} sendNameAndEmail={sendNameAndEmail}/>}
+                {phoneFormOpen === true && <PhoneForm openPhoneBox={openPhoneBox} send={send}/>}
+                <FirstQuestions send={send} initialFirstQuestions={initialFirstQuestions}/>
+                <MessegesBox messeges={messeges} colors={colors} SvgImages={SvgImages} />
+                {loading && <Preloader className="39012739017239"/>}
+              </div>
             </div>
             <Textarea
               keyDown={keyDown}
