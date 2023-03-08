@@ -41,6 +41,8 @@ const App = () => {
   // (fn) каждый рендер; (fn, []) один раз; (fn, [args]) при обновлении args; prevCountRef.current - предидущий стейт
   useEffect(() => setTimeout(() => messegesBox.current?.scrollTo(0, 999000), 100));
   useEffect(() => {
+    setX(window.innerWidth - 340);
+    setY(window.innerHeight - 470);
     messengesController.connect(setConnected);
   }, []);
 
@@ -64,7 +66,7 @@ const App = () => {
     // position: 'absolute', left: x, top: y
     setX(event.clientX);
     setY(event.clientY);
-    setStyleBox({ 'bottom': 0, 'left': window.innerWidth - 335 , 'width': 330, 'backgroundColor': colors.conteiner, position: 'absolute', left: x, top: y});
+    setStyleBox({'backgroundColor': colors.conteiner, position: 'absolute', left: x, top: y});
   };
 
   const send = (text) => messengesController.send(text, setMessage, messeges, setDataMessage);

@@ -2,7 +2,7 @@ import React from 'react';
 import Player from './player/Player';
 import style from './MessegesBox.module.css';
 import MyImage from './image/MyImage';
-
+import FileAvailabilityCheck from '../../hocs/FileAvailabilityCheck';
 export const MessegesBox = (props) => {
   const { messeges, colors, SvgImages } = props;
 
@@ -29,7 +29,7 @@ export const MessegesBox = (props) => {
             }
             {
               item.type === 'toDocuments' &&
-              <a href={item.text}><SvgImages svg={'documents'} fill={'#fff'}/></a>
+              <FileAvailabilityCheck url={item.text} SvgImages={<SvgImages svg='playError'/>} WrappedComponent={<SvgImages svg={'documents'} fill={'#fff'}/>}/>
             }
             {
               item.type === 'toAudio' && <Player SvgImages={SvgImages} url={item.text}/>
