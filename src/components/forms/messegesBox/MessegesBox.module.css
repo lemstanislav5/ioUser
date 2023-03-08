@@ -65,19 +65,25 @@
   word-wrap: break-word;
   margin-bottom: 5px;
 }
-.toImage{
+.toImage {
   max-width: 89%;
   float: right;
-  padding: 2px;
-  margin: 0px 2px 5px 22px;
+  padding: 5px;
   color: #fff;
-  border-radius: 8px 8px 0px 8px;
+  margin: 0px 2px 2px 22px;
   text-align: left;
   font-size: 15px;
   display: grid;
+  margin-bottom: 2px;
+  border-radius: 8px 8px 0px 8px;
+}
+.toImage img{
+  max-width: 100%;
+  color: #fff;
+  border-radius: 8px 8px 0px 8px;
 }
 .toDocuments{
-  width: 50px;
+  max-width: 50px;
   float: right;
   padding: 5px;
   margin: 0px 2px 5px 261px;
@@ -100,7 +106,7 @@
   border-radius: 8px 8px 0px 8px;
 }
 .toVideo{
-  width: 89%;
+  max-width: 89%;
   float: right;
   padding: 5px;
   margin: 0px 2px 2px 22px;

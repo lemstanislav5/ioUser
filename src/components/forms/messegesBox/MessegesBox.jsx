@@ -1,5 +1,6 @@
 import React from 'react';
-import Player from './player/Player';
+import AudioPlayer from './audio/AudioPlayer';
+import VideoPlayer from './video/VideoPlayer';
 import style from './MessegesBox.module.css';
 import MyImage from './image/MyImage';
 import FileAvailabilityCheck from '../../hocs/FileAvailabilityCheck';
@@ -27,7 +28,7 @@ export const MessegesBox = (props) => {
             }
             {
               item.type === 'toImage' && 
-              <FileAvailabilityCheck className={style.image} url={item.text} SvgImages={SvgImages} Component={MyImage}/>
+              <FileAvailabilityCheck className={style.toImage} url={item.text} SvgImages={SvgImages} Component={MyImage}/>
             }
             {
               item.type === 'toDocuments' &&
@@ -35,17 +36,15 @@ export const MessegesBox = (props) => {
             }
             {
               item.type === 'toAudio' && 
-              <FileAvailabilityCheck url={item.text} SvgImages={SvgImages} Component={Player}/>
+              <FileAvailabilityCheck url={item.text} SvgImages={SvgImages} Component={AudioPlayer}/>
             }
             {
               item.type === 'toVideo' &&
-              <video width="100%" height="100%" controls>
-                    <source src={item.text} type="video/mp4"/>
-              </video>
+              <FileAvailabilityCheck url={item.text} SvgImages={SvgImages} Component={VideoPlayer}/>
             }
             <div className={item.type === 'notification'? style.bottomNotification : style.bottomMessage}>
               {
-                (item.type === 'to' || item.type === 'toImage') &&
+                (item.type === 'to') &&
                   <>
                     <div className={style.serverAccepted}>
                       <SvgImages svg='daw' fill={item.serverAccepted ? '#0cec0c' : ' #e82554'}/>

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import style from './Player.module.css';
+import style from './AudioPlayer.module.css';
 
 const useAudio = url => {
   const [audio] = useState(new Audio(url));
@@ -25,7 +25,7 @@ const useAudio = url => {
   return [playing, toggle, duration];
 };
 
-const Player = ({ url, SvgImages }) => {
+const AudioPlayer = ({ url, SvgImages }) => {
   const [playing, toggle, duration] = useAudio(url);
 
   return (
@@ -38,4 +38,4 @@ const Player = ({ url, SvgImages }) => {
   );
 };
 
-export default Player;
+export default AudioPlayer;
