@@ -1,7 +1,6 @@
 /* З А Д А Ч И
 * 2. Ссылки на wothsapp
 * 3. Выверить цвета
-* 5. Перетаскивать окно чат
 * 6. Изменять размеры окна чата
 * 8. Скрипт для вставки в сайт готовый
 * 9. Видеоинструкция и статья с 0
@@ -35,13 +34,13 @@ const App = () => {
   const [introduce, setIntroduce] = useState(initialIntroduce);
   const [loading, setLoading] = useState(false);
   const [styleMessegesBox, setStyleMessegesBox] = useState({'opacity': 0});
-  const [x, setX] = useState(0);
-  const [y, setY] = useState(0);
+  let [[x, y], setXY] = useState([0, 0]);
+  let [[innerX, innerY], setInnerXY] = useState([0, 0]);
   // (fn) каждый рендер; (fn, []) один раз; (fn, [args]) при обновлении args; prevCountRef.current - предидущий стейт
   useEffect(() => setTimeout(() => messegesBox.current?.scrollTo(0, 999000), 100));
   useEffect(() => {
-    setX(window.innerWidth - 340);
-    setY(window.innerHeight - 470);
+    let x = window.innerWidth - 340, y = window.innerHeight - 530;
+    setXY([x,y]);
     messengesController.connect(setConnected);
   }, []);
 
@@ -61,13 +60,12 @@ const App = () => {
     storage.set('messeges', messeges);
   }, [messeges]);
 
-  const handleDragEnd = (event) => {
-    // position: 'absolute', left: x, top: y
-    setX(event.clientX);
-    setY(event.clientY);
-    setStyleBox({'backgroundColor': colors.conteiner, position: 'absolute', left: x, top: y});
-  };
-
+  const handleDragEnd = (e) => setXY([e.clientX - innerX, e.clientY - innerY]);
+  const mousemove = (e) => {
+    let target = e.target.getBoundingClientRect();
+  	let inx = e.clientX - target.left, iny = e.clientY - target.top;
+    setInnerXY([inx, iny]);
+  }
   const send = (text) => messengesController.send(text, setMessage, messeges, setDataMessage);
   const sendNameAndEmail = (name, email) => messengesController.sendNameAndEmail(name, email, setMessage, messeges, setIntroduce);
   const upload = (file, type) => messengesController.upload(file, type, setLoading, setMessage, messeges);
@@ -85,7 +83,7 @@ const App = () => {
       {
         (iconChat === true && open === false)
         ? <OpenChat colorStart={colors.text} colorEnd={colors.top} setOpen={setOpen}/>
-        : <div className={style.conteiner} draggable  onDragEnd={handleDragEnd} style={styleBox}>
+        : <div className={style.conteiner} draggable  onDragEnd={handleDragEnd} onMouseMove={mousemove} style={styleBox}>
             <div className={style.box_top} style={{'backgroundColor': colors.top}}>
               <span style={{'color': colors.text}}>
                 {open ? 'Напишите ваше сообщение' : 'Поддержка'}
