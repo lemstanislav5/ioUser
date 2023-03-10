@@ -1,7 +1,4 @@
 /* З А Д А Ч И
-* 2. Ссылки на wothsapp
-* 3. Выверить цвета
-* 6. Изменять размеры окна чата
 * 8. Скрипт для вставки в сайт готовый
 * 9. Видеоинструкция и статья с 0
 * 10. consent to the processing of personal data
@@ -14,12 +11,10 @@ import { SvgImages } from './components/images/SvgImages';
 import { Preloader } from './components/preloader/Preloader';
 import style from './App.module.css';
 import { storage } from './services/storage';
-import { colors, iconChat, initialFirstQuestions, filesType, contacts } from './options';
+import { colors, initialFirstQuestions, filesType, contacts } from './options';
 import { initialMesseges } from './services/initialMesseges';
 import { initialIntroduce } from './services/initialIntroduce';
 import { messengesController } from './controllers/messengesController';
-
-
 
 const App = () => {
   const close = useRef(null);
@@ -34,14 +29,13 @@ const App = () => {
   const [loading, setLoading] = useState(false);
   const [styleMessegesBox, setStyleMessegesBox] = useState({'opacity': 0});
   const [openContacts, setOpenContacts] = useState(false);
-  // (fn) каждый рендер; (fn, []) один раз; (fn, [args]) при обновлении args; prevCountRef.current - предидущий стейт
+
   useEffect(() => setTimeout(() => messegesBox.current?.scrollTo(0, 999000), 100));
   useEffect(() => {
     messengesController.connect(setConnected);
     document.addEventListener('click', () => setOpenContacts(false));
   }, []);
 
-  //! УСТАНОВИТЬ НАЧЕНИЕ LEFT TOP ПО УМОЛЧАНИЮ
   useEffect(() => {
     if (open) return setTimeout(() => setStyleMessegesBox({'opacity': 1}), 500);
     setStyleMessegesBox({'opacity': 0});
@@ -51,6 +45,7 @@ const App = () => {
     messengesController.newMessage(messeges, setMessage);
     messengesController.notification(messeges, setMessage);
     storage.set('messeges', messeges);
+    setTimeout(() => messegesBox.current?.scrollTo(0, 999000), 100)
   }, [messeges]);
 
   const send = (text) => messengesController.send(text, setMessage, messeges, setDataMessage);
@@ -61,57 +56,54 @@ const App = () => {
     phoneFormOpen ? setPhoneFormOpen(false) : setPhoneFormOpen(true);
     phoneFormOpen ? setStyleCall({ 'color': colors.text}) : setStyleCall({ 'color': colors.messeges});
   }
+
   if(connected === false ) return <></>;
 
   const keyDown = (e) => (e.key === "Enter") && send(message);
 
   return (
-    <>
-      {
-        (iconChat === true && open === false)
-        ? <div onMouseEnter={() => setOpenContacts(true)}>
-            <OpenChat colorStart={colors.text} colorEnd={colors.top} setOpen={setOpen}/>
-            { openContacts && <ContactsServise SvgImages={SvgImages} contacts={contacts}/> }
+    !open
+    ? <div onMouseEnter={() => setOpenContacts(true)}>
+        <OpenChat colorStart={colors.text} colorEnd={colors.top} setOpen={setOpen}/>
+        { openContacts && <ContactsServise SvgImages={SvgImages} contacts={contacts}/> }
+      </div>
+    : <div className={style.conteiner}>
+        <div className={style.box_top} style={{'backgroundColor': colors.top}}>
+          <span style={{'color': colors.text}}>
+            {open ? 'Напишите ваше сообщение' : 'Поддержка'}
+          </span>
+          <div className={style.move}></div>
+          {open && <div style={styleСall} onClick={openPhoneBox} className={style.backСall}><SvgImages svg={'backСall'}/></div>}
+          <div onClick={() => setOpen(true)} className={style.open} style={{'color': colors.text}}>
+            <SvgImages svg={'open'}/>
           </div>
-        : <div className={style.conteiner} draggable >
-            <div className={style.box_top} style={{'backgroundColor': colors.top}}>
-              <span style={{'color': colors.text}}>
-                {open ? 'Напишите ваше сообщение' : 'Поддержка'}
-              </span>
-              <div className={style.move}></div>
-              {open && <div style={styleСall} onClick={openPhoneBox} className={style.backСall}><SvgImages svg={'backСall'}/></div>}
-              <div onClick={() => setOpen(true)} className={style.open} style={{'color': colors.text}}>
-                <SvgImages svg={'open'}/>
-              </div>
-            </div>
-            <div style={{'backgroundColor': colors.messeges}}>
-              <div className={style.box_messeges} ref={messegesBox} style={styleMessegesBox}>
-                {(messeges.length === 2 && introduce === false) && <IntroduceYourself SvgImages={SvgImages} sendNameAndEmail={sendNameAndEmail}/>}
-                {phoneFormOpen === true && <PhoneForm openPhoneBox={openPhoneBox} send={send}/>}
-                <FirstQuestions send={send} initialFirstQuestions={initialFirstQuestions}/>
-                <MessegesBox messeges={messeges} colors={colors} SvgImages={SvgImages} />
-                {loading && <Preloader className="39012739017239"/>}
-              </div>
-            </div>
-            <Textarea
-              keyDown={keyDown}
-              placeholder="Введите сообщение"
-              setDataMessage={setDataMessage}
-              message={message}
-              backgroundColor={colors.conteiner}/>
-            <div className={style.tools}>
-              <Attachment color={colors.messeges} upload={upload} fileСheck={fileСheck}/>
-              <Record fileСheck={fileСheck}/>
-            </div>
-            <div className={style.send} onClick={() => {send(message)}}  style={{'color': colors.text, 'borderColor': colors.text}}>
-              <SvgImages svg={'send'}/>
-            </div>
-            { open && <div ref={close} className={style.close} onClick={() => setOpen(false)} style={{'color': colors.text}}>
-                <SvgImages svg={'close'}/>
-              </div> }
+        </div>
+        <div style={{'backgroundColor': colors.messeges}}>
+          <div className={style.box_messeges} ref={messegesBox} style={styleMessegesBox}>
+            {(messeges.length === 2 && introduce === false) && <IntroduceYourself SvgImages={SvgImages} sendNameAndEmail={sendNameAndEmail}/>}
+            {phoneFormOpen === true && <PhoneForm openPhoneBox={openPhoneBox} send={send}/>}
+            <FirstQuestions send={send} initialFirstQuestions={initialFirstQuestions}/>
+            <MessegesBox messeges={messeges} colors={colors} SvgImages={SvgImages} />
+            {loading && <Preloader className="39012739017239"/>}
           </div>
-      }
-    </>
+        </div>
+        <Textarea
+          keyDown={keyDown}
+          placeholder="Введите сообщение"
+          setDataMessage={setDataMessage}
+          message={message}
+          backgroundColor={colors.conteiner}/>
+        <div className={style.tools}>
+          <Attachment color={colors.messeges} upload={upload} fileСheck={fileСheck}/>
+          <Record fileСheck={fileСheck}/>
+        </div>
+        <div className={style.send} onClick={() => {send(message)}}  style={{'color': colors.text, 'borderColor': colors.text}}>
+          <SvgImages svg={'send'}/>
+        </div>
+        { open && <div ref={close} className={style.close} onClick={() => setOpen(false)} style={{'color': colors.text}}>
+            <SvgImages svg={'close'}/>
+          </div> }
+      </div>
   );
 }
 

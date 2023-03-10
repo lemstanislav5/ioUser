@@ -8,7 +8,6 @@ import Document from './document/Document';
 export const MessegesBox = (props) => {
   const { messeges, colors, SvgImages } = props;
 
-
   return(
     messeges.map((item, i) => {
       return (
@@ -27,7 +26,7 @@ export const MessegesBox = (props) => {
               <div className={style.notificationText}>{item.text}</div>
             }
             {
-              item.type === 'toImage' && 
+              item.type === 'toImage' &&
               <FileAvailabilityCheck className={style.toImage} url={item.text} SvgImages={SvgImages} Component={MyImage}/>
             }
             {
@@ -35,11 +34,27 @@ export const MessegesBox = (props) => {
               <FileAvailabilityCheck url={item.text} SvgImages={SvgImages} Component={Document}/>
             }
             {
-              item.type === 'toAudio' && 
+              item.type === 'toAudio' &&
               <FileAvailabilityCheck url={item.text} SvgImages={SvgImages} Component={AudioPlayer}/>
             }
             {
               item.type === 'toVideo' &&
+              <FileAvailabilityCheck url={item.text} SvgImages={SvgImages} Component={VideoPlayer}/>
+            }
+            {
+              item.type === 'fromImage' &&
+              <FileAvailabilityCheck className={style.toImage} url={item.text} SvgImages={SvgImages} Component={MyImage}/>
+            }
+            {
+              item.type === 'fromDocuments' &&
+              <FileAvailabilityCheck url={item.text} SvgImages={SvgImages} Component={Document}/>
+            }
+            {
+              item.type === 'fromAudio' &&
+              <FileAvailabilityCheck url={item.text} SvgImages={SvgImages} Component={AudioPlayer}/>
+            }
+            {
+              item.type === 'fromVideo' &&
               <FileAvailabilityCheck url={item.text} SvgImages={SvgImages} Component={VideoPlayer}/>
             }
             <div className={item.type === 'notification'? style.bottomNotification : style.bottomMessage}>

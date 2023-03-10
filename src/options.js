@@ -6,6 +6,10 @@ let url = 'messenger.ddns.net',
       top: '#2c2e33',
       messeges: '#000',
       from: '#303245',
+      fromImage: '#5e785e',
+      fromDocuments: '#5e785e',
+      fromAudio: '#5e785e',
+      fromVideo: '#5e785e',
       text: '#FFB700',
       notification: '#333',
       to: '#5e785e',
@@ -15,7 +19,6 @@ let url = 'messenger.ddns.net',
       toVideo: '#5e785e',
     },
     testData = false, // "false" уберет тестовые сообщения
-    iconChat = true, // "false" поменяет иконку чата на шапку окна, высплывающую снизу
     initialFirstQuestions = [
       'Здравствуйте!',
       'Mне нужна помощь!',
@@ -29,4 +32,4 @@ let url = 'messenger.ddns.net',
       VKontakte: 'null',
       WhatsApp: 'null',
     };
-export { url, ws, port, colors, testData, iconChat, initialFirstQuestions, filesType, limitSizeFile, contacts }
+export { url, ws, port, colors, testData, initialFirstQuestions, filesType, limitSizeFile, contacts }
