@@ -1,0 +1,34 @@
+.wrapper{
+  display: block;
+  position: fixed;
+  width: 170px;
+  right: 10px;
+  bottom: 70px;
+  border: 1px #FFC107 solid;
+  border-radius: 10px;
+  height: auto;
+}
+.wrapper a{
+  width: auto;
+  line-height: 30px;
+  text-decoration: none;
+  color: #565656;
+  border-bottom: 1px #FFC107 solid;
+  display: flex;
+  padding: 4px;
+}
+.wrapper a:hover {
+   background: #FFC107;
+ }
+.lastLinck{
+  border-bottom: none!important;
+}
+.wrapper div {
+  width: 121px;
+  text-align: center;
+  line-height: 30px;
+  font-size: 18px;
+}
+.selected{
+  background: #FFC107;
+}

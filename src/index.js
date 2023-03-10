@@ -9,12 +9,12 @@
 */
 import React, { useRef , useEffect, useState }  from 'react';
 import ReactDOM from 'react-dom';
-import { FirstQuestions, IntroduceYourself, MessegesBox, OpenChat, PhoneForm, Textarea, Attachment, Record } from './components/forms/Forms';
+import { FirstQuestions, IntroduceYourself, MessegesBox, OpenChat, PhoneForm, Textarea, Attachment, Record, ContactsServise } from './components/forms/Forms';
 import { SvgImages } from './components/images/SvgImages';
 import { Preloader } from './components/preloader/Preloader';
 import style from './App.module.css';
 import { storage } from './services/storage';
-import { colors, iconChat, initialFirstQuestions, filesType } from './options';
+import { colors, iconChat, initialFirstQuestions, filesType, contacts } from './options';
 import { initialMesseges } from './services/initialMesseges';
 import { initialIntroduce } from './services/initialIntroduce';
 import { messengesController } from './controllers/messengesController';
@@ -28,31 +28,24 @@ const App = () => {
   const [connected, setConnected] = useState(false);
   const [messeges, setMessage] = useState(initialMesseges);
   const [message, setDataMessage] = useState('');
-  const [styleBox, setStyleBox] = useState({});
   const [styleСall, setStyleCall] = useState({'display': 'block', 'color': colors.text});
   const [phoneFormOpen, setPhoneFormOpen] = useState(false);
   const [introduce, setIntroduce] = useState(initialIntroduce);
   const [loading, setLoading] = useState(false);
   const [styleMessegesBox, setStyleMessegesBox] = useState({'opacity': 0});
-  let [[x, y], setXY] = useState([0, 0]);
-  let [[innerX, innerY], setInnerXY] = useState([0, 0]);
+  const [openContacts, setOpenContacts] = useState(false);
   // (fn) каждый рендер; (fn, []) один раз; (fn, [args]) при обновлении args; prevCountRef.current - предидущий стейт
   useEffect(() => setTimeout(() => messegesBox.current?.scrollTo(0, 999000), 100));
   useEffect(() => {
-    let x = window.innerWidth - 340, y = window.innerHeight - 530;
-    setXY([x,y]);
     messengesController.connect(setConnected);
+    document.addEventListener('click', () => setOpenContacts(false));
   }, []);
 
   //! УСТАНОВИТЬ НАЧЕНИЕ LEFT TOP ПО УМОЛЧАНИЮ
   useEffect(() => {
-    if (open) {
-      setStyleBox({'backgroundColor': colors.conteiner, left: x, top: y});
-      setTimeout(() => setStyleMessegesBox({'opacity': 1}), 500);
-    } else {
-      setStyleMessegesBox({'opacity': 0})
-    }
-  }, [open, x, y]);
+    if (open) return setTimeout(() => setStyleMessegesBox({'opacity': 1}), 500);
+    setStyleMessegesBox({'opacity': 0});
+  }, [open]);
 
   useEffect(() => {
     messengesController.newMessage(messeges, setMessage);
@@ -60,12 +53,6 @@ const App = () => {
     storage.set('messeges', messeges);
   }, [messeges]);
 
-  const handleDragEnd = (e) => setXY([e.clientX - innerX, e.clientY - innerY]);
-  const mousemove = (e) => {
-    let target = e.target.getBoundingClientRect();
-  	let inx = e.clientX - target.left, iny = e.clientY - target.top;
-    setInnerXY([inx, iny]);
-  }
   const send = (text) => messengesController.send(text, setMessage, messeges, setDataMessage);
   const sendNameAndEmail = (name, email) => messengesController.sendNameAndEmail(name, email, setMessage, messeges, setIntroduce);
   const upload = (file, type) => messengesController.upload(file, type, setLoading, setMessage, messeges);
@@ -82,8 +69,11 @@ const App = () => {
     <>
       {
         (iconChat === true && open === false)
-        ? <OpenChat colorStart={colors.text} colorEnd={colors.top} setOpen={setOpen}/>
-        : <div className={style.conteiner} draggable  onDragEnd={handleDragEnd} onMouseMove={mousemove} style={styleBox}>
+        ? <div onMouseEnter={() => setOpenContacts(true)}>
+            <OpenChat colorStart={colors.text} colorEnd={colors.top} setOpen={setOpen}/>
+            { openContacts && <ContactsServise SvgImages={SvgImages} contacts={contacts}/> }
+          </div>
+        : <div className={style.conteiner} draggable >
             <div className={style.box_top} style={{'backgroundColor': colors.top}}>
               <span style={{'color': colors.text}}>
                 {open ? 'Напишите ваше сообщение' : 'Поддержка'}
@@ -121,7 +111,6 @@ const App = () => {
               </div> }
           </div>
       }
-
     </>
   );
 }

@@ -23,5 +23,10 @@ let url = 'messenger.ddns.net',
       'Вы не скажете, сколько сейчас градусов ниже нуля?',
     ],
     filesType = ['jpeg', 'jpg','png', 'pdf', 'doc', 'docx', 'txt', 'mp3', 'mp4'],
-    limitSizeFile = 10; // в мегабайтах
-export { url, ws, port, colors, testData, iconChat, initialFirstQuestions, filesType, limitSizeFile }
+    limitSizeFile = 10, // в мегабайтах
+    contacts = {
+      Telegram: 'null',
+      VKontakte: 'null',
+      WhatsApp: 'null',
+    };
+export { url, ws, port, colors, testData, iconChat, initialFirstQuestions, filesType, limitSizeFile, contacts }
