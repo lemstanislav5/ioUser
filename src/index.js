@@ -6,7 +6,7 @@
 */
 import React, { useRef , useEffect, useState }  from 'react';
 import ReactDOM from 'react-dom';
-import { FirstQuestions, IntroduceYourself, MessegesBox, OpenChat, PhoneForm, Textarea, Attachment, Record, ContactsServise } from './components/forms/Forms';
+import { FirstQuestions, IntroduceYourself, MessegesBox, OpenChat, PhoneForm, Textarea, Attachment, Record, ContactsServise, ConsentPersonalData } from './components/forms/Forms';
 import { SvgImages } from './components/images/SvgImages';
 import { Preloader } from './components/preloader/Preloader';
 import style from './App.module.css';
@@ -29,12 +29,22 @@ const App = () => {
   const [loading, setLoading] = useState(false);
   const [styleMessegesBox, setStyleMessegesBox] = useState({'opacity': 0});
   const [openContacts, setOpenContacts] = useState(false);
+  const [consent, setConsent] = useState(null);
+  const [styleConsent, setstyleConsent] = useState({'opacity': 0});
+  // ConsentPersonalData
 
   useEffect(() => setTimeout(() => messegesBox.current?.scrollTo(0, 999000), 100));
   useEffect(() => {
     messengesController.connect(setConnected);
     document.addEventListener('click', () => setOpenContacts(false));
   }, []);
+
+  useEffect(() => {
+    console.log(consent)
+    //! Стереть переписку по окнчании сессии
+    if (consent === null) return setTimeout(() => setstyleConsent({'opacity': 1}), 100);
+    setTimeout(() => setstyleConsent({'opacity': 0}), 100);
+  }, [consent]);
 
   useEffect(() => {
     if (open) return setTimeout(() => setStyleMessegesBox({'opacity': 1}), 500);
@@ -62,48 +72,53 @@ const App = () => {
   const keyDown = (e) => (e.key === "Enter") && send(message);
 
   return (
-    !open
-    ? <div onMouseEnter={() => setOpenContacts(true)}>
-        <OpenChat colorStart={colors.text} colorEnd={colors.top} setOpen={setOpen}/>
-        { openContacts && <ContactsServise SvgImages={SvgImages} contacts={contacts}/> }
-      </div>
-    : <div className={style.conteiner}>
-        <div className={style.box_top} style={{'backgroundColor': colors.top}}>
-          <span style={{'color': colors.text}}>
-            {open ? 'Напишите ваше сообщение' : 'Поддержка'}
-          </span>
-          <div className={style.move}></div>
-          {open && <div style={styleСall} onClick={openPhoneBox} className={style.backСall}><SvgImages svg={'backСall'}/></div>}
-          <div onClick={() => setOpen(true)} className={style.open} style={{'color': colors.text}}>
-            <SvgImages svg={'open'}/>
+    <>
+      {
+        !open
+        ? <div onMouseEnter={() => setOpenContacts(true)}>
+            <OpenChat colorStart={colors.text} colorEnd={colors.top} setOpen={setOpen}/>
+            { openContacts && <ContactsServise SvgImages={SvgImages} contacts={contacts}/> }
           </div>
-        </div>
-        <div style={{'backgroundColor': colors.messeges}}>
-          <div className={style.box_messeges} ref={messegesBox} style={styleMessegesBox}>
-            {(messeges.length === 2 && introduce === false) && <IntroduceYourself SvgImages={SvgImages} sendNameAndEmail={sendNameAndEmail}/>}
-            {phoneFormOpen === true && <PhoneForm openPhoneBox={openPhoneBox} send={send}/>}
-            <FirstQuestions send={send} initialFirstQuestions={initialFirstQuestions}/>
-            <MessegesBox messeges={messeges} colors={colors} SvgImages={SvgImages} />
-            {loading && <Preloader className="39012739017239"/>}
+        : <div className={style.conteiner}>
+            <div className={style.box_top} style={{'backgroundColor': colors.top}}>
+              <span style={{'color': colors.text}}>
+                {open ? 'Напишите ваше сообщение' : 'Поддержка'}
+              </span>
+              <div className={style.move}></div>
+              {open && <div style={styleСall} onClick={openPhoneBox} className={style.backСall}><SvgImages svg={'backСall'}/></div>}
+              <div onClick={() => setOpen(true)} className={style.open} style={{'color': colors.text}}>
+                <SvgImages svg={'open'}/>
+              </div>
+            </div>
+            <div style={{'backgroundColor': colors.messeges}}>
+              <div className={style.box_messeges} ref={messegesBox} style={styleMessegesBox}>
+                {(messeges.length === 2 && introduce === false) && <IntroduceYourself SvgImages={SvgImages} sendNameAndEmail={sendNameAndEmail}/>}
+                {phoneFormOpen === true && <PhoneForm openPhoneBox={openPhoneBox} send={send}/>}
+                <FirstQuestions send={send} initialFirstQuestions={initialFirstQuestions}/>
+                <MessegesBox messeges={messeges} colors={colors} SvgImages={SvgImages} />
+                {loading && <Preloader className="39012739017239"/>}
+              </div>
+            </div>
+            <Textarea
+              keyDown={keyDown}
+              placeholder="Введите сообщение"
+              setDataMessage={setDataMessage}
+              message={message}
+              backgroundColor={colors.conteiner}/>
+            <div className={style.tools}>
+              <Attachment color={colors.messeges} upload={upload} fileСheck={fileСheck}/>
+              <Record fileСheck={fileСheck}/>
+            </div>
+            <div className={style.send} onClick={() => {send(message)}}  style={{'color': colors.text, 'borderColor': colors.text}}>
+              <SvgImages svg={'send'}/>
+            </div>
+            { open && <div ref={close} className={style.close} onClick={() => setOpen(false)} style={{'color': colors.text}}>
+                <SvgImages svg={'close'}/>
+              </div> }
           </div>
-        </div>
-        <Textarea
-          keyDown={keyDown}
-          placeholder="Введите сообщение"
-          setDataMessage={setDataMessage}
-          message={message}
-          backgroundColor={colors.conteiner}/>
-        <div className={style.tools}>
-          <Attachment color={colors.messeges} upload={upload} fileСheck={fileСheck}/>
-          <Record fileСheck={fileСheck}/>
-        </div>
-        <div className={style.send} onClick={() => {send(message)}}  style={{'color': colors.text, 'borderColor': colors.text}}>
-          <SvgImages svg={'send'}/>
-        </div>
-        { open && <div ref={close} className={style.close} onClick={() => setOpen(false)} style={{'color': colors.text}}>
-            <SvgImages svg={'close'}/>
-          </div> }
-      </div>
+        }
+        <ConsentPersonalData styleConsent={styleConsent} setConsent={setConsent}/>
+      </>
   );
 }
 

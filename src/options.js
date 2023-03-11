@@ -31,5 +31,7 @@ let url = 'messenger.ddns.net',
       Telegram: 'null',
       VKontakte: 'null',
       WhatsApp: 'null',
-    };
-export { url, ws, port, colors, testData, initialFirstQuestions, filesType, limitSizeFile, contacts }
+    },
+    consentLink = 'null',
+    policyLink = 'null';
+export { url, ws, port, colors, testData, initialFirstQuestions, filesType, limitSizeFile, contacts, consentLink, policyLink }
