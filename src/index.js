@@ -1,10 +1,13 @@
 /* З А Д А Ч И
+* 1. Принимать картинки и документы
+* 2. Смайлики
 * 8. Скрипт для вставки в сайт готовый
 * 9. Видеоинструкция и статья с 0
 */
 import React, { useRef , useEffect, useState }  from 'react';
 import ReactDOM from 'react-dom';
-import { FirstQuestions, IntroduceYourself, MessegesBox, OpenChat, PhoneForm, Textarea, Attachment, Record, ContactsServise, ConsentPersonalData } from './components/forms/Forms';
+import { FirstQuestions, IntroduceYourself, MessegesBox, OpenChat, PhoneForm, 
+         Textarea, Attachment, Record, ContactsServise, ConsentPersonalData } from './components/forms/Forms';
 import { SvgImages } from './components/images/SvgImages';
 import { Preloader } from './components/preloader/Preloader';
 import style from './App.module.css';
@@ -12,6 +15,7 @@ import { storage } from './services/storage';
 import { colors, initialFirstQuestions, filesType, contacts } from './options';
 import { initialMesseges } from './services/initialMesseges';
 import { initialIntroduce } from './services/initialIntroduce';
+import { initialConsent } from './services/initialConsent';
 import { messengesController } from './controllers/messengesController';
 
 const App = () => {
@@ -21,15 +25,14 @@ const App = () => {
   const [connected, setConnected] = useState(false);
   const [messeges, setMessage] = useState(initialMesseges);
   const [message, setDataMessage] = useState('');
-  const [styleСall, setStyleCall] = useState({'display': 'block', 'color': colors.text});
+  const [styleСall, setStyleCall] = useState({'display': 'block', 'color': colors.text}); 
   const [phoneFormOpen, setPhoneFormOpen] = useState(false);
   const [introduce, setIntroduce] = useState(initialIntroduce);
   const [loading, setLoading] = useState(false);
   const [styleMessegesBox, setStyleMessegesBox] = useState({'opacity': 0});
   const [openContacts, setOpenContacts] = useState(false);
-  const [consent, setConsent] = useState(null);
+  const [consent, setConsent] = useState(initialConsent);
   const [styleConsent, setstyleConsent] = useState({'opacity': 0});
-  // ConsentPersonalData
 
   useEffect(() => setTimeout(() => messegesBox.current?.scrollTo(0, 999000), 100));
   useEffect(() => {
@@ -38,9 +41,9 @@ const App = () => {
   }, []);
 
   useEffect(() => {
-    console.log(consent)
-    //! Стереть переписку по окнчании сессии
+    window.onbeforeunload = () => (!consent)? storage.clear() : null;
     if (consent === null) return setTimeout(() => setstyleConsent({'opacity': 1}), 100);
+    storage.set('consent', true);
     setTimeout(() => setstyleConsent({'opacity': 0}), 100);
   }, [consent]);
 

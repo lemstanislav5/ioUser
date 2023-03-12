@@ -25,7 +25,7 @@ let url = 'messenger.ddns.net',
       'Как пройти в библиотеку?',
       'Вы не скажете, сколько сейчас градусов ниже нуля?',
     ],
-    filesType = ['jpeg', 'jpg','png', 'pdf', 'doc', 'docx', 'txt', 'mp3', 'mp4'],
+    filesType = ['jpeg', 'jpg', 'png', 'pdf', 'doc', 'docx', 'txt', 'mp3', 'mp4'],
     limitSizeFile = 10, // в мегабайтах
     contacts = {
       Telegram: 'null',

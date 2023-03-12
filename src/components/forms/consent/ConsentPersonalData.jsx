@@ -12,10 +12,10 @@ export const ConsentPersonalData = (props) => {
   return(
     <div style={styleConsent} className={style.form}>
       <div>Продолжая пользоваться сайтом, я даю <a href={consentLink}>согласие</a> на использование файлов cookie и
-      подтверждаю ознакомление с <a href={policyLink}>политикой</a> обработки персональных данных ознакомлен!</div>
+      подтверждаю ознакомление с <a href={policyLink}>политикой</a> обработки персональных данных.</div>
       <div className={style.bottom}>
+      <div onClick={() => setConsent(false)} className={style.reject}>Отклонить</div>
         <div onClick={() => setConsent(true)} className={style.accept}>Принять</div> 
-        <div onClick={() => setConsent(false)} className={style.reject}>Отклонить</div>
       </div>
     </div>
   )
