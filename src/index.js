@@ -1,8 +1,6 @@
 /* З А Д А Ч И
 * 8. Скрипт для вставки в сайт готовый
 * 9. Видеоинструкция и статья с 0
-* 10. consent to the processing of personal data
-* 11. Продолжая пользоваться сайтом, я даю согласие на использование файлов cookie.
 */
 import React, { useRef , useEffect, useState }  from 'react';
 import ReactDOM from 'react-dom';
