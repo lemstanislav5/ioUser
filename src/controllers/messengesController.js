@@ -15,19 +15,19 @@ export const messengesController = {
     socket.on('disconnect', () => setConnected(false));
   },
   newMessage: (messeges, setMessage) => {
-    socket.once('newMessage', (text, type) => {
-      console.log(type);
-
-    if (type ==='jpeg' || type === 'jpg' || type === 'png') {
-      return console.log(type, text);
-    } else if (type === 'mp4' || type === 'wav' || type === 'ogg') {
-      return console.log(type, text);
-    } else if (type === 'pdf' || type === 'doc' || type === 'docx' || type === 'txt') {
-      return console.log(type, text);
-    }
-
+    socket.once('newMessage', (text, inType) => {
+      let type = 'from';
+      if (inType ==='jpeg' || inType === 'jpg' || inType === 'png') {
+        type = 'fromImage';
+      } else if (inType === 'pdf' || inType === 'doc' || inType === 'docx' || inType === 'txt') {
+        type = 'fromDocuments';
+      } else if (inType === 'mp3' || type === 'ogg') {
+        type = 'fromAudio';
+      } else if (type === 'mp4' || type === 'wav') {
+        type = 'fromVideo';
+      }
       const id = nanoid(10);
-      const incomingMessage = { id, chatId, type: 'from', text, date: dateMessage(), serverAccepted: true, botAccepted: true }
+      const incomingMessage = { id, chatId, type, text, date: dateMessage(), serverAccepted: true, botAccepted: true }
       setMessage([...messeges, incomingMessage]);
       socket.off('newMessage');
     });

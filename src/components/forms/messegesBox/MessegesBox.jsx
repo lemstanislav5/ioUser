@@ -43,7 +43,7 @@ export const MessegesBox = (props) => {
             }
             {
               item.type === 'fromImage' &&
-              <FileAvailabilityCheck className={style.toImage} url={item.text} SvgImages={SvgImages} Component={MyImage}/>
+              <FileAvailabilityCheck className={style.fromImage} url={item.text} SvgImages={SvgImages} Component={MyImage}/>
             }
             {
               item.type === 'fromDocuments' &&

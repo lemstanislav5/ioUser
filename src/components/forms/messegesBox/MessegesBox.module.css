@@ -82,6 +82,23 @@
   color: #fff;
   border-radius: 8px 8px 0px 8px;
 }
+.fromImage{
+  max-width: 89%;
+  float: left;
+  padding: 5px;
+  color: #fff;
+  margin: 0 2px 2px 5px;
+  text-align: left;
+  font-size: 15px;
+  display: grid;
+  margin-bottom: 2px;
+  border-radius: 8px 8px 0px 8px;
+}
+.fromImage img{
+  max-width: 100%;
+  color: #fff;
+  border-radius: 8px 8px 0px 8px;
+}
 .toDocuments{
   max-width: 50px;
   float: right;
