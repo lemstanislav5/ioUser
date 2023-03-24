@@ -15,7 +15,17 @@ export const messengesController = {
     socket.on('disconnect', () => setConnected(false));
   },
   newMessage: (messeges, setMessage) => {
-    socket.once('newMessage', (text) => {
+    socket.once('newMessage', (text, type) => {
+      console.log(type);
+
+    if (type ==='jpeg' || type === 'jpg' || type === 'png') {
+      return console.log(type, text);
+    } else if (type === 'mp4' || type === 'wav' || type === 'ogg') {
+      return console.log(type, text);
+    } else if (type === 'pdf' || type === 'doc' || type === 'docx' || type === 'txt') {
+      return console.log(type, text);
+    }
+
       const id = nanoid(10);
       const incomingMessage = { id, chatId, type: 'from', text, date: dateMessage(), serverAccepted: true, botAccepted: true }
       setMessage([...messeges, incomingMessage]);
