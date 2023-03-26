@@ -56,7 +56,7 @@ const App = () => {
     messengesController.newMessage(messeges, setMessage);
     messengesController.notification(messeges, setMessage);
     storage.set('messeges', messeges);
-    setTimeout(() => messegesBox.current?.scrollTo(0, 999000), 100)
+    setTimeout(() => messegesBox.current?.scrollTo(0, 999000), 500)
   }, [messeges]);
 
   const send = (text) => messengesController.send(text, setMessage, messeges, setDataMessage);

@@ -115,7 +115,7 @@
   float: right;
   padding: 5px;
   color: #fff;
-  margin: 0px 2px 2px 22px;
+  margin: 0 2px 2px 5px;
   text-align: left;
   font-size: 15px;
   display: grid;
@@ -134,6 +134,32 @@
   display: grid;
 }
 .toVideo video{
+  border-radius: 5px;
+}
+.fromAudio{
+  max-width: 89%;
+  float: left;
+  padding: 5px;
+  color: #fff;
+  margin: 0px 0px 0px 5px;
+  text-align: left;
+  font-size: 15px;
+  display: grid;
+  margin-bottom: 2px;
+  border-radius: 8px 8px 0px 8px;
+}
+.fromVideo{
+  max-width: 89%;
+  float: left;
+  padding: 5px;
+  margin: 0px 0px 0px 5px;
+  color: #fff;
+  border-radius: 8px 8px 0px 8px;
+  text-align: left;
+  font-size: 15px;
+  display: grid;
+}
+.fromVideo video{
   border-radius: 5px;
 }
 .bottomMessage{

@@ -21,9 +21,9 @@ export const messengesController = {
         type = 'fromImage';
       } else if (inType === 'pdf' || inType === 'doc' || inType === 'docx' || inType === 'txt') {
         type = 'fromDocuments';
-      } else if (inType === 'mp3' || type === 'ogg') {
+      } else if (inType === 'mp3' || inType === 'ogg') {
         type = 'fromAudio';
-      } else if (type === 'mp4' || type === 'wav') {
+      } else if (inType === 'mp4' || inType === 'wav') {
         type = 'fromVideo';
       }
       const id = nanoid(10);
