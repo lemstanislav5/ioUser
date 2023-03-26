@@ -1,14 +1,14 @@
 import React, { useState }  from 'react'
-import style from './IntroduceYourself.module.css'
+import style from './IntroduceForm.module.css'
 
-export const IntroduceYourself = (props) => {
-  const { SvgImages, sendNameAndEmail } = props;
+export const IntroduceForm = (props) => {
+  const { SvgImages, introduce } = props;
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [visual, setVisual] = useState(true);
 
   const send = () => {
-    if(name !== '' && email !== '' ) sendNameAndEmail(name, email);
+    if(name !== '' && email !== '' ) introduce(name, email);
   }
   if(!visual) return <></>;
   return(

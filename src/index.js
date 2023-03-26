@@ -6,7 +6,7 @@
 */
 import React, { useRef , useEffect, useState }  from 'react';
 import ReactDOM from 'react-dom';
-import { FirstQuestions, IntroduceYourself, MessegesBox, OpenChat, PhoneForm, 
+import { FirstQuestions, IntroduceForm, MessegesBox, OpenChat, PhoneForm, 
          Textarea, Attachment, Record, ContactsServise, ConsentPersonalData } from './components/forms/Forms';
 import { SvgImages } from './components/images/SvgImages';
 import { Preloader } from './components/preloader/Preloader';
@@ -27,7 +27,7 @@ const App = () => {
   const [message, setDataMessage] = useState('');
   const [styleСall, setStyleCall] = useState({'display': 'block', 'color': colors.text}); 
   const [phoneFormOpen, setPhoneFormOpen] = useState(false);
-  const [introduce, setIntroduce] = useState(initialIntroduce);
+  const [introduction, setIntroduce] = useState(initialIntroduce);
   const [loading, setLoading] = useState(false);
   const [styleMessegesBox, setStyleMessegesBox] = useState({'opacity': 0});
   const [openContacts, setOpenContacts] = useState(false);
@@ -59,8 +59,16 @@ const App = () => {
     setTimeout(() => messegesBox.current?.scrollTo(0, 999000), 500)
   }, [messeges]);
 
+  useEffect(() => {
+    if (connected) {
+      const chatId = storage.get('chatId')
+      messengesController.setNewSocket(chatId)
+    }
+  }, [connected]);
+
+
   const send = (text) => messengesController.send(text, setMessage, messeges, setDataMessage);
-  const sendNameAndEmail = (name, email) => messengesController.sendNameAndEmail(name, email, setMessage, messeges, setIntroduce);
+  const introduce = (name, email) => messengesController.introduce(name, email, setMessage, messeges, setIntroduce);
   const upload = (file, type) => messengesController.upload(file, type, setLoading, setMessage, messeges);
   const fileСheck = (file) => messengesController.fileСheck(file, setMessage, messeges, filesType, upload);
   const openPhoneBox = () => {
@@ -93,7 +101,7 @@ const App = () => {
             </div>
             <div style={{'backgroundColor': colors.messeges}}>
               <div className={style.box_messeges} ref={messegesBox} style={styleMessegesBox}>
-                {(messeges.length === 2 && introduce === false) && <IntroduceYourself SvgImages={SvgImages} sendNameAndEmail={sendNameAndEmail}/>}
+                {(messeges.length === 2 && introduction === false) && <IntroduceForm SvgImages={SvgImages} introduce={introduce}/>}
                 {phoneFormOpen === true && <PhoneForm openPhoneBox={openPhoneBox} send={send}/>}
                 <FirstQuestions send={send} initialFirstQuestions={initialFirstQuestions}/>
                 <MessegesBox messeges={messeges} colors={colors} SvgImages={SvgImages} />

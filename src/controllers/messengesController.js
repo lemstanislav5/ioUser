@@ -52,9 +52,9 @@ export const messengesController = {
   });
     setDataMessage('');
   },
-  sendNameAndEmail: (name, email, setMessage, messeges, setIntroduce) => {
+  introduce: (name, email, setMessage, messeges, setIntroduce) => {
     const id = nanoid(10);
-    socket.emit("newNameAndEmail", { id, chatId, name, email}, (error, notification) => {
+    socket.emit("introduce", { id, chatId, name, email}, (error, notification) => {
       if(error) {
         console.log(error, notification);
         return setMessage([...messeges, { id, chatId, type: 'from', text: 'Извините сервис временно недоступен!', date: dateMessage()}]);
@@ -97,5 +97,11 @@ export const messengesController = {
     } else {
       upload(file, type);
     }
+  }, 
+  setNewSocket: (chatId) => {
+    socket.emit("setNewSocket", { chatId }, (error, notification) => {
+      if (error) console.log(error, notification);
+      console.log('socket передан для обновления!')
+    });
   }
 }
