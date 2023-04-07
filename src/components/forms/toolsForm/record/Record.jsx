@@ -2,7 +2,6 @@ import React, { useState, useRef, useEffect } from 'react';
 import style from './Record.module.css';
 import { SvgImages } from '../../../images/SvgImages';
 import { recorder } from '../../../../services/recorder';
-import { stopwatch } from '../../../../services/stopwatch';
 const mimeType = "audio/mp3";
 
 export const Record = (props) => {
@@ -15,20 +14,21 @@ export const Record = (props) => {
   const [start, setStart] = useState(false);
 
   useEffect(() => {
+    let interval;
     if (start) {
       let watch = () => {
         let minute = 0, second = 0;
         console.log(second)
         second = count.second + 1;
         minute = Math.floor(second/60)
-        if (count.minute === 3) return clearInterval(stopwatch.interval)
+        if (count.minute === 3) return clearInterval(interval)
         setCount({minute, second})
       }
-      stopwatch.interval = setInterval(watch, 1000);
+     interval = setInterval(watch, 1000);
     } else {
-      clearInterval(stopwatch.interval)
+      clearInterval(interval)
     }
-  }, [start, count]);
+  }, []);
 
   const startStop = () => start ? setStart(false): setStart(true);
 
