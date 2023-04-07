@@ -11,24 +11,27 @@ export const Record = (props) => {
   const [color, setColor] = useState('#9e9e9e');
   const [audioChunks, setAudioChunks] = useState([]);
   const [count, setCount] = useState({minute: 0, second: 0});
-  const [start, setStart] = useState(false);
+  const [isStarted, setIsStarted] = useState(false);
+  const [intervalId, setIntervalId] = useState(null);
 
   useEffect(() => {
-    let interval;
-    if (start) {
-      let watch = () => {
-        let minute = 0, second = 0;
-        console.log(second)
-        second = count.second + 1;
-        minute = Math.floor(second/60)
-        if (count.minute === 3) return clearInterval(interval)
-        setCount({minute, second})
-      }
-     interval = setInterval(watch, 1000);
+    intervalId = setInterval(watch, 1000);
+    setIntervalId(intervalId)
+  }, []);
+
+  let watch = () => {
+    if(isStarted) {
+      let minute = 0, second = 0;
+      console.log(second)
+      second = count.second + 1;
+      minute = Math.floor(second/60)
+      if (count.minute === 3) return clearInterval(interval)
+      setCount({minute, second}) 
     } else {
-      clearInterval(interval)
+
     }
-  }, [start, count]);
+    
+  }
 
   const startStop = () => start ? setStart(false): setStart(true);
 
@@ -39,12 +42,12 @@ export const Record = (props) => {
     } else if (stream && !mediaRecorder.current) {
       // recorder.startRecording(stream, mimeType, mediaRecorder, setAudioChunks)
       setColor('#ff5722');
-      startStop();
+      setIsStarted(!isStarted);
     } else if (stream && mediaRecorder.current) {
       // recorder.stopRecording(mediaRecorder, audioChunks, mimeType, fileСheck, setAudioChunks);
       setColor('#000');
       mediaRecorder.current = null;
-      startStop();
+      setIsStarted(!isStarted);
     }
   }
   const getMicrophonePermission = async () => {
