@@ -110,6 +110,17 @@
   font-size: 15px;
   display: grid;
 }
+.fromDocuments{
+  max-width: 50px;
+  float: left;
+  padding: 5px;
+  margin: 0px 2px 5px 5px;
+  color: #fff;
+  border-radius: 8px 8px 0px 8px;
+  text-align: left;
+  font-size: 15px;
+  display: grid;
+}
 .toAudio{
   max-width: 89%;
   float: right;
