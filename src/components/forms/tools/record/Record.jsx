@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react';
 import style from './Record.module.css';
 import { SvgImages } from '../../../images/SvgImages';
-import { startRecording, stopRecording } from '../../../../services/recorder';
+import { recorder } from '../../../../services/recorder';
 const mimeType = "audio/mp3";
 
 export const Record = (props) => {
@@ -16,10 +16,10 @@ export const Record = (props) => {
       getMicrophonePermission();
       setColor('#000');
     } else if (stream && !mediaRecorder.current) {
-      startRecording(stream, mimeType, mediaRecorder, setAudioChunks)
+      recorder.startRecording(stream, mimeType, mediaRecorder, setAudioChunks)
       setColor('#ff5722');
     } else if (stream && mediaRecorder.current) {
-      stopRecording(mediaRecorder, audioChunks, mimeType, fileСheck, setAudioChunks);
+      recorder.stopRecording(mediaRecorder, audioChunks, mimeType, fileСheck, setAudioChunks);
       setColor('#000');
       mediaRecorder.current = null;
     }
