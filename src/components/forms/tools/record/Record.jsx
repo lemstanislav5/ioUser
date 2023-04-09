@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react';
 import style from './Record.module.css';
 import { SvgImages } from '../../../images/SvgImages';
+import { startRecording, stopRecording } from '../../../../services/recorder';
 const mimeType = "audio/mp3";
 
 export const Record = (props) => {
@@ -15,10 +16,10 @@ export const Record = (props) => {
       getMicrophonePermission();
       setColor('#000');
     } else if (stream && !mediaRecorder.current) {
-      startRecording();
+      startRecording(stream, mimeType, mediaRecorder, setAudioChunks)
       setColor('#ff5722');
     } else if (stream && mediaRecorder.current) {
-      stopRecording();
+      stopRecording(mediaRecorder, audioChunks, mimeType, fileСheck, setAudioChunks);
       setColor('#000');
       mediaRecorder.current = null;
     }
@@ -38,35 +39,9 @@ export const Record = (props) => {
     }
   };
 
-
-  const startRecording = async () => {
-    const media = new MediaRecorder(stream, { type: mimeType });
-    mediaRecorder.current = media;
-    mediaRecorder.current.start();
-    let localAudioChunks = [];
-    mediaRecorder.current.ondataavailable = (event) => {
-       if (typeof event.data === "undefined") return;
-       if (event.data.size === 0) return;
-       localAudioChunks.push(event.data);
-    };
-    setAudioChunks(localAudioChunks);
-};
-
-  const stopRecording = () => {
-    mediaRecorder.current.stop();
-    mediaRecorder.current.onstop = () => {
-       const audioBlob = new Blob(audioChunks, { type: mimeType });
-       let file = new File([audioBlob], "audio.mp3", {type: mimeType});
-       fileСheck(file);
-       setAudioChunks([]);
-    };
-  };
-
   return(
-    <>
-      <div className={style.record} onClick={init}>
-        <SvgImages svg={'record'} fill={color} />
-      </div>
-    </>
+    <div className={style.record} onClick={init}>
+      <SvgImages svg={'record'} fill={color} />
+    </div>
   )
 }
