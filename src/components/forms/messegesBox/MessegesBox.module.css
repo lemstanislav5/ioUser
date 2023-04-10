@@ -178,10 +178,12 @@
   justify-content: right;
   align-items: flex-start;
 }
-
-.bottomNotification{
-
-}
 .notificationText{
   color: #ca7e7e;
+}
+.newDate{
+  text-align: center;
+  font-size: 12px;
+  padding: 4px;
+  color: #fff;
 }

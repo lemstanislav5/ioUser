@@ -1,4 +1,4 @@
-import React from 'react';
+import React  from 'react';
 import AudioPlayer from './audio/AudioPlayer';
 import VideoPlayer from './video/VideoPlayer';
 import style from './MessegesBox.module.css';
@@ -8,13 +8,29 @@ import Document from './document/Document';
 
 export const MessegesBox = (props) => {
   const { messeges, colors, SvgImages } = props;
+  let currentDate = null;
+
+  const dateChangeCheck = (date) => {
+    if (currentDate === null) {
+      currentDate = date;
+      return false;
+    } else {
+      console.log(date, currentDate, date === currentDate)
+      if (date === currentDate) return false;
+      currentDate = date;
+      return true;
+    }
+  }
+ 
   return(
     messeges.map((item, i) => {
       let [dateSend, timeSend] = item.date.split(',');
-      let [day, month, year] = dateSend.split('.');
-      console.log( i + ' : ' + dateSend);
       return (
         <div className={style.msgbox} key={'msg' + i}>
+          {
+            dateChangeCheck(dateSend) === true && 
+            <div className={style.newDate}>{dateSend}</div>
+          }
           <div className={style[item.type]} key={i}  style={{'backgroundColor': colors[item.type]}}>
             {
               item.type === 'to' &&
