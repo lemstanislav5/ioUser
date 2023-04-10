@@ -4,6 +4,7 @@
 * 8. Скрипт для вставки в сайт готовый
 * 9. Видеоинструкция и статья с 0
 */
+//!0:52
 import React, { useRef , useEffect, useState }  from 'react';
 import ReactDOM from 'react-dom';
 import { FirstQuestions, IntroduceForm, MessegesBox, OpenChat, PhoneForm, 
