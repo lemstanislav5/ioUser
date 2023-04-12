@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import style from './Record.module.css';
 import { SvgImages } from '../../../images/SvgImages';
 import { recorder } from '../../../../services/recorder';
@@ -12,6 +12,25 @@ export const Record = (props) => {
   const [color, setColor] = useState('#9e9e9e');
   const [audioChunks, setAudioChunks] = useState([]);
   const [count, setCount] = useState({minute: 0, second: 0});
+  const [start, setStart] = useState(false);
+
+  useEffect(() => {
+    if (start) {
+      let watch = () => {
+        let minute = 0, second = 0;
+        console.log(second)
+        second = count.second + 1;
+        minute = Math.floor(second/60)
+        if (count.minute === 3) return clearInterval(stopwatch.interval)
+        setCount({minute, second})
+      }
+      stopwatch.interval = setInterval(watch, 1000);
+    } else {
+      clearInterval(stopwatch.interval)
+    }
+  }, [start, count]);
+
+  const startStop = () => start ? setStart(false): setStart(true);
 
   const init = () => {
     if (!stream && !mediaRecorder.current) {
@@ -20,12 +39,12 @@ export const Record = (props) => {
     } else if (stream && !mediaRecorder.current) {
       recorder.startRecording(stream, mimeType, mediaRecorder, setAudioChunks)
       setColor('#ff5722');
-      stopwatch.start(count, setCount);
+      startStop();
     } else if (stream && mediaRecorder.current) {
       recorder.stopRecording(mediaRecorder, audioChunks, mimeType, fileСheck, setAudioChunks);
       setColor('#000');
       mediaRecorder.current = null;
-      stopwatch.stop();
+      startStop();
     }
   }
   const getMicrophonePermission = async () => {
