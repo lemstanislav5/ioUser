@@ -28,7 +28,7 @@ export const Record = (props) => {
     } else {
       clearInterval(interval)
     }
-  }, []);
+  }, [start, count]);
 
   const startStop = () => start ? setStart(false): setStart(true);
 
@@ -37,11 +37,11 @@ export const Record = (props) => {
       getMicrophonePermission();
       setColor('#000');
     } else if (stream && !mediaRecorder.current) {
-      recorder.startRecording(stream, mimeType, mediaRecorder, setAudioChunks)
+      // recorder.startRecording(stream, mimeType, mediaRecorder, setAudioChunks)
       setColor('#ff5722');
       startStop();
     } else if (stream && mediaRecorder.current) {
-      recorder.stopRecording(mediaRecorder, audioChunks, mimeType, fileСheck, setAudioChunks);
+      // recorder.stopRecording(mediaRecorder, audioChunks, mimeType, fileСheck, setAudioChunks);
       setColor('#000');
       mediaRecorder.current = null;
       startStop();
