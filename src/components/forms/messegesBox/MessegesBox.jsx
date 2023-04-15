@@ -1,3 +1,5 @@
+//!style.date добавить нули в отображении времени отправки сообщения
+
 import React from 'react';
 import AudioPlayer from './audio/AudioPlayer';
 import VideoPlayer from './video/VideoPlayer';

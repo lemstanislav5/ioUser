@@ -1,5 +1,5 @@
 .textarea{
-  font-size: 14px;
+  font-size: 17px;
   height: 46px;
   width: calc(100% - 50px);
   display: block;
@@ -7,6 +7,7 @@
   margin: 0 0 0 0px;
   border-radius: 3px;
   font-family: inherit;
+  font-weight: 100;
   outline: none;
 }
 .textarea :active, :hover, :focus {
