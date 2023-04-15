@@ -14,14 +14,14 @@ export const Record = (props) => {
   const [isStarted, setIsStarted] = useState(false);
 
   const start = () => {
-    recorder.startRecording(stream, mimeType, mediaRecorder, setAudioChunks)
+    // recorder.startRecording(stream, mimeType, mediaRecorder, setAudioChunks)
     setColor('#ff5722');
     setIsStarted(!isStarted);
   }
   const stop = () => {
-    recorder.stopRecording(mediaRecorder, audioChunks, mimeType, fileСheck, setAudioChunks);
+    // recorder.stopRecording(mediaRecorder, audioChunks, mimeType, fileСheck, setAudioChunks);
     setColor('#000');
-    mediaRecorder.current = null;
+    // mediaRecorder.current = null;
     setIsStarted(!isStarted);
   }
   const init = () => {

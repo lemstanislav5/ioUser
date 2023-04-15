@@ -3,13 +3,13 @@ import style from "./Stopwatch.module.css";
 
 export const Stopwatch = (props) => {
   const { timeLimit, stop } = props;
-  let [seconds, setSeconts] = useState(0);
+  let [seconds, setSeconts] = useState(0);//!new Date().getTime()
 
   useEffect(() => {
-    const interval = setInterval(() => {setSeconts(seconds++)}, 10);
+    const interval = setInterval(() => { setSeconts(seconds++) }, 1000);
     if (seconds === timeLimit) {
       clearInterval(interval);
-      stop()
+      stop();
     };
     const cleanup = () => {
       clearInterval(interval);
@@ -19,6 +19,7 @@ export const Stopwatch = (props) => {
   });
 
   const getTime = (time) => {
+    console.log(time, timeLimit)
     if (time < 10) return '00:0' + time;
     if (time < 60) return '00:' +time;
     let minutes = Math.floor(time / 60);
@@ -28,5 +29,6 @@ export const Stopwatch = (props) => {
     return minutes + ':' + seconds;
   };
 
-  return <div className={style.stopwatch}>{ getTime(seconds) }</div>;
+  return <div id={seconds > timeLimit - 10 ? style['blink'] : seconds} 
+              className={style.stopwatch}>{ getTime(seconds) }</div>;
 };
