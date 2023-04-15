@@ -1,5 +1,3 @@
-//!style.date добавить нули в отображении времени отправки сообщения
-
 import React from 'react';
 import AudioPlayer from './audio/AudioPlayer';
 import VideoPlayer from './video/VideoPlayer';
@@ -12,6 +10,7 @@ export const MessegesBox = (props) => {
 
   return(
     messeges.map((item, i) => {
+      console.log(item.date)
       return (
         <div className={style.msgbox} key={'msg' + i}>
           <div className={style[item.type]} key={i}  style={{'backgroundColor': colors[item.type]}}>
