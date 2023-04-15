@@ -6,3 +6,17 @@
   left: 56px;
   font-size: 17px;
 }
+#blink {
+  -webkit-animation: blink 0.8s linear infinite;
+  animation: blink 0.5s linear infinite;
+}
+@-webkit-keyframes blink {
+  50% { color: rgba(255, 87, 34); }
+  51% { color: rgba(255, 87, 34); }
+  100% { color: rgba(255, 87, 34); }
+}
+@keyframes blink {
+  50% { color: rgba(255, 87, 34); }
+  51% { color: rgba(255, 87, 34); }
+  100% { color: rgba(255, 87, 34); }
+}
