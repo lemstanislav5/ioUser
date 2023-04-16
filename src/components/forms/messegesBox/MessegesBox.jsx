@@ -11,7 +11,8 @@ export const MessegesBox = (props) => {
   return(
     messeges.map((item, i) => {
       let [dateSend, timeSend] = item.date.split(',');
-      console.log(dateSend);
+      let [day, month, year] = dateSend.split('.');
+      console.log( i + ' : ' + dateSend);
       return (
         <div className={style.msgbox} key={'msg' + i}>
           <div className={style[item.type]} key={i}  style={{'backgroundColor': colors[item.type]}}>
