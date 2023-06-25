@@ -1,4 +1,4 @@
-let url = 'messenger.ddns.net',
+let url = 'consultant.sytes.net',
     ws = 'ws', // wss
     port = '80', // 433
     colors = {
