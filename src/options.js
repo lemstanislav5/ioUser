@@ -1,6 +1,12 @@
+<<<<<<< HEAD
 let url = '212.193.48.171', //messenger.ddns.net
     ws = 'ws', //wss
     port = '80', //433
+=======
+let url = 'consultant.sytes.net',
+    ws = 'ws', // wss
+    port = '80', // 433
+>>>>>>> 2016b65ffc6f4190fa8cbdde4e5ebf2c01ec2ae1
     colors = {
       conteiner: '#fff',
       top: '#2c2e33',
