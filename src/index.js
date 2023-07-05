@@ -74,7 +74,7 @@ const App = () => {
   const fileСheck = (file) => messengesController.fileСheck(file, setMessage, messeges, filesType, upload);
   const openPhoneBox = () => {
     phoneFormOpen ? setPhoneFormOpen(false) : setPhoneFormOpen(true);
-    phoneFormOpen ? setStyleCall({ 'color': colors.text}) : setStyleCall({ 'color': colors.messeges});
+    phoneFormOpen ? setStyleCall({'color': colors.text}) : setStyleCall({'color': colors.messeges});
   }
 
   if(connected === false ) return <></>;

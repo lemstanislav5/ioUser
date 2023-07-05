@@ -2,8 +2,7 @@
 import React from 'react';
 import style from './ContactsServise.module.css';
 
-export const ContactsServise = (props) => {
-  const { SvgImages, contacts } = props;
+export const ContactsServise = ({ SvgImages, contacts }) => {
   const { Telegram, VKontakte, WhatsApp } = contacts;
 
   return (

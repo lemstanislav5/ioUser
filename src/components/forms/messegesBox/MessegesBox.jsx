@@ -1,4 +1,4 @@
-import React  from 'react';
+import {memo}  from 'react';
 import AudioPlayer from './audio/AudioPlayer';
 import VideoPlayer from './video/VideoPlayer';
 import style from './MessegesBox.module.css';
@@ -6,7 +6,7 @@ import MyImage from './image/MyImage';
 import FileAvailabilityCheck from '../../hocs/FileAvailabilityCheck';
 import Document from './document/Document';
 
-export const MessegesBox = (props) => {
+export const MessegesBox = memo((props) => {
   const { messeges, colors, SvgImages } = props;
   let currentDate = null;
 
@@ -15,7 +15,6 @@ export const MessegesBox = (props) => {
       currentDate = date;
       return false;
     } else {
-      console.log(date, currentDate, date === currentDate)
       if (date === currentDate) return false;
       currentDate = date;
       return true;
@@ -95,4 +94,4 @@ export const MessegesBox = (props) => {
       )
     })
   )
-}
+});

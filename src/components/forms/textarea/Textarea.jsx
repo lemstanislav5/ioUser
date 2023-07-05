@@ -1,9 +1,6 @@
-import React from 'react';
 import style from './Textarea.module.css';
 
-export const Textarea = (props) => {
-  const { keyDown, placeholder, setDataMessage, message, backgroundColor } = props;
-
+export const Textarea = ({ keyDown, placeholder, setDataMessage, message, backgroundColor }) => {
   return(
     <textarea
       onKeyDown={keyDown}

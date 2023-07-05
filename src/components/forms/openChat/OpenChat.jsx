@@ -1,9 +1,8 @@
-import React, { useState }  from 'react';
+import { memo, useState }  from 'react';
 import style from './OpenChat.module.css';
 import { SvgImages } from '../../images/SvgImages';
 
-export const OpenChat = (props) => {
-  const { setOpen } = props;
+export const OpenChat = memo(({ setOpen }) => {
   const [color, setColor] = useState('#FFC107');
 
   return(
@@ -11,4 +10,4 @@ export const OpenChat = (props) => {
       <SvgImages svg={'openChat'} fill={color}/>
     </div>
   )
-}
+});

@@ -1,6 +1,6 @@
 import { storage } from '../services/storage';
 import { nanoid } from 'nanoid';
-import { idController } from '../controllers/idController';
+import { idController } from './idController';
 import { dateMessage } from '../services/dataMeseges'
 import { Manager } from "socket.io-client";
 import { url, ws, port, limitSizeFile} from '../options';

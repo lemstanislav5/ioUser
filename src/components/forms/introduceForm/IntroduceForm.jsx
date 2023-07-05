@@ -1,8 +1,8 @@
 import React, { useState }  from 'react'
 import style from './IntroduceForm.module.css'
 
-export const IntroduceForm = (props) => {
-  const { SvgImages, introduce } = props;
+export const IntroduceForm = ({ SvgImages, introduce }) => {
+
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [visual, setVisual] = useState(true);

@@ -1,9 +1,9 @@
+import { memo } from 'react';
 import style from './ConsentPersonalData.module.css'
 import { consentLink, policyLink } from '../../../options';
 
-export const ConsentPersonalData = (props) => {
-  const { setConsent, styleConsent } = props;
-
+export const ConsentPersonalData = memo(({ setConsent, styleConsent }) => {
+  
   if (consentLink === null || policyLink === null) {
     console.warn("Укажите ссылку на согласие и политику обработки персональных данных");
     return null;
@@ -19,4 +19,4 @@ export const ConsentPersonalData = (props) => {
       </div>
     </div>
   )
-}
+})

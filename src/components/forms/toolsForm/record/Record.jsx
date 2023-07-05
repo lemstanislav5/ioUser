@@ -1,12 +1,11 @@
-import React, { useState, useRef } from 'react';
+import { useState, useRef } from 'react';
 import style from './Record.module.css';
 import { SvgImages } from '../../../images/SvgImages';
 import { recorder } from '../../../../services/recorder';
 import { Stopwatch } from './stopwatch/Stopwatch';
 const mimeType = "audio/mp3";
 
-export const Record = (props) => {
-  const { fileСheck } = props;
+export const Record = ({ fileСheck }) => {
   const mediaRecorder = useRef(null);
   const [stream, setStream] = useState(null);
   const [color, setColor] = useState('#9e9e9e');

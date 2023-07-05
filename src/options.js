@@ -1,6 +1,6 @@
-let url = 'messenger.ddns.net',
-    ws = 'ws', // wss
-    port = '80', // 433
+let url = '212.193.48.171', //messenger.ddns.net
+    ws = 'ws', //wss
+    port = '80', //433
     colors = {
       conteiner: '#fff',
       top: '#2c2e33',

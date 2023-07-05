@@ -1,9 +1,8 @@
-import React, { useRef } from 'react';
+import { useRef } from 'react';
 import style from './Attachment.module.css';
 import { SvgImages } from '../../../images/SvgImages';
 
-export const Attachment = (props) => {
-  const { color, fileСheck } = props;
+export const Attachment = ({ color, fileСheck }) => {
   const ref = useRef(null)
   return(
     <>
