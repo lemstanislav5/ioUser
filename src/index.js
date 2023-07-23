@@ -13,7 +13,7 @@ import { SvgImages } from './components/images/SvgImages';
 import { Preloader } from './components/preloader/Preloader';
 import style from './App.module.css';
 import { storage } from './services/storage';
-import { colors, initialFirstQuestions, filesType, contacts } from './options';
+import { colors, initialFirstQuestions, filesType, contacts } from './setings';
 import { initialMesseges } from './services/initialMesseges';
 import { initialIntroduce } from './services/initialIntroduce';
 import { initialConsent } from './services/initialConsent';

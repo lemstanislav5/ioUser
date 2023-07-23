@@ -1,12 +1,11 @@
 import { storage } from '../services/storage';
 import { nanoid } from 'nanoid';
 import { idController } from './idController';
-import { dateMessage } from '../services/dataMeseges'
-import { Manager } from "socket.io-client";
-import { url, ws, port, limitSizeFile} from '../options';
-let manager = new Manager(ws + "://" + url + ":" + port, { transports: ['websocket', 'polling', 'flashsocket'] });
-let socket = manager.socket("/");
+import { dateMessage } from '../services/dataMeseges';
+import { url, ws, port, limitSizeFile} from '../setings';
+import { socketСreator } from '../connectors';
 
+let socket = socketСreator(url, ws, port);
 const chatId = (idController.get() === null || idController.get() === undefined) ? idController.set(nanoid(10)) : idController.get();
 
 export const messengesController = {

@@ -1,4 +1,4 @@
-import { testData } from '../options';
+import { testData } from '../setings';
 import { storage } from './storage';
 const testMesseges = [
   { id: 'JHLJSHS121', chatId: 'initialState', type: 'to', text: 'Hello!', date: '13-10-2021,9:19', serverAccepted: true, botAccepted: true},

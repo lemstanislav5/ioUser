@@ -1,6 +1,6 @@
 import { memo } from 'react';
 import style from './ConsentPersonalData.module.css'
-import { consentLink, policyLink } from '../../../options';
+import { consentLink, policyLink } from '../../../setings';
 
 export const ConsentPersonalData = memo(({ setConsent, styleConsent }) => {
   
