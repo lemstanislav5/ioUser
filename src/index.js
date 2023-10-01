@@ -42,7 +42,7 @@ const App = () => {
   }, []);
 
   useEffect(() => {
-    window.onbeforeunload = () => (!consent)? storage.clear() : null;
+    window.onbeforeunload = () => (consent === false)? storage.clear() : null;
     if (consent === null) return setTimeout(() => setstyleConsent({'opacity': 1}), 100);
     storage.set('consent', true);
     setTimeout(() => setstyleConsent({'opacity': 0}), 100);
