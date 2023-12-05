@@ -12,11 +12,15 @@ export const messengesController = {
   connect: (setConnected) => {
     socket.on('connect', () => {
       socket.emit('online', chatId, answer => {
+        //!ОСТАНОВИЛСЯ ЗДЕСЬ
         console.log('- - - online: ', answer)
       })
       setConnected(true)}
     );
-    socket.on('disconnect', () => setConnected(false));
+    socket.on('disconnect', () => {
+      socket.emit('offline', chatId);
+      setConnected(false);
+    });
   },
   newMessage: (messeges, setMessage) => {
     socket.once('newMessage', (text, inType) => {
