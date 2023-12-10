@@ -5,6 +5,7 @@
  * Статья (редми)
  * Видеоинструкция
 */
+import "./index.css";
 import React, { useRef , useEffect, useState }  from 'react';
 import ReactDOM from 'react-dom';
 import { FirstQuestions, IntroduceForm, MessegesBox, OpenChat, PhoneForm, 
