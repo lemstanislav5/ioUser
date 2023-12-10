@@ -17,10 +17,7 @@ export const messengesController = {
       })
       setConnected(true)}
     );
-    socket.on('disconnect', () => {
-      socket.emit('offline', chatId);
-      setConnected(false);
-    });
+    socket.on('disconnect', () => setConnected(false));
   },
   newMessage: (messeges, setMessage) => {
     socket.once('newMessage', (text, inType) => {
