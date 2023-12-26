@@ -102,7 +102,7 @@ export const messengesController = {
     } else {
       upload(file, type);
     }
-  }, 
+  },
   setNewSocket: (chatId) => {
     socket.emit("setNewSocket", { chatId }, (error, notification) => {
       if (error) console.log(error, notification);
