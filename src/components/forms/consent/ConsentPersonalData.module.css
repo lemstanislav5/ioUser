@@ -12,6 +12,9 @@
   background: #fff;
   text-align: center;
 }
+.form div{
+  color: #000;
+}
 .accept{
   margin: auto;
   width: 110px;

@@ -1,4 +1,4 @@
-/** 
+/**
  * Смайлики
  * Разграничение сообщений по датам
  * Скрипт для вставки в сайт
@@ -8,7 +8,7 @@
 import "./index.css";
 import React, { useRef , useEffect, useState }  from 'react';
 import ReactDOM from 'react-dom';
-import { FirstQuestions, IntroduceForm, MessegesBox, OpenChat, PhoneForm, 
+import { FirstQuestions, IntroduceForm, MessegesBox, OpenChat, PhoneForm,
          Textarea, Attachment, Record, ContactsServise, ConsentPersonalData } from './components/forms/Forms';
 import { SvgImages } from './components/images/SvgImages';
 import { Preloader } from './components/preloader/Preloader';
@@ -27,7 +27,7 @@ const App = () => {
   const [connected, setConnected] = useState(false);
   const [messeges, setMessage] = useState(initialMesseges);
   const [message, setDataMessage] = useState('');
-  const [styleСall, setStyleCall] = useState({'display': 'block', 'color': colors.text}); 
+  const [styleСall, setStyleCall] = useState({'display': 'block', 'color': colors.text});
   const [phoneFormOpen, setPhoneFormOpen] = useState(false);
   const [introduction, setIntroduce] = useState(initialIntroduce);
   const [loading, setLoading] = useState(false);
@@ -60,14 +60,6 @@ const App = () => {
     storage.set('messeges', messeges);
     setTimeout(() => messegesBox.current?.scrollTo(0, 999000), 500)
   }, [messeges]);
-
-  useEffect(() => {
-    if (connected) {
-      const chatId = storage.get('chatId')
-      messengesController.setNewSocket(chatId)
-    }
-  }, [connected]);
-
 
   const send = (text) => messengesController.send(text, setMessage, messeges, setDataMessage);
   const introduce = (name, email) => messengesController.introduce(name, email, setMessage, messeges, setIntroduce);
