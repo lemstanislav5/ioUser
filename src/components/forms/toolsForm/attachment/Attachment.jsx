@@ -2,7 +2,7 @@ import { useRef } from 'react';
 import style from './Attachment.module.css';
 import { SvgImages } from '../../../images/SvgImages';
 
-export const Attachment = ({ color, fileСheck }) => {
+export const Attachment = ({ color, handlerFileСheck }) => {
   const ref = useRef(null)
   return(
     <>
@@ -11,7 +11,7 @@ export const Attachment = ({ color, fileСheck }) => {
         }}>
         <SvgImages svg={'attachment'} fill={color} />
       </div>
-      <input ref={ref} className={style.inputFile} type="file" onChange={event => fileСheck(event.target.files[0])}/>
+      <input ref={ref} className={style.inputFile} type="file" onChange={event => handlerFileСheck(event.target.files[0])}/>
     </>
   )
 }

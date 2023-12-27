@@ -5,7 +5,7 @@ import { recorder } from '../../../../services/recorder';
 import { Stopwatch } from './stopwatch/Stopwatch';
 const mimeType = "audio/mp3";
 
-export const Record = ({ fileСheck }) => {
+export const Record = ({ handlerFileСheck }) => {
   const mediaRecorder = useRef(null);
   const [stream, setStream] = useState(null);
   const [color, setColor] = useState('#9e9e9e');
@@ -18,7 +18,7 @@ export const Record = ({ fileСheck }) => {
     setIsStarted(!isStarted);
   }
   const stop = () => {
-    recorder.stopRecording(mediaRecorder, audioChunks, mimeType, fileСheck, setAudioChunks);
+    recorder.stopRecording(mediaRecorder, audioChunks, mimeType, handlerFileСheck, setAudioChunks);
     setColor('#000');
     mediaRecorder.current = null;
     setIsStarted(!isStarted);

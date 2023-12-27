@@ -1,14 +1,14 @@
 import React, { useState }  from 'react'
 import style from './IntroduceForm.module.css'
 
-export const IntroduceForm = ({ SvgImages, introduce }) => {
+export const IntroduceForm = ({ SvgImages, handlerIntroduce }) => {
 
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [visual, setVisual] = useState(true);
 
   const send = () => {
-    if(name !== '' && email !== '' ) introduce(name, email);
+    if(name !== '' && email !== '' ) handlerIntroduce(name, email);
   }
   if(!visual) return <></>;
   return(
@@ -22,6 +22,6 @@ export const IntroduceForm = ({ SvgImages, introduce }) => {
         <input className={style.inputForm} type="text" name="email" value={email}  onChange={(e) => setEmail(e.target.value)}/>
         <input className={style.submitForm} type="submit" value="Отправить" onClick={send}/>
       </div>
-    </div> 
+    </div>
   )
 }

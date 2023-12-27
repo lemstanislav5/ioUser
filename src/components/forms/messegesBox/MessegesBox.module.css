@@ -7,7 +7,7 @@
   display: inline-block;
   width: 100%;
 }
-.date{
+.time{
   font-size: 10px;
   color: #fff;
   padding-top: 5px;
@@ -37,16 +37,20 @@
   display: grid;
   word-wrap: break-word;
 }
-.serverAccepted{
+.get{
   height: 1px;
   text-align: right;
-  margin-right: -10px;
-  margin-top: -1px;
+  margin-left: -10px;
 }
-.botAccepted{
+.send{
   height: 1px;
   text-align: right;
-  margin-top: -1px;
+  margin-left: -10px;
+}
+.read{
+  height: 1px;
+  text-align: right;
+  margin-left: -10px;
 }
 .false{
   color: red;
