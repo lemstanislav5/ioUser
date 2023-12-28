@@ -65,7 +65,7 @@ const App = () => {
     }
     const handlerDisconnect = () => setConnected(false);
     const handlerNewMessage = ({id, text, chatId}) => {//addToDataBase: false, sendToAdmin: false, readAdmin
-      setMessage([...messeges, {id, chatId, type: 'from', text: text, time: dateMessage(), get: true, send: true, read: true}]);
+      setMessage([...messeges, {id, chatId, type: 'messege', text: text, time: dateMessage(), get: true, send: true, read: true}]);
     }
     // const handlerNewMessage = () => {
     //   socket.once('newMessage', (text, inType) => {
@@ -101,21 +101,17 @@ const App = () => {
 //------------------------------------outcoming handlers------------------------------------
 const handlerSend = text => {
   const messegeId = nanoid(10);
-  if (text === '') return setMessage([...messeges, { messegeId, chatId, type: 'notification', text: 'Сообщение не может быть пустым!', date: dateMessage()}]);
-  socket.emit("newMessage", { messegeId, text, chatId, type: 'to' }, ({get, send, read}) => {
+  if (text === '') return setMessage([...messeges, { messegeId, chatId, type: 'notification', text: 'Сообщение не может быть пустым!', time: dateMessage()}]);
+  socket.emit("newMessage", { messegeId, text, chatId, type: 'messege' }, ({get, send, read}) => {
     //'Извините сервис временно недоступен!'
-    return setMessage([...messeges, { messegeId, chatId, type: 'to', text: text, time: dateMessage(), get, send, read }]);
+    return setMessage([...messeges, { messegeId, chatId, type: 'messege', text: text, time: dateMessage(), get, send, read }]);
   });
   setTextMessage('');
 };
 const handlerIntroduce = (name, email) => {
   const id = nanoid(10);
   socket.emit("introduce", { id, chatId, name, email}, ({get, send, read}) => {
-    // if(error){
-    //   console.log(error, notification);
-    //   return setMessage([...messeges, { id, chatId, type: 'from', text: 'Извините сервис временно недоступен!', date: dateMessage()}]);
-    // }
-    setMessage([...messeges, {id, chatId, type: 'from', text: 'Ваши данные приняты (' +name +' , '+ email+')', get, send, read}]);
+    setMessage([...messeges, {id, chatId, type: 'messege', text: 'Ваши данные приняты (' +name +' , '+ email+')', get, send, read}]);
     storage.set('introduce', {name, email});
     setIntroduce({name, email});
   });
