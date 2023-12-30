@@ -23,22 +23,16 @@ export const MessegesBox = memo((props) => {
 
   return(
     messeges.map((item, i) => {
-      console.log(item.chatId, chatId)
+      console.log(item.chatId, chatId )
       let [dateSend, timeSend] = item.time.split(',');
+      const styleMessage = item.chatId === chatId ? 'to': 'from';
       return (
         <div className={style.msgbox} key={'msg' + i}>
-          {
-            dateChangeCheck(dateSend) === true &&
-            <div className={style.newDate}>{dateSend}</div>
-          }
-          <div className={style[item.type]} key={i}  style={{'backgroundColor': colors[item.type]}}>
-            {item.chatId === chatId && <div className={style.message}>{item.text}</div>}
-            {item.chatId !== chatId && <div className={style.message}>{item.text}</div>}
+          {dateChangeCheck(dateSend) === true &&  <div className={style.newDate}>{dateSend}</div>}
+          <div className={style[styleMessage]} key={i}  style={{'backgroundColor': colors[styleMessage]}}>
+            {item.type === 'text' && <div className={style.message}>{item.text}</div>}
             {item.type === 'notification' && <div className={style.notificationText}>{item.text}</div>}
-            {
-              item.type === 'toImage' &&
-              <FileAvailabilityCheck className={style.toImage} url={item.text} SvgImages={SvgImages} Component={MyImage}/>
-            }
+            {item.type === 'toImage' && <FileAvailabilityCheck className={style.toImage} url={item.text} SvgImages={SvgImages} Component={MyImage}/>}
             {item.type === 'toDocuments' && <FileAvailabilityCheck url={item.text} SvgImages={SvgImages} Component={Document}/>}
             {item.type === 'toAudio' && <FileAvailabilityCheck url={item.text} SvgImages={SvgImages} Component={AudioPlayer}/>}
             {item.type === 'toVideo' && <FileAvailabilityCheck url={item.text} SvgImages={SvgImages} Component={VideoPlayer}/>}

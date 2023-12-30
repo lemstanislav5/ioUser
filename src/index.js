@@ -64,8 +64,9 @@ const App = () => {
       setConnected(true);
     }
     const handlerDisconnect = () => setConnected(false);
-    const handlerNewMessage = ({id, text, chatId}) => {//addToDataBase: false, sendToAdmin: false, readAdmin
-      setMessage([...messeges, {id, chatId, type: 'messege', text: text, time: dateMessage(), get: true, send: true, read: true}]);
+    const handlerReceiveMessage = ({id, text, chatId}) => {//addToDataBase: false, sendToAdmin: false, readAdmin
+      console.log(chatId)
+      setMessage([...messeges, {id, chatId, type: 'text', text: text, time: dateMessage(), get: true, send: true, read: true}]);
     }
     // const handlerNewMessage = () => {
     //   socket.once('newMessage', (text, inType) => {
@@ -83,7 +84,7 @@ const App = () => {
     //------------------------------------incoming handlers------------------------------------
     socket.on('connect', handlerConnect);
     socket.on('disconnect', handlerDisconnect);//! ЗАПОЛНИТЬ ФУНКЦИЮ
-    socket.on('newMessage', handlerNewMessage);
+    socket.on('newMessage', handlerReceiveMessage);
     socket.on('upload', ({type, pathFile}) => {
       console.log('upload: ', type, pathFile);
     });
@@ -91,27 +92,27 @@ const App = () => {
     return () => {
       socket.off('connect', handlerConnect);
       socket.off('disconnect', handlerDisconnect);//! ЗАПОЛНИТЬ ФУНКЦИЮ
-      socket.off('newMessage', handlerNewMessage);
+      socket.off('newMessage', handlerReceiveMessage);
       socket.off('online', (chatId) => {});
       socket.off('offline', (chatId) => {});
       socket.off('upload', () => {});
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [messeges]);
 //------------------------------------outcoming handlers------------------------------------
 const handlerSend = text => {
   const messegeId = nanoid(10);
   if (text === '') return setMessage([...messeges, { messegeId, chatId, type: 'notification', text: 'Сообщение не может быть пустым!', time: dateMessage()}]);
-  socket.emit("newMessage", { messegeId, text, chatId, type: 'messege' }, ({get, send, read}) => {
+  socket.emit("newMessage", { messegeId, text, chatId, type: 'text' }, ({get, send, read}) => {
     //'Извините сервис временно недоступен!'
-    return setMessage([...messeges, { messegeId, chatId, type: 'messege', text: text, time: dateMessage(), get, send, read }]);
+    return setMessage([...messeges, { messegeId, chatId, type: 'text', text: text, time: dateMessage(), get, send, read }]);
   });
   setTextMessage('');
 };
 const handlerIntroduce = (name, email) => {
   const id = nanoid(10);
   socket.emit("introduce", { id, chatId, name, email}, ({get, send, read}) => {
-    setMessage([...messeges, {id, chatId, type: 'messege', text: 'Ваши данные приняты (' +name +' , '+ email+')', get, send, read}]);
+    setMessage([...messeges, {id, chatId, type: 'text', text: 'Ваши данные приняты (' +name +' , '+ email+')', get, send, read}]);
     storage.set('introduce', {name, email});
     setIntroduce({name, email});
   });
