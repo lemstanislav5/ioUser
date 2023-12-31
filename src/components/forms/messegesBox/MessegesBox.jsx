@@ -22,36 +22,33 @@ export const MessegesBox = memo((props) => {
   }
 
   return(
-    messeges.map((item, i) => {
-      console.log(item.chatId, chatId )
-      let [dateSend, timeSend] = item.time.split(',');
-      const styleMessage = item.chatId === chatId ? 'to': 'from';
+    messeges.map(({from, to, messageId, text, time, type, read}, i) => {
+      const send = 1,
+            [dateSend, timeSend] = time.split(','),
+            styleMessage = (chatId === chatId)? 'to': 'from';
       return (
         <div className={style.msgbox} key={'msg' + i}>
           {dateChangeCheck(dateSend) === true &&  <div className={style.newDate}>{dateSend}</div>}
           <div className={style[styleMessage]} key={i}  style={{'backgroundColor': colors[styleMessage]}}>
-            {item.type === 'text' && <div className={style.message}>{item.text}</div>}
-            {item.type === 'notification' && <div className={style.notificationText}>{item.text}</div>}
-            {item.type === 'toImage' && <FileAvailabilityCheck className={style.toImage} url={item.text} SvgImages={SvgImages} Component={MyImage}/>}
-            {item.type === 'toDocuments' && <FileAvailabilityCheck url={item.text} SvgImages={SvgImages} Component={Document}/>}
-            {item.type === 'toAudio' && <FileAvailabilityCheck url={item.text} SvgImages={SvgImages} Component={AudioPlayer}/>}
-            {item.type === 'toVideo' && <FileAvailabilityCheck url={item.text} SvgImages={SvgImages} Component={VideoPlayer}/>}
-            {item.type === 'fromImage' && <FileAvailabilityCheck className={style.fromImage} url={item.text} SvgImages={SvgImages} Component={MyImage}/>}
-            {item.type === 'fromDocuments' && <FileAvailabilityCheck url={item.text} SvgImages={SvgImages} Component={Document}/>}
-            {item.type === 'fromAudio' && <FileAvailabilityCheck url={item.text} SvgImages={SvgImages} Component={AudioPlayer}/>}
-            {item.type === 'fromVideo' && <FileAvailabilityCheck url={item.text} SvgImages={SvgImages} Component={VideoPlayer}/>}
-            <div className={item.type === 'notification'? style.bottomNotification : style.bottomMessage}>
+            {type === 'text' && <div className={style.message}>{text}</div>}
+            {type === 'notification' && <div className={style.notificationText}>{text}</div>}
+            {type === 'toImage' && <FileAvailabilityCheck className={style.toImage} url={text} SvgImages={SvgImages} Component={MyImage}/>}
+            {type === 'toDocuments' && <FileAvailabilityCheck url={text} SvgImages={SvgImages} Component={Document}/>}
+            {type === 'toAudio' && <FileAvailabilityCheck url={text} SvgImages={SvgImages} Component={AudioPlayer}/>}
+            {type === 'toVideo' && <FileAvailabilityCheck url={text} SvgImages={SvgImages} Component={VideoPlayer}/>}
+            {type === 'fromImage' && <FileAvailabilityCheck className={style.fromImage} url={text} SvgImages={SvgImages} Component={MyImage}/>}
+            {type === 'fromDocuments' && <FileAvailabilityCheck url={text} SvgImages={SvgImages} Component={Document}/>}
+            {type === 'fromAudio' && <FileAvailabilityCheck url={text} SvgImages={SvgImages} Component={AudioPlayer}/>}
+            {type === 'fromVideo' && <FileAvailabilityCheck url={text} SvgImages={SvgImages} Component={VideoPlayer}/>}
+            <div className={type === 'notification'? style.bottomNotification : style.bottomMessage}>
               {
-                (item.type === 'to') &&
+                (type === 'to') &&
                   <>
-                    <div className={style.get}>
-                      <SvgImages svg='daw' fill={item.get ? '#0cec0c' : ' #e82554'}/>
-                    </div>
                     <div className={style.send}>
-                      <SvgImages svg='line' fill={item.send ? '#0cec0c' : ' #e82554'}/>
+                      <SvgImages svg='line' fill={send ? '#0cec0c' : ' #e82554'}/>
                     </div>
                     <div className={style.read}>
-                      <SvgImages svg='line' fill={item.read ? '#0cec0c' : ' #e82554'}/>
+                      <SvgImages svg='line' fill={read ? '#0cec0c' : ' #e82554'}/>
                     </div>
                   </>
               }

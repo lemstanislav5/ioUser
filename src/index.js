@@ -23,7 +23,7 @@ import {limitSizeFile} from './setings';
 import {nanoid} from 'nanoid';
 import {socket} from './socket';
 import {chatId} from './services/chatId';
-import {dateMessage} from './services/dataMeseges';
+import {dateMessage} from './services/dataMeseges';//! ДАННАЯ ФУНКЦИЯ ВОЗМОЖНО НЕ НУЖНА
 
 const App = () => {
   const close = useRef(null);
@@ -101,17 +101,19 @@ const App = () => {
   }, [messeges]);
 //------------------------------------outcoming handlers------------------------------------
 const handlerSend = text => {
-  const messegeId = nanoid(10);
-  if (text === '') return setMessage([...messeges, { messegeId, chatId, type: 'notification', text: 'Сообщение не может быть пустым!', time: dateMessage()}]);
-  socket.emit("newMessage", { messegeId, text, chatId, type: 'text' }, ({get, send, read}) => {
+  if (text === '') return setMessage([...messeges, { chatId, type: 'notification', text: 'Сообщение не может быть пустым!', time: dateMessage()}]);
+  const fromId = chatId, type = 'text';
+  socket.emit("newMessage", ({fromId, text, type}), (message) => {
+    console.log(message)
+    const {fromId, toId, messageId, text, time, type, read} = message;
     //'Извините сервис временно недоступен!'
-    return setMessage([...messeges, { messegeId, chatId, type: 'text', text: text, time: dateMessage(), get, send, read }]);
+    return setMessage([...messeges, {fromId, toId, messageId, text, time, type, read}]);
   });
   setTextMessage('');
 };
 const handlerIntroduce = (name, email) => {
   const id = nanoid(10);
-  socket.emit("introduce", { id, chatId, name, email}, ({get, send, read}) => {
+  socket.emit("introduce", {id, chatId, name, email}, ({get, send, read}) => {
     setMessage([...messeges, {id, chatId, type: 'text', text: 'Ваши данные приняты (' +name +' , '+ email+')', get, send, read}]);
     storage.set('introduce', {name, email});
     setIntroduce({name, email});
