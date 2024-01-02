@@ -5,7 +5,7 @@ import style from './MessegesBox.module.css';
 import MyImage from './image/MyImage';
 import FileAvailabilityCheck from '../../hocs/FileAvailabilityCheck';
 import Document from './document/Document';
-import {dateMessage} from '../../../services/dataMeseges'
+import {getDateTime} from '../../../services/getDateTime'
 
 export const MessegesBox = memo((props) => {
   const { chatId, messeges, colors, SvgImages } = props;
@@ -23,11 +23,11 @@ export const MessegesBox = memo((props) => {
   }
 
   return(
-    messeges.map(({from, to, messageId, text, time, type, read}, i) => {
-      const [dateSend, timeSend] = dateMessage(time), direction = (chatId !== from)? 'to': 'from';
+    messeges.map(({from, text, time, type, read}, i) => {
+      const direction = (chatId !== from)? 'to': 'from', [mDate, mTime] = getDateTime(time)
       return (
         <div className={style.msgbox} key={'msg' + i}>
-          {dateChangeCheck(dateSend) === true &&  <div className={style.newDate}>{dateSend}</div>}
+          {dateChangeCheck(mDate) === true &&  <div className={style.newDate}>{mDate}</div>}
           <div className={style[direction]} key={i}  style={{'backgroundColor': colors[direction]}}>
             {type === 'text' && <div className={style.message}>{text}</div>}
             {type === 'notification' && <div className={style.notificationText}>{text}</div>}
@@ -51,7 +51,7 @@ export const MessegesBox = memo((props) => {
                     </div>
                   </>
               }
-              <div className={style.time}>{timeSend}</div>
+              <div className={style.time}>{mTime}</div>
             </div>
           </div>
         </div>

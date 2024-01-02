@@ -23,9 +23,9 @@ import {limitSizeFile} from './setings';
 import {nanoid} from 'nanoid';
 import {socket} from './socket';
 import {chatId} from './services/chatId';
-import {dateMessage} from './services/dataMeseges';//! ДАННАЯ ФУНКЦИЯ ВОЗМОЖНО НЕ НУЖНА
 
 const App = () => {
+  const e = new Date();
   const close = useRef(null);
   const messegesBox = useRef(null);
   const [open, setOpen] = useState(false);
@@ -64,9 +64,10 @@ const App = () => {
       setConnected(true);
     }
     const handlerDisconnect = () => setConnected(false);
-    const handlerReceiveMessage = ({id, text, chatId}) => {//addToDataBase: false, sendToAdmin: false, readAdmin
-      console.log(chatId)
-      setMessage([...messeges, {id, chatId, type: 'text', text: text, time: dateMessage(), get: true, send: true, read: true}]);
+    const handlerReceiveMessage = message => {
+      console.log(message)
+      const {fromId, toId, messageId, text, time, type, read} = message;
+      return setMessage([...messeges, {fromId, toId, messageId, text, time, type, read}]);
     }
     // const handlerNewMessage = () => {
     //   socket.once('newMessage', (text, inType) => {
@@ -76,7 +77,7 @@ const App = () => {
     //     if (inType === 'mp3' || inType === 'ogg') type = 'fromAudio';
     //     if (inType === 'mp4' || inType === 'wav') type = 'fromVideo';
     //     const id = nanoid(10);
-    //     const incomingMessage = { id, chatId, type, text, date: dateMessage(), serverAccepted: true, botAccepted: true }
+    //     const incomingMessage = { id, chatId, type, text, date: e.getTime(), serverAccepted: true, botAccepted: true }
     //     setMessage([...messeges, incomingMessage]);
     //     socket.off('newMessage');
     //   });
@@ -101,12 +102,10 @@ const App = () => {
   }, [messeges]);
 //------------------------------------outcoming handlers------------------------------------
 const handlerSend = text => {
-  if (text === '') return setMessage([...messeges, { chatId, type: 'notification', text: 'Сообщение не может быть пустым!', time: dateMessage()}]);
-  const fromId = chatId, type = 'text';
-  socket.emit("newMessage", ({fromId, text, type}), (message) => {
-    console.log(message)
+  if (text === '') return setMessage([...messeges, { chatId, type: 'notification', text: 'Сообщение не может быть пустым!', time: e.getTime()}]);
+  socket.emit("newMessage", ({fromId: chatId, text, time: e.getTime(), type: 'text'}), message => {
     const {fromId, toId, messageId, text, time, type, read} = message;
-    //'Извините сервис временно недоступен!'
+    //!'Извините сервис временно недоступен!'
     return setMessage([...messeges, {fromId, toId, messageId, text, time, type, read}]);
   });
   setTextMessage('');
@@ -125,14 +124,14 @@ const handlerUpload = (file, type) => {
     setLoading(false);
     const id = nanoid(10);
     if (data.url === false) {
-      setMessage([...messeges, { id, chatId, type: 'notification', text: 'Ошибка отправки!', time: dateMessage()}]);
+      setMessage([...messeges, { id, chatId, type: 'notification', text: 'Ошибка отправки!', time: e.getTime()}]);
     } else {
       let section;
       if (type === 'jpeg' || type === 'jpg' || type === 'png') section = 'toImage';
       if (type === 'pdf' || type === 'doc' || type === 'docx' || type === 'txt') section = 'toDocuments';
       if (type === 'mp3') section = 'toAudio';
       if (type === 'mp4') section = 'toVideo';
-      setMessage([...messeges, { id, chatId, type: section, text: data.url, time: dateMessage()}]);
+      setMessage([...messeges, { id, chatId, type: section, text: data.url, time: e.getTime()}]);
     }
   });
 };
@@ -141,9 +140,9 @@ const handlerFileСheck = file => {
   let type = file.type.replace('image/', '').replace('application/', '').replace('audio/', '').replace('video/', '');
   type = (type === 'mpeg') ? 'mp3' : type;
   if (file.size > mb * limitSizeFile) {
-    setMessage([...messeges, { id, chatId, type: 'notification', text: 'Лимит файла ' + limitSizeFile + ' МБ превышен', date: dateMessage()}]);
+    setMessage([...messeges, { id, chatId, type: 'notification', text: 'Лимит файла ' + limitSizeFile + ' МБ превышен', date: e.getTime()}]);
   } else if (filesType.indexOf(type) === -1) {
-    setMessage([...messeges, { id, chatId, type: 'notification', text: 'Допустимы орматы: ' + filesType.join(', '), date: dateMessage()}]);
+    setMessage([...messeges, { id, chatId, type: 'notification', text: 'Допустимы орматы: ' + filesType.join(', '), date: e.getTime()}]);
   } else {
     handlerUpload(file, type);
   }
@@ -152,7 +151,7 @@ const handlerFileСheck = file => {
 useEffect(() => {
   // socket.once('notification', (text) => {
   //   const id = nanoid(10);
-  //   const incomingMessage = { id, chatId, type: 'notification', text, date: dateMessage(), serverAccepted: true, botAccepted: true }
+  //   const incomingMessage = { id, chatId, type: 'notification', text, date: e.getTime(), serverAccepted: true, botAccepted: true }
   //   setMessage([...messeges, incomingMessage]);
   //   socket.off('notification');
   // });
