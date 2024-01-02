@@ -5,6 +5,7 @@ import style from './MessegesBox.module.css';
 import MyImage from './image/MyImage';
 import FileAvailabilityCheck from '../../hocs/FileAvailabilityCheck';
 import Document from './document/Document';
+import {dateMessage} from '../../../services/dataMeseges'
 
 export const MessegesBox = memo((props) => {
   const { chatId, messeges, colors, SvgImages } = props;
@@ -23,13 +24,11 @@ export const MessegesBox = memo((props) => {
 
   return(
     messeges.map(({from, to, messageId, text, time, type, read}, i) => {
-      const send = 1,
-            [dateSend, timeSend] = time.split(','),
-            styleMessage = (chatId === chatId)? 'to': 'from';
+      const [dateSend, timeSend] = dateMessage(time), direction = (chatId !== from)? 'to': 'from';
       return (
         <div className={style.msgbox} key={'msg' + i}>
           {dateChangeCheck(dateSend) === true &&  <div className={style.newDate}>{dateSend}</div>}
-          <div className={style[styleMessage]} key={i}  style={{'backgroundColor': colors[styleMessage]}}>
+          <div className={style[direction]} key={i}  style={{'backgroundColor': colors[direction]}}>
             {type === 'text' && <div className={style.message}>{text}</div>}
             {type === 'notification' && <div className={style.notificationText}>{text}</div>}
             {type === 'toImage' && <FileAvailabilityCheck className={style.toImage} url={text} SvgImages={SvgImages} Component={MyImage}/>}
@@ -42,10 +41,10 @@ export const MessegesBox = memo((props) => {
             {type === 'fromVideo' && <FileAvailabilityCheck url={text} SvgImages={SvgImages} Component={VideoPlayer}/>}
             <div className={type === 'notification'? style.bottomNotification : style.bottomMessage}>
               {
-                (type === 'to') &&
+                (direction === 'to') &&
                   <>
                     <div className={style.send}>
-                      <SvgImages svg='line' fill={send ? '#0cec0c' : ' #e82554'}/>
+                      <SvgImages svg='daw' fill={'#0cec0c'}/>
                     </div>
                     <div className={style.read}>
                       <SvgImages svg='line' fill={read ? '#0cec0c' : ' #e82554'}/>

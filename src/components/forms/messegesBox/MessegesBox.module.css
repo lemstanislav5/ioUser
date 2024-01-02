@@ -10,7 +10,7 @@
 .time{
   font-size: 10px;
   color: #fff;
-  padding-top: 5px;
+  padding-top: 7px;
   text-align: right;
 }
 .from{
@@ -36,11 +36,6 @@
   font-size: 14px;
   display: grid;
   word-wrap: break-word;
-}
-.get{
-  height: 1px;
-  text-align: right;
-  margin-left: -10px;
 }
 .send{
   height: 1px;

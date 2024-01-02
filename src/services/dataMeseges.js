@@ -1,13 +1,10 @@
-export let dateMessage = () => {
-  const i = (time) => {
-    if (time < 10) return '0' + time;
-    return time;
-  }
-  let date = new Date(),
-      hours = date.getHours(),
-      min = date.getMinutes(),
-      month = date.getMonth() + 1,
-      year = date.getFullYear();
-  
-  return date.getDate() + '.' + i(month) + '.' + i(year) + ',' + i(hours) + ':' + i(min);
+export let dateMessage = (time) => {
+  const i = (n) => (n < 10)? '0'+n: n;
+  const date = new Date(time),
+        hours = date.getHours(),
+        min = date.getMinutes(),
+        day = date.getDate(),
+        month = date.getMonth() + 1,  
+        year = date.getFullYear();
+  return [i(day)+'.'+i(month)+'.'+i(year), i(hours)+':'+i(min)];
 }
