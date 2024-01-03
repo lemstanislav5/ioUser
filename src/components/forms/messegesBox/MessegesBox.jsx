@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import {memo}  from 'react';
 import AudioPlayer from './audio/AudioPlayer';
 import VideoPlayer from './video/VideoPlayer';
@@ -7,24 +8,22 @@ import FileAvailabilityCheck from '../../hocs/FileAvailabilityCheck';
 import Document from './document/Document';
 import {getDateTime} from '../../../services/getDateTime'
 
-export const MessegesBox = memo((props) => {
-  const { chatId, messeges, colors, SvgImages } = props;
-  let currentDate = null;
+export const MessegesBox = memo(({ chatId, messeges, colors, SvgImages }) => {
+  const [currentDate, setCurrentDate] = useState(null);
 
   const dateChangeCheck = (date) => {
-    if (currentDate === null) {
-      currentDate = date;
+    console.log(date, currentDate)
+    if (date !== currentDate) {
+      setCurrentDate(date);
       return false;
     } else {
-      if (date === currentDate) return false;
-      currentDate = date;
       return true;
     }
   }
 
   return(
     messeges.map(({from, text, time, type, read}, i) => {
-      const direction = (chatId !== from)? 'to': 'from', [mDate, mTime] = getDateTime(time)
+      const direction = (chatId !== from)? 'to': 'from', [mDate, mTime] = getDateTime(time);
       return (
         <div className={style.msgbox} key={'msg' + i}>
           {dateChangeCheck(mDate) === true &&  <div className={style.newDate}>{mDate}</div>}
