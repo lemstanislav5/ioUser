@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import {useRef} from 'react';
 import {memo}  from 'react';
 import AudioPlayer from './audio/AudioPlayer';
 import VideoPlayer from './video/VideoPlayer';
@@ -9,15 +9,18 @@ import Document from './document/Document';
 import {getDateTime} from '../../../services/getDateTime'
 
 export const MessegesBox = memo(({ chatId, messeges, colors, SvgImages }) => {
-  const [currentDate, setCurrentDate] = useState(null);
+  let date = useRef(null);
 
-  const dateChangeCheck = (date) => {
-    console.log(date, currentDate)
-    if (date !== currentDate) {
-      setCurrentDate(date);
-      return false;
+  const dateChangeCheck = (mDate) => {
+    console.log(mDate, date.current, mDate === date.current)
+    if (date.current === null) {
+      date.current = mDate;
+      return true; 
     } else {
-      return true;
+      if (date.current !== mDate) {
+        date.current = mDate;
+        return true; 
+      }
     }
   }
 
@@ -26,7 +29,7 @@ export const MessegesBox = memo(({ chatId, messeges, colors, SvgImages }) => {
       const direction = (chatId !== from)? 'to': 'from', [mDate, mTime] = getDateTime(time);
       return (
         <div className={style.msgbox} key={'msg' + i}>
-          {dateChangeCheck(mDate) === true &&  <div className={style.newDate}>{mDate}</div>}
+          {dateChangeCheck(mDate) &&  <div className={style.newDate}>{mDate}</div>}
           <div className={style[direction]} key={i}  style={{'backgroundColor': colors[direction]}}>
             {type === 'text' && <div className={style.message}>{text}</div>}
             {type === 'notification' && <div className={style.notificationText}>{text}</div>}
