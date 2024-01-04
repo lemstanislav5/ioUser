@@ -64,7 +64,7 @@
   word-wrap: break-word;
   margin-bottom: 5px;
 }
-.toImage {
+.image {
   max-width: 89%;
   float: right;
   padding: 5px;
@@ -76,7 +76,7 @@
   margin-bottom: 2px;
   border-radius: 8px 8px 0px 8px;
 }
-.toImage img{
+.image img{
   max-width: 100%;
   color: #fff;
   border-radius: 8px 8px 0px 8px;

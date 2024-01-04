@@ -5,12 +5,13 @@ const FileAvailabilityCheck = ({ url, SvgImages, Component }) => {
   useEffect(() => {
     fetch(url)
       .then(res => {
-        if (res.status === 202) return setFileAvailability(false);
-        setFileAvailability(true);
+        //! ОСТАНОВИЛСЯ
+        
+        if (res.status === 202 || res.status === 200) setFileAvailability(true);
       })
       .catch(err => console.log(err));
   }, [url])
-
+  console.log(fileAvailability, url)
   if (fileAvailability === null){
     return <></>
   } else if (fileAvailability === false) {

@@ -119,19 +119,14 @@ const handlerIntroduce = (name, email) => {
   });
 };
 const handlerUpload = (file, type) => {
-  setLoading(true);
   socket.emit("upload", file, type, data => {
+    console.log(data)
     setLoading(false);
     const id = nanoid(10);
     if (data.url === false) {
       setMessage([...messeges, { id, chatId, type: 'notification', text: 'Ошибка отправки!', time: e.getTime()}]);
     } else {
-      let section;
-      if (type === 'jpeg' || type === 'jpg' || type === 'png') section = 'toImage';
-      if (type === 'pdf' || type === 'doc' || type === 'docx' || type === 'txt') section = 'toDocuments';
-      if (type === 'mp3') section = 'toAudio';
-      if (type === 'mp4') section = 'toVideo';
-      setMessage([...messeges, { id, chatId, type: section, text: data.url, time: e.getTime()}]);
+      setMessage([...messeges, { id, chatId, type, text: data.url, time: e.getTime()}]);
     }
   });
 };

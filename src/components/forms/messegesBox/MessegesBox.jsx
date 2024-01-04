@@ -33,14 +33,10 @@ export const MessegesBox = memo(({ chatId, messeges, colors, SvgImages }) => {
           <div className={style[direction]} key={i}  style={{'backgroundColor': colors[direction]}}>
             {type === 'text' && <div className={style.message}>{text}</div>}
             {type === 'notification' && <div className={style.notificationText}>{text}</div>}
-            {type === 'toImage' && <FileAvailabilityCheck className={style.toImage} url={text} SvgImages={SvgImages} Component={MyImage}/>}
-            {type === 'toDocuments' && <FileAvailabilityCheck url={text} SvgImages={SvgImages} Component={Document}/>}
-            {type === 'toAudio' && <FileAvailabilityCheck url={text} SvgImages={SvgImages} Component={AudioPlayer}/>}
-            {type === 'toVideo' && <FileAvailabilityCheck url={text} SvgImages={SvgImages} Component={VideoPlayer}/>}
-            {type === 'fromImage' && <FileAvailabilityCheck className={style.fromImage} url={text} SvgImages={SvgImages} Component={MyImage}/>}
-            {type === 'fromDocuments' && <FileAvailabilityCheck url={text} SvgImages={SvgImages} Component={Document}/>}
-            {type === 'fromAudio' && <FileAvailabilityCheck url={text} SvgImages={SvgImages} Component={AudioPlayer}/>}
-            {type === 'fromVideo' && <FileAvailabilityCheck url={text} SvgImages={SvgImages} Component={VideoPlayer}/>}
+            {(type === 'jpeg' || type === 'jpg' || type === 'png') && <FileAvailabilityCheck className={style.image} url={text} SvgImages={SvgImages} Component={MyImage}/>}
+            {(type === 'pdf' || type === 'doc' || type === 'docx' || type === 'txt') && <FileAvailabilityCheck url={text} SvgImages={SvgImages} Component={Document}/>}
+            {type === 'mp3' && <FileAvailabilityCheck url={text} SvgImages={SvgImages} Component={AudioPlayer}/>}
+            {type === 'mp4' && <FileAvailabilityCheck url={text} SvgImages={SvgImages} Component={VideoPlayer}/>}
             <div className={type === 'notification'? style.bottomNotification : style.bottomMessage}>
               {
                 (direction === 'to') &&
