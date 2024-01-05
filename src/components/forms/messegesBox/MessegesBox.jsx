@@ -12,7 +12,6 @@ export const MessegesBox = memo(({ chatId, messeges, colors, SvgImages }) => {
   let date = useRef(null);
 
   const dateChangeCheck = (mDate) => {
-    console.log(mDate, date.current, mDate === date.current)
     if (date.current === null) {
       date.current = mDate;
       return true; 

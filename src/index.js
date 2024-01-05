@@ -5,19 +5,18 @@
  * Статья (редми)
  * Видеоинструкция
 */
-import "./index.css";
-import React, { useRef , useEffect, useState }  from 'react';
+import React, {useRef , useEffect, useState}  from 'react';
 import ReactDOM from 'react-dom';
-import { FirstQuestions, IntroduceForm, MessegesBox, OpenChat, PhoneForm,
+import {FirstQuestions, IntroduceForm, MessegesBox, OpenChat, PhoneForm,
          Textarea, Attachment, Record, ContactsServise, ConsentPersonalData } from './components/forms/Forms';
-import { SvgImages } from './components/images/SvgImages';
-import { Preloader } from './components/preloader/Preloader';
-import style from './App.module.css';
-import { storage } from './services/storage';
-import { colors, initialFirstQuestions, filesType, contacts } from './setings';
-import { initialMesseges } from './services/initialMesseges';
-import { initialIntroduce } from './services/initialIntroduce';
-import { initialConsent } from './services/initialConsent';
+import {SvgImages} from './components/images/SvgImages';
+import {Preloader} from './components/preloader/Preloader';
+import style from './Index.module.css';
+import {storage} from './services/storage';
+import {colors, initialFirstQuestions, filesType, contacts} from './setings';
+import {initialMesseges} from './services/initialMesseges';
+import {initialIntroduce} from './services/initialIntroduce';
+import {initialConsent} from './services/initialConsent';
 
 import {limitSizeFile} from './setings';
 import {nanoid} from 'nanoid';
@@ -104,30 +103,26 @@ const App = () => {
 const handlerSend = text => {
   if (text === '') return setMessage([...messeges, { chatId, type: 'notification', text: 'Сообщение не может быть пустым!', time: e.getTime()}]);
   socket.emit("newMessage", ({fromId: chatId, text, time: e.getTime(), type: 'text'}), message => {
+    if(!message) return setMessage([...messeges, { id: nanoid(10), fromId: chatId, type: 'notification', text: 'Извините сервис временно недоступен!', time: e.getTime()}]);
     const {fromId, toId, messageId, text, time, type, read} = message;
-    //!'Извините сервис временно недоступен!'
     return setMessage([...messeges, {fromId, toId, messageId, text, time, type, read}]);
   });
   setTextMessage('');
 };
 const handlerIntroduce = (name, email) => {
-  const id = nanoid(10);
-  socket.emit("introduce", {id, chatId, name, email}, ({get, send, read}) => {
-    setMessage([...messeges, {id, chatId, type: 'text', text: 'Ваши данные приняты (' +name +' , '+ email+')', get, send, read}]);
+  socket.emit("introduce", {chatId, name, email}, date => {
+    if (!date) return setMessage([...messeges, { id: nanoid(10), fromId: chatId, type: 'notification', text: 'Произошла ошибка записи данных!', time: e.getTime()}]);
     storage.set('introduce', {name, email});
     setIntroduce({name, email});
+    return setMessage([...messeges, { id: nanoid(10), fromId: chatId, type: 'notification', text: 'Ваши данные приняты (' +name +' , '+ email+')', time: e.getTime()}]);
   });
 };
 const handlerUpload = (file, type) => {
-  socket.emit("upload", file, type, data => {
-    console.log(data)
+  socket.emit("upload", file, {fromId: chatId, time: e.getTime(), type}, message => {
+    const {fromId, toId, messageId, text, time, type, read} = message;
     setLoading(false);
-    const id = nanoid(10);
-    if (data.url === false) {
-      setMessage([...messeges, { id, chatId, type: 'notification', text: 'Ошибка отправки!', time: e.getTime()}]);
-    } else {
-      setMessage([...messeges, { id, chatId, type, text: data.url, time: e.getTime()}]);
-    }
+    if (!message) return setMessage([...messeges, { id: nanoid(10), chatId, type: 'notification', text: 'Ошибка отправки!', time: e.getTime()}]);
+    setMessage([...messeges, {fromId, toId, messageId, text, time, type, read}]);
   });
 };
 const handlerFileСheck = file => {
@@ -144,12 +139,6 @@ const handlerFileСheck = file => {
 }
 //------------------------------------outncoming handlers------------------------------------
 useEffect(() => {
-  // socket.once('notification', (text) => {
-  //   const id = nanoid(10);
-  //   const incomingMessage = { id, chatId, type: 'notification', text, date: e.getTime(), serverAccepted: true, botAccepted: true }
-  //   setMessage([...messeges, incomingMessage]);
-  //   socket.off('notification');
-  // });
   storage.set('messeges', messeges);
   setTimeout(() => messegesBox.current?.scrollTo(0, 999000), 500)
 }, [messeges]);

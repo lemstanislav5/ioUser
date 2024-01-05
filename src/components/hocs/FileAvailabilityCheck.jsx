@@ -5,19 +5,18 @@ const FileAvailabilityCheck = ({ url, SvgImages, Component }) => {
   useEffect(() => {
     fetch(url)
       .then(res => {
-        //! ОСТАНОВИЛСЯ
-        
-        if (res.status === 202 || res.status === 200) setFileAvailability(true);
+        if (res.status === 200) return setFileAvailability(true);
+        return setFileAvailability(false);
       })
       .catch(err => console.log(err));
-  }, [url])
-  console.log(fileAvailability, url)
+  }, [url]);
+  
   if (fileAvailability === null){
     return <></>
   } else if (fileAvailability === false) {
     return <SvgImages svg='playError'/>
   } else if (fileAvailability === true) {
-    return <Component url={url} SvgImages={SvgImages}/>
+    return <Component url={url} SvgImages={SvgImages} />
   }
 };
 
