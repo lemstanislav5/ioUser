@@ -17,11 +17,11 @@ import {colors, initialFirstQuestions, filesType, contacts} from './setings';
 import {initialMesseges} from './services/initialMesseges';
 import {initialIntroduce} from './services/initialIntroduce';
 import {initialConsent} from './services/initialConsent';
-
 import {limitSizeFile} from './setings';
 import {nanoid} from 'nanoid';
-import {socket} from './socket';
 import {chatId} from './services/chatId';
+import {io} from 'socket.io-client';
+export const socket = io('http://localhost:4000');
 
 const App = () => {
   const e = new Date();
