@@ -14,7 +14,6 @@ import {Preloader} from './components/preloader/Preloader';
 import style from './Index.module.css';
 import {storage} from './services/storage';
 import {colors, initialFirstQuestions, filesType, contacts} from './setings';
-import {initialMesseges} from './services/initialMesseges';
 import {initialIntroduce} from './services/initialIntroduce';
 import {initialConsent} from './services/initialConsent';
 import {limitSizeFile} from './setings';
@@ -29,7 +28,7 @@ const App = () => {
   const messegesBox = useRef(null);
   const [open, setOpen] = useState(false);
   const [connected, setConnected] = useState(false);
-  const [messeges, setMessage] = useState(initialMesseges);
+  const [messeges, setMessage] = useState([]);
   const [messageText, setTextMessage] = useState('');
   const [styleСall, setStyleCall] = useState({'display': 'block', 'color': colors.text});
   const [phoneFormOpen, setPhoneFormOpen] = useState(false);

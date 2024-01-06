@@ -1,5 +1,5 @@
 import {nanoid} from 'nanoid';
-import { storage } from './storage';
+import {storage} from './storage';
 
 const controllerChatId = {
   get: () => (storage.get('chatId')),

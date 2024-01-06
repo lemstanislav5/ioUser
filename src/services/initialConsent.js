@@ -1,4 +1,4 @@
-import { storage } from './storage';
+import {storage} from './storage';
 
 export const initialConsent = (() => {
   if (storage.get('consent') === undefined) return null;

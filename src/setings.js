@@ -18,7 +18,6 @@ let url = 'localhost', //messenger.ddns.net //212.193.48.171
       toAudio: '#5e785e',
       toVideo: '#5e785e',
     },
-    testData = false, // "false" уберет тестовые сообщения
     initialFirstQuestions = [
       'Здравствуйте!',
       'Mне нужна помощь!',
@@ -34,4 +33,4 @@ let url = 'localhost', //messenger.ddns.net //212.193.48.171
     },
     consentLink = 'null',
     policyLink = 'null';
-export { url, ws, port, colors, testData, initialFirstQuestions, filesType, limitSizeFile, contacts, consentLink, policyLink }
+export { url, ws, port, colors, initialFirstQuestions, filesType, limitSizeFile, contacts, consentLink, policyLink }

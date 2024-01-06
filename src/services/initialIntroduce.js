@@ -1,4 +1,4 @@
-import { storage } from './storage';
+import {storage} from './storage';
 
 export const initialIntroduce = (() => {
   if (storage.get('introduce') === undefined) return false;
