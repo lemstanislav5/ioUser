@@ -48,7 +48,7 @@ const App = () => {
   }, [open]);
   useEffect(() => {
     window.onbeforeunload = () => (consent === false)? storage.clear() : null;
-    if (consent === null) return setTimeout(() => setstyleConsent({'opacity': 1}), 100);
+    if(consent === null) return setTimeout(() => setstyleConsent({'opacity': 1}), 100);
     storage.set('consent', true);
     setTimeout(() => setstyleConsent({'opacity': 0}), 100);
   }, [consent]);
@@ -58,9 +58,8 @@ const App = () => {
     //------------------------------------incoming handlers------------------------------------
     const handlerConnect = () => {
       socket.emit('online', chatId, answer => {
-        console.log('handler online answer: ', answer)
-      })
-      setConnected(true);
+        if(answer) setConnected(true);
+      });
     }
     const handlerDisconnect = () => setConnected(false);
     const handlerReceiveMessage = message => {
@@ -68,19 +67,7 @@ const App = () => {
       const {fromId, toId, messageId, text, time, type, read} = message;
       return setMessage([...messeges, {fromId, toId, messageId, text, time, type, read}]);
     }
-    // const handlerNewMessage = () => {
-    //   socket.once('newMessage', (text, inType) => {
-    //     let type = 'from';
-    //     if (inType ==='jpeg' || inType === 'jpg' || inType === 'png') type = 'fromImage';
-    //     if (inType === 'pdf' || inType === 'doc' || inType === 'docx' || inType === 'txt') type = 'fromDocuments';
-    //     if (inType === 'mp3' || inType === 'ogg') type = 'fromAudio';
-    //     if (inType === 'mp4' || inType === 'wav') type = 'fromVideo';
-    //     const id = nanoid(10);
-    //     const incomingMessage = { id, chatId, type, text, date: e.getTime(), serverAccepted: true, botAccepted: true }
-    //     setMessage([...messeges, incomingMessage]);
-    //     socket.off('newMessage');
-    //   });
-    // }
+
     //------------------------------------incoming handlers------------------------------------
     socket.on('connect', handlerConnect);
     socket.on('disconnect', handlerDisconnect);//! ЗАПОЛНИТЬ ФУНКЦИЮ
