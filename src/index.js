@@ -13,7 +13,7 @@ import {SvgImages} from './components/images/SvgImages';
 import {Preloader} from './components/preloader/Preloader';
 import style from './Index.module.css';
 import {storage} from './services/storage';
-import {colors, initialFirstQuestions, filesType, contacts} from './setings';
+import {colors, initialFirstQuestions, contacts} from './setings';
 import {initialIntroduce} from './services/initialIntroduce';
 import {initialConsent} from './services/initialConsent';
 import {limitSizeFile} from './setings';
@@ -21,6 +21,7 @@ import {nanoid} from 'nanoid';
 import {chatId} from './services/chatId';
 import {io} from 'socket.io-client';
 export const socket = io('http://localhost:4000');
+const filesType = ['jpeg', 'jpg', 'png', 'pdf', 'doc', 'docx', 'txt', 'mp3', 'mp4'];
 
 const App = () => {
   const e = new Date();

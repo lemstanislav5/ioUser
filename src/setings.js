@@ -6,17 +6,9 @@ let url = 'localhost', //messenger.ddns.net //212.193.48.171
       top: '#2c2e33',
       messeges: '#000',
       from: '#303245',
-      fromImage: '#303245',
-      fromDocuments: '#303245',
-      fromAudio: '#303245',
-      fromVideo: '#303245',
       text: '#FFB700',
       notification: '#333',
       to: '#5e785e',
-      toImage: '#5e785e',
-      toDocuments: '#5e785e',
-      toAudio: '#5e785e',
-      toVideo: '#5e785e',
     },
     initialFirstQuestions = [
       'Здравствуйте!',
@@ -24,7 +16,6 @@ let url = 'localhost', //messenger.ddns.net //212.193.48.171
       'Как пройти в библиотеку?',
       'Вы не скажете, сколько сейчас градусов ниже нуля?',
     ],
-    filesType = ['jpeg', 'jpg', 'png', 'pdf', 'doc', 'docx', 'txt', 'mp3', 'mp4'],
     limitSizeFile = 10, // в мегабайтах
     contacts = {
       Telegram: 'null',
@@ -33,4 +24,4 @@ let url = 'localhost', //messenger.ddns.net //212.193.48.171
     },
     consentLink = 'null',
     policyLink = 'null';
-export { url, ws, port, colors, initialFirstQuestions, filesType, limitSizeFile, contacts, consentLink, policyLink }
+export { url, ws, port, colors, initialFirstQuestions, limitSizeFile, contacts, consentLink, policyLink }

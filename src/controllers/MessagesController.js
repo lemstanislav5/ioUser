@@ -1,4 +1,3 @@
-import { storage } from '../services/storage';
 import { nanoid } from 'nanoid';
 import { idController } from './idController';
 import { dateMessage } from '../services/dataMeseges';
