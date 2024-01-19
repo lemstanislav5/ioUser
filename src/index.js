@@ -39,7 +39,8 @@ const App = () => {
   const [openContacts, setOpenContacts] = useState(false);
   const [consent, setConsent] = useState(initialConsent);
   const [styleConsent, setstyleConsent] = useState({'opacity': 0});
-
+  const [setings, setSetings] = useState(null);
+  //! ОСТАНОВИЛСЯ ЗДЕСЬ
 
   useEffect(() => setTimeout(() => messegesBox.current?.scrollTo(0, 999000), 100));
   useEffect(() => {
@@ -57,14 +58,10 @@ const App = () => {
     document.addEventListener('click', () => setOpenContacts(false));
     //------------------------------------incoming handlers------------------------------------
     const handlerConnect = () => {
-      socket.emit('online', chatId, answer => {
-        if(answer) setConnected(true);
-      });
+      socket.emit('online', chatId, answer => ((answer)? setConnected(true): null));
     }
     const handlerDisconnect = () => setConnected(false);
-    const handlerReceiveMessage = message => {
-      console.log(message)
-      const {fromId, toId, messageId, text, time, type, read} = message;
+    const handlerReceiveMessage = ({fromId, toId, messageId, text, time, type, read}) => {
       return setMessage([...messeges, {fromId, toId, messageId, text, time, type, read}]);
     }
 
