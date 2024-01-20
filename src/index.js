@@ -13,7 +13,7 @@ import {SvgImages} from './components/images/SvgImages';
 import {Preloader} from './components/preloader/Preloader';
 import style from './Index.module.css';
 import {storage} from './services/storage';
-import {colors, initialFirstQuestions, contacts} from './setings';
+import {initialFirstQuestions, contacts} from './setings';
 import {initialIntroduce} from './services/initialIntroduce';
 import {initialConsent} from './services/initialConsent';
 import {limitSizeFile} from './setings';
@@ -31,7 +31,7 @@ const App = () => {
   const [connected, setConnected] = useState(false);
   const [messeges, setMessage] = useState([]);
   const [messageText, setTextMessage] = useState('');
-  const [styleСall, setStyleCall] = useState({'display': 'block', 'color': colors.text});
+  const [styleСall, setStyleCall] = useState({'display': 'block'});
   const [phoneFormOpen, setPhoneFormOpen] = useState(false);
   const [introduction, setIntroduce] = useState(initialIntroduce);
   const [loading, setLoading] = useState(false);
@@ -42,6 +42,14 @@ const App = () => {
   const [setings, setSetings] = useState(null);
   //! ОСТАНОВИЛСЯ ЗДЕСЬ
 
+  useEffect(() => {
+    if(setings === null){
+      socket.emit('getSetings', date => {
+        console.log(date)
+        setSetings(date);
+      });
+    }
+  }, [setings])
   useEffect(() => setTimeout(() => messegesBox.current?.scrollTo(0, 999000), 100));
   useEffect(() => {
     if (open) return setTimeout(() => setStyleMessegesBox({'opacity': 1}), 500);
@@ -64,22 +72,20 @@ const App = () => {
     const handlerReceiveMessage = ({fromId, toId, messageId, text, time, type, read}) => {
       return setMessage([...messeges, {fromId, toId, messageId, text, time, type, read}]);
     }
+    const handlerUpload = ({type, pathFile}) => {console.log('upload: ', type, pathFile)
 
+    }
     //------------------------------------incoming handlers------------------------------------
     socket.on('connect', handlerConnect);
     socket.on('disconnect', handlerDisconnect);//! ЗАПОЛНИТЬ ФУНКЦИЮ
     socket.on('newMessage', handlerReceiveMessage);
-    socket.on('upload', ({type, pathFile}) => {
-      console.log('upload: ', type, pathFile);
-    });
+    socket.on('upload', handlerUpload);
 
     return () => {
       socket.off('connect', handlerConnect);
       socket.off('disconnect', handlerDisconnect);//! ЗАПОЛНИТЬ ФУНКЦИЮ
       socket.off('newMessage', handlerReceiveMessage);
-      socket.off('online', (chatId) => {});
-      socket.off('offline', (chatId) => {});
-      socket.off('upload', () => {});
+      socket.off('upload', handlerUpload);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [messeges]);
@@ -129,10 +135,10 @@ useEffect(() => {
 
   const openPhoneBox = () => {
     phoneFormOpen ? setPhoneFormOpen(false) : setPhoneFormOpen(true);
-    phoneFormOpen ? setStyleCall({'color': colors.text}) : setStyleCall({'color': colors.messeges});
+    phoneFormOpen ? setStyleCall({'color': setings.colors.text}) : setStyleCall({'color': setings.colors.messeges});
   }
 
-  if(connected === false ) return <></>;
+  if(connected === false || setings === null) return <></>;
 
   const keyDown = (e) => (e.key === "Enter") && handlerSend(messageText);
 
@@ -141,26 +147,26 @@ useEffect(() => {
       {
         !open
         ? <div onMouseEnter={() => setOpenContacts(true)}>
-            <OpenChat colorStart={colors.text} colorEnd={colors.top} setOpen={setOpen}/>
+            <OpenChat colorStart={setings.colors.text} colorEnd={setings.colors.top} setOpen={setOpen}/>
             { openContacts && <ContactsServise SvgImages={SvgImages} contacts={contacts}/> }
           </div>
         : <div className={style.conteiner}>
-            <div className={style.box_top} style={{'backgroundColor': colors.top}}>
-              <span style={{'color': colors.text}}>
+            <div className={style.box_top} style={{'backgroundColor': setings.colors.top}}>
+              <span style={{'color': setings.colors.text}}>
                 {open ? 'Напишите ваше сообщение' : 'Поддержка'}
               </span>
               <div className={style.move}></div>
               {open && <div style={styleСall} onClick={openPhoneBox} className={style.backСall}><SvgImages svg={'backСall'}/></div>}
-              <div onClick={() => setOpen(true)} className={style.open} style={{'color': colors.text}}>
+              <div onClick={() => setOpen(true)} className={style.open} style={{'color': setings.colors.text}}>
                 <SvgImages svg={'open'}/>
               </div>
             </div>
-            <div style={{'backgroundColor': colors.messeges}}>
+            <div style={{'backgroundColor': setings.colors.messeges}}>
               <div className={style.box_messeges} ref={messegesBox} style={styleMessegesBox}>
                 {(messeges.length === 2 && introduction === false) && <IntroduceForm SvgImages={SvgImages} handlerIntroduce={handlerIntroduce}/>}
                 {phoneFormOpen === true && <PhoneForm openPhoneBox={openPhoneBox} handlerSend={handlerSend}/>}
                 <FirstQuestions handlerSend={handlerSend} initialFirstQuestions={initialFirstQuestions}/>
-                <MessegesBox chatId={chatId} messeges={messeges} colors={colors} SvgImages={SvgImages} />
+                <MessegesBox chatId={chatId} messeges={messeges} colors={setings.colors} SvgImages={SvgImages} />
                 {loading && <Preloader className="39012739017239"/>}
               </div>
             </div>
@@ -169,15 +175,15 @@ useEffect(() => {
               placeholder="Введите сообщение"
               setTextMessage={setTextMessage}
               message={messageText}
-              backgroundColor={colors.conteiner}/>
+              backgroundColor={setings.colors.conteiner}/>
             <div className={style.tools}>
-              <Attachment color={colors.messeges} handlerFileСheck={handlerFileСheck}/>
+              <Attachment color={setings.colors.messeges} handlerFileСheck={handlerFileСheck}/>
               <Record handlerFileСheck={handlerFileСheck}/>
             </div>
-            <div className={style.send} onClick={() => {handlerSend(messageText)}}  style={{'color': colors.text, 'borderColor': colors.text}}>
+            <div className={style.send} onClick={() => {handlerSend(messageText)}}  style={{'color': setings.colors.text, 'borderColor': setings.colors.text}}>
               <SvgImages svg={'send'}/>
             </div>
-            { open && <div ref={close} className={style.close} onClick={() => setOpen(false)} style={{'color': colors.text}}>
+            { open && <div ref={close} className={style.close} onClick={() => setOpen(false)} style={{'color': setings.colors.text}}>
                 <SvgImages svg={'close'}/>
               </div> }
           </div>
