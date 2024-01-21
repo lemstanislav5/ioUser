@@ -22,10 +22,11 @@ export const MessegesBox = memo(({ chatId, messeges, colors, SvgImages }) => {
       }
     }
   }
-
+  console.log(messeges)
+//! Оconteiner, top, messeges, fromId, text, notification, toId
   return(
-    messeges.map(({from, text, time, type, read}, i) => {
-      const direction = (chatId !== from)? 'to': 'from', [mDate, mTime] = getDateTime(time);
+    messeges.map(({fromId, text, time, type, read}, i) => {
+      const direction = (chatId !== fromId)? 'toId': 'fromId', [mDate, mTime] = getDateTime(time);
       return (
         <div className={style.msgbox} key={'msg' + i}>
           {dateChangeCheck(mDate) &&  <div className={style.newDate}>{mDate}</div>}

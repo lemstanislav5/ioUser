@@ -13,7 +13,7 @@
   padding-top: 7px;
   text-align: right;
 }
-.from{
+.fromId{
   width: 89%;
   float: left;
   padding: 5px;
@@ -25,7 +25,7 @@
   display: grid;
   word-wrap: break-word;
 }
-.to{
+.toId{
   width: 89%;
   float: right;
   padding: 5px;

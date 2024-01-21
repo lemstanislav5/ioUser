@@ -5,10 +5,10 @@ import { recorder } from '../../../../services/recorder';
 import { Stopwatch } from './stopwatch/Stopwatch';
 const mimeType = "audio/mp3";
 
-export const Record = ({ handlerFileСheck }) => {
+export const Record = ({color, handlerFileСheck}) => {
   const mediaRecorder = useRef(null);
   const [stream, setStream] = useState(null);
-  const [color, setColor] = useState('#9e9e9e');
+  const [fill, setColor] = useState('#9e9e9e');
   const [audioChunks, setAudioChunks] = useState([]);
   const [isStarted, setIsStarted] = useState(false);
 

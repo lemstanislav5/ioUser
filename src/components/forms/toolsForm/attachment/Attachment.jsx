@@ -3,6 +3,7 @@ import style from './Attachment.module.css';
 import { SvgImages } from '../../../images/SvgImages';
 
 export const Attachment = ({ color, handlerFileСheck }) => {
+  console.log(color)
   const ref = useRef(null)
   return(
     <>

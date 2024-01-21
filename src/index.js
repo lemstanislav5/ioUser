@@ -40,7 +40,7 @@ const App = () => {
   const [consent, setConsent] = useState(initialConsent);
   const [styleConsent, setstyleConsent] = useState({'opacity': 0});
   const [setings, setSetings] = useState(null);
-  //! ОСТАНОВИЛСЯ ЗДЕСЬ
+
 
   useEffect(() => {
     if(setings === null){
@@ -177,13 +177,13 @@ useEffect(() => {
               message={messageText}
               backgroundColor={setings.colors.conteiner}/>
             <div className={style.tools}>
-              <Attachment color={setings.colors.messeges} handlerFileСheck={handlerFileСheck}/>
-              <Record handlerFileСheck={handlerFileСheck}/>
+              <Attachment color={setings.colors.top} handlerFileСheck={handlerFileСheck}/>
+              <Record color={setings.colors.top} handlerFileСheck={handlerFileСheck}/>
             </div>
-            <div className={style.send} onClick={() => {handlerSend(messageText)}}  style={{'color': setings.colors.text, 'borderColor': setings.colors.text}}>
+            <div className={style.send} onClick={() => {handlerSend(messageText)}}  style={{'color': setings.colors.top, 'borderColor': setings.colors.top}}>
               <SvgImages svg={'send'}/>
             </div>
-            { open && <div ref={close} className={style.close} onClick={() => setOpen(false)} style={{'color': setings.colors.text}}>
+            { open && <div ref={close} className={style.close} onClick={() => setOpen(false)} style={{'color': setings.colors.top}}>
                 <SvgImages svg={'close'}/>
               </div> }
           </div>
