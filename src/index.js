@@ -153,7 +153,7 @@ useEffect(() => {
         : <div className={style.conteiner}>
             <div className={style.box_top} style={{'backgroundColor': setings.colors.top}}>
               <span style={{'color': setings.colors.text}}>
-                {open ? 'Напишите ваше сообщение' : 'Поддержка'}
+                Напишите ваше сообщение
               </span>
               <div className={style.move}></div>
               {open && <div style={styleСall} onClick={openPhoneBox} className={style.backСall}><SvgImages svg={'backСall'}/></div>}
