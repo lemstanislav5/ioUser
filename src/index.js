@@ -13,7 +13,6 @@ import {SvgImages} from './components/images/SvgImages';
 import {Preloader} from './components/preloader/Preloader';
 import style from './Index.module.css';
 import {storage} from './services/storage';
-import {initialFirstQuestions, contacts} from './setings';
 import {initialIntroduce} from './services/initialIntroduce';
 import {initialConsent} from './services/initialConsent';
 import {limitSizeFile} from './setings';
@@ -148,7 +147,7 @@ useEffect(() => {
         !open
         ? <div onMouseEnter={() => setOpenContacts(true)}>
             <OpenChat colorStart={setings.colors.text} colorEnd={setings.colors.top} setOpen={setOpen}/>
-            { openContacts && <ContactsServise SvgImages={SvgImages} contacts={contacts}/> }
+            { openContacts && <ContactsServise SvgImages={SvgImages} contacts={setings.contacts}/> }
           </div>
         : <div className={style.conteiner}>
             <div className={style.box_top} style={{'backgroundColor': setings.colors.top}}>
@@ -165,7 +164,7 @@ useEffect(() => {
               <div className={style.box_messeges} ref={messegesBox} style={styleMessegesBox}>
                 {(messeges.length === 2 && introduction === false) && <IntroduceForm SvgImages={SvgImages} handlerIntroduce={handlerIntroduce}/>}
                 {phoneFormOpen === true && <PhoneForm openPhoneBox={openPhoneBox} handlerSend={handlerSend}/>}
-                <FirstQuestions handlerSend={handlerSend} initialFirstQuestions={initialFirstQuestions}/>
+                <FirstQuestions handlerSend={handlerSend} questions={setings.questions}/>
                 <MessegesBox chatId={chatId} messeges={messeges} colors={setings.colors} SvgImages={SvgImages} />
                 {loading && <Preloader className="39012739017239"/>}
               </div>

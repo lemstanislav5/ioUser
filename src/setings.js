@@ -10,18 +10,7 @@ let url = 'localhost', //messenger.ddns.net //212.193.48.171
       notification: '#333',
       to: '#5e785e',
     },
-    initialFirstQuestions = [
-      'Здравствуйте!',
-      'Mне нужна помощь!',
-      'Как пройти в библиотеку?',
-      'Вы не скажете, сколько сейчас градусов ниже нуля?',
-    ],
     limitSizeFile = 10, // в мегабайтах
-    contacts = {
-      Telegram: 'null',
-      VKontakte: 'null',
-      WhatsApp: 'null',
-    },
     consentLink = 'null',
     policyLink = 'null';
-export { url, ws, port, colors, initialFirstQuestions, limitSizeFile, contacts, consentLink, policyLink }
+export { url, ws, port, colors, limitSizeFile, consentLink, policyLink }
