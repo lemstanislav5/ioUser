@@ -147,7 +147,7 @@ useEffect(() => {
         !open
         ? <div onMouseEnter={() => setOpenContacts(true)}>
             <OpenChat colorStart={setings.colors.text} colorEnd={setings.colors.top} setOpen={setOpen}/>
-            { openContacts && <ContactsServise SvgImages={SvgImages} contacts={setings.contacts}/> }
+            { openContacts && <ContactsServise SvgImages={SvgImages} contacts={setings.contacts} color={setings.colors.top} /> }
           </div>
         : <div className={style.conteiner}>
             <div className={style.box_top} style={{'backgroundColor': setings.colors.top}}>
