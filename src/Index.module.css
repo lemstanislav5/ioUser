@@ -110,6 +110,6 @@ body{
   background: #f9b729;
 }
 .tools{
-  display: inline-block;
+  padding-top: 2px;
   display: flex;
 }
